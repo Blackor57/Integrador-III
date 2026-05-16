@@ -13,7 +13,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "inventario")
+@Table(name = "factura")
 public class factura {
 
     @Id
