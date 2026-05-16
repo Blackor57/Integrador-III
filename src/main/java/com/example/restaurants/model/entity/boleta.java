@@ -32,4 +32,5 @@ public class boleta {
 
     @Column(name = "fecha_emision")
     private Date fecha_emision;
+
 }
