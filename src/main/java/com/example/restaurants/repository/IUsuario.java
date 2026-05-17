@@ -6,11 +6,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface IUsuario extends JpaRepository <usuario,Integer> {
+public interface IUsuario extends JpaRepository <usuario,Long> {
 
-    public usuario findByUsername(String username);
-    List<usuario> findByRoles(String rol);
-    List<usuario> findbyFechaRegistro(Date fecha);
+    Optional<usuario> findByUsername(String username);
+
+    List<usuario> findByRoles_Nombre(String rol);
+
+    List<usuario> findByFecRegistro(Date fecha);
 }

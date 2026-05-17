@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface IRol extends JpaRepository<rol,Integer> {
 
-    Optional<rol> findByUsername(String username);
+    Optional<rol> findByNombre(String nombre);
 
 }
