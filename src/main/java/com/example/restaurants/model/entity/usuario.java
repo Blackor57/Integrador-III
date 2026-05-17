@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
@@ -22,32 +21,30 @@ import java.util.stream.Collectors;
 @Table(name = "usuario", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
 })
-public class usuario implements UserDetails {
-
+public class usuario implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "usuario", length = 50, nullable = false, unique = true)
+    @Column(name = "usuario", length = 50, nullable = false)
     private String username;
 
-    @Column(name = "contraseña", length = 100, nullable = false)
+    @Column(name = "contraseña", length = 50, nullable = false)
     private String password;
 
-    @Column(name = "nombre_completo", length = 150, nullable = false)
+    @Column(name = "Nombre_Completo", length = 10, nullable = false)
     private String nombreCompleto;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "telefono", length = 12)
+    @Column(name = "telefono")
     private String telefono;
 
     @Column(name = "direccion")
     private String direccion;
 
     @Column(name = "fec_registro")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date fecRegistro;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

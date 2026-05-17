@@ -22,5 +22,5 @@ public class mesa {
     private int nombre;
 
     @Column(name = "estado", nullable = false)
-    private boolean estado;
+    private String estado;
 }

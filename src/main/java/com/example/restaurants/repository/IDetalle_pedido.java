@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
-public interface IDetalle_pedido extends JpaRepository<detalle_pedido,Integer> {
+public interface IDetalle_pedido extends JpaRepository<detalle_pedido,Long> {
     List<detalle_pedido> findByPedido_Id(Long idPedido);
     boolean existsByPedido_Id(Long idPedido);
     @Query("""

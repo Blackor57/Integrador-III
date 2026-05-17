@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ISubCategoria extends JpaRepository<subcategoria,Integer> {
+public interface ISubCategoria extends JpaRepository<subcategoria,Long> {
     List<subcategoria> findByCategoria(Long idCategoria);
 }
