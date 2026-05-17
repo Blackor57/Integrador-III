@@ -65,5 +65,4 @@ Sigue estos pasos para levantar el entorno de desarrollo localmente:
 ### Pasos
 1. **Clonar el repositorio:**
    ```bash
-   git clone [https://github.com/TU_USUARIO/Integrador-III.git](https://github.com/TU_USUARIO/Integrador-III.git)
-   cd Integrador-III
+   git clone (https://github.com/Blackor57/Integrador-III.git)
