@@ -9,6 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface ILote extends JpaRepository<lote, Integer> {
+public interface ILote extends JpaRepository<lote, Long> {
     List<lote> findByFechaVencimiento(Date fecha);
 }

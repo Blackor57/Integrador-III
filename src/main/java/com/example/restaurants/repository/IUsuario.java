@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface IUsuario extends JpaRepository <usuario,Integer> {
+public interface IUsuario extends JpaRepository <usuario,Long> {
 
     public usuario findByUsername(String username);
     List<usuario> findByRoles(String rol);

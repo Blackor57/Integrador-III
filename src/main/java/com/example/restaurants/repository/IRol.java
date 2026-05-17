@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface IRol extends JpaRepository<rol,Integer> {
+public interface IRol extends JpaRepository<rol,Long> {
 
     Optional<rol> findByUsername(String username);
 

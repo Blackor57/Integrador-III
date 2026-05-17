@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class Detalle_PedidoServices {
+public class Detalle_PedidoService {
 }

@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface IFactura extends JpaRepository<factura, Integer> {
+public interface IFactura extends JpaRepository<factura, Long> {
     factura findByDetalle_Id(Long detalle_pedido);
     List<factura> findByRUC(char RUC);
     List<factura> findByFechaEmision(Date fecha);

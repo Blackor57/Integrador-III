@@ -9,6 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface IInventario extends JpaRepository<inventario, Integer> {
+public interface IInventario extends JpaRepository<inventario, Long> {
     List<inventario> findbyFechaRegistro(Date fecha);
 }

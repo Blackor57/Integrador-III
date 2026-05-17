@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface IPedido extends JpaRepository<pedido, Integer> {
+public interface IPedido extends JpaRepository<pedido, Long> {
     Optional<pedido> findByMesa_Id(Long idMesa);
     List<pedido> findByUsuario_Id(Long idUsuario);
     List<pedido> findByEstado(String estadoPedido);

@@ -21,8 +21,8 @@ public class factura {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_detalle")
-    private detalle_pedido detalle_pedido;
+    @JoinColumn(name = "id_pedido")
+    private pedido pedido;
 
     @Column(name = "RUC")
     private char RUC;

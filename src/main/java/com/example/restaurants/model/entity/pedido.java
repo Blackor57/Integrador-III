@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -43,9 +44,9 @@ public class pedido {
     @Column(name = "sub_total")
     private float sub_total;
 
-    @Column(name = "dscto")
-    private float dscto;
-
     @Column(name = "total")
     private float total;
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<detalle_pedido> detalles;
 }

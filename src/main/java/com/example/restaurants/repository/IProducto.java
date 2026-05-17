@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IProducto extends JpaRepository<producto, Integer> {
+public interface IProducto extends JpaRepository<producto, Long> {
     List<producto> findBySubacategoria(Long subacategoria);
 }

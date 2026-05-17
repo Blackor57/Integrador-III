@@ -21,8 +21,8 @@ public class boleta {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_detalle")
-    private detalle_pedido detalle_pedido;
+    @JoinColumn(name = "id_pedido")
+    private detalle_pedido pedido;
 
     @Column(name = "DNI")
     private char dni;

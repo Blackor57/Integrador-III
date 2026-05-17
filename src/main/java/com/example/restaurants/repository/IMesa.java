@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface IMesa extends JpaRepository<mesa,Integer> {
+public interface IMesa extends JpaRepository<mesa,Long> {
     Optional<mesa> findByNumeroMesa(Integer numeroMesa);
-    List<mesa>  findByMesasLibres (boolean estado);
+    List<mesa>  findByEstado (String estado);
     long countByEstado(String estado);
 }

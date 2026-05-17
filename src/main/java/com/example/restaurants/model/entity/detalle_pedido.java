@@ -36,6 +36,6 @@ public class detalle_pedido {
     private float subtotal;
 
     @Column(name = "estado_item")
-    private boolean estado_item;
+    private String estado_item;
 
 }
