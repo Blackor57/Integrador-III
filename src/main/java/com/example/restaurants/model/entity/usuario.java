@@ -32,7 +32,7 @@ public class usuario implements UserDetails{
     @Column(name = "contraseña", length = 50, nullable = false)
     private String password;
 
-    @Column(name = "Nombre_Completo", length = 10, nullable = false)
+    @Column(name = "NombreCompleto", length = 10, nullable = false)
     private String nombreCompleto;
 
     @Column(name = "email", nullable = false)
@@ -44,7 +44,7 @@ public class usuario implements UserDetails{
     @Column(name = "direccion")
     private String direccion;
 
-    @Column(name = "fec_registro")
+    @Column(name = "fecregistro")
     private Date fecRegistro;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

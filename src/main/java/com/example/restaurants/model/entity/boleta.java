@@ -21,7 +21,7 @@ public class boleta {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_pedido")
+    @JoinColumn(name = "idpedido")
     private detalle_pedido pedido;
 
     @Column(name = "DNI")
@@ -30,7 +30,7 @@ public class boleta {
     @Column(name = "nombre")
     private String nombre;
 
-    @Column(name = "fecha_emision")
+    @Column(name = "fechaemision")
     private Date fecha_emision;
 
 }

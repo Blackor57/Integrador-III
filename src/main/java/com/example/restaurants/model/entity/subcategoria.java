@@ -22,7 +22,7 @@ public class subcategoria {
     private String nombre;
 
     @ManyToOne
-    @JoinColumn(name = "id_categoria")
+    @JoinColumn(name = "idcategoria")
     private categoria categoria;
 
 }

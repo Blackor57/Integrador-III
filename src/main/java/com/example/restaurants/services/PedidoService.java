@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class PedidoService {
     @Transactional
     public pedido crearPedido(pedido nuevoPedido) {
         // 1. Validar y actualizar la Mesa (si es servicio en salón)
-        if ("MESA".equalsIgnoreCase(nuevoPedido.getTipo_servicio()) && nuevoPedido.getMesa() != null) {
+        if ("MESA".equalsIgnoreCase(nuevoPedido.getTiposervicio()) && nuevoPedido.getMesa() != null) {
             mesa mesaEntity = mesaRepository.findById(nuevoPedido.getMesa().getId())
                     .orElseThrow(() -> new RuntimeException("Mesa no encontrada"));
 
@@ -43,8 +42,8 @@ public class PedidoService {
             nuevoPedido.setMesa(mesaEntity);
         }
 
-        nuevoPedido.setFecha_creacion(new Date());
-        nuevoPedido.setEstado_pedido("PENDIENTE");
+        nuevoPedido.setFechacreacion(new Date());
+        nuevoPedido.setEstadopedido("PENDIENTE");
 
         float totalPedido = 0;
 
@@ -60,7 +59,7 @@ public class PedidoService {
             }
         }
 
-        nuevoPedido.setSub_total(totalPedido);
+        nuevoPedido.setSubtotal(totalPedido);
         nuevoPedido.setTotal(totalPedido);
 
         return pedidoRepository.save(nuevoPedido);
@@ -98,7 +97,7 @@ public class PedidoService {
      */
     @Transactional(readOnly = true)
     public pedido obtenerPorMesa(Long idMesa) {
-        return pedidoRepository.findByMesa_Id(idMesa)
+        return pedidoRepository.findByMesaId(idMesa)
                 .orElseThrow(() -> new RuntimeException("No se encontró un pedido activo para la mesa: " + idMesa));
     }
 
@@ -108,7 +107,7 @@ public class PedidoService {
     @Transactional
     public pedido cambiarEstadoPedido(Long idPedido, String nuevoEstado) {
         pedido pedidoExistente = obtenerPorId(idPedido);
-        pedidoExistente.setEstado_pedido(nuevoEstado);
+        pedidoExistente.setEstadopedido(nuevoEstado);
         return pedidoRepository.save(pedidoExistente);
     }
 
@@ -121,7 +120,7 @@ public class PedidoService {
         pedido pedidoExistente = obtenerPorId(idPedido);
 
         // 2. Cambiamos el estado principal del pedido
-        pedidoExistente.setEstado_pedido("CANCELADO");
+        pedidoExistente.setEstadopedido("CANCELADO");
 
         // 3. Liberamos la mesa (si es que el pedido es en salón y tiene mesa)
         if (pedidoExistente.getMesa() != null) {

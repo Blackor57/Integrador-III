@@ -19,10 +19,10 @@ public class producto {
     private Long id;
 
     @Column(length = 20, nullable = false)
-    private String cod_producto;
+    private String codproducto;
 
     @Column(length = 20, nullable = false)
-    private String nombre_producto;
+    private String nombreproducto;
 
     @Column(length = 50, nullable = false)
     private String descripcion;

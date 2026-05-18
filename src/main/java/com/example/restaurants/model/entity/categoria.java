@@ -22,6 +22,6 @@ public class categoria {
     private String nombre;
 
     @ManyToOne
-    @JoinColumn(name = "id_rol")
+    @JoinColumn(name = "rol")
     private rol rol;
 }

@@ -13,7 +13,7 @@ public interface IUsuario extends JpaRepository <usuario,Long> {
 
     Optional<usuario> findByUsername(String username);
 
-    List<usuario> findByRoles_Nombre(String rol);
+    List<usuario> findByRolesNombre(String rol);
 
     List<usuario> findByFecRegistro(Date fecha);
 }

@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface IReceta extends JpaRepository<receta, Long> {
-    receta findByProducto_Id(Long id_producto);
-    List<receta> findByInsumo_Id(Long id_insumo);
+    receta findByProductoId(Long id_producto);
+    List<receta> findByInsumoId(Long id_insumo);
 }

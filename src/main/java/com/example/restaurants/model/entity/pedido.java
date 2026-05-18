@@ -22,27 +22,27 @@ public class pedido {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    @JoinColumn(name = "idusuario")
     private usuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "id_mesa")
+    @JoinColumn(name = "idmesa")
     private mesa mesa;
 
-    @Column(name = "fecha_creacion")
-    private Date fecha_creacion;
+    @Column(name = "fechacreacion")
+    private Date fechacreacion;
 
-    @Column(name = "estado_pedido")
-    private String estado_pedido;
+    @Column(name = "estadopedido")
+    private String estadopedido;
 
-    @Column(name = "tipo_servicio")
-    private String tipo_servicio;
+    @Column(name = "tiposervicio")
+    private String tiposervicio;
 
-    @Column(name = "notas_especiales")
-    private String notas_especiales;
+    @Column(name = "notasespeciales")
+    private String notasespeciales;
 
-    @Column(name = "sub_total")
-    private float sub_total;
+    @Column(name = "subtotal")
+    private float subtotal;
 
     @Column(name = "total")
     private float total;

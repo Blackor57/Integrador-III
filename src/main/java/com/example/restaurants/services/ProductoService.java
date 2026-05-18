@@ -42,7 +42,7 @@ public class ProductoService {
     @Transactional(readOnly = true)
     public List<producto> listarPorSubcategoria(Long idSubcategoria) {
         // Asegúrate de corregir el nombre del método en tu IProducto
-        return productoRepository.findBySubcategoria_Id(idSubcategoria);
+        return productoRepository.findBySubcategoriaId(idSubcategoria);
     }
 
     @Transactional
@@ -50,7 +50,7 @@ public class ProductoService {
         producto productoExistente = obtenerPorId(id);
 
         // Actualizamos los datos (no actualizamos el código de producto ni el ID)
-        productoExistente.setNombre_producto(productoActualizado.getNombre_producto());
+        productoExistente.setNombreproducto(productoActualizado.getNombreproducto());
         productoExistente.setDescripcion(productoActualizado.getDescripcion());
 
         if (productoActualizado.getPrecio() > 0) {

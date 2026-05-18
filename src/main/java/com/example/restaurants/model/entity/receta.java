@@ -19,11 +19,11 @@ public class receta {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_insumo")
+    @JoinColumn(name = "idinsumo")
     private insumo insumo;
 
     @ManyToOne
-    @JoinColumn(name = "id_producto")
+    @JoinColumn(name = "idproducto")
     private producto producto;
 
     @Column(name = "cantidad")

@@ -21,23 +21,23 @@ public class factura {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_pedido")
+    @JoinColumn(name = "idpedido")
     private pedido pedido;
 
     @Column(name = "RUC")
     private char RUC;
 
-    @Column(name = "razon_social")
-    private String razon_social;
+    @Column(name = "razonsocial")
+    private String razonsocial;
 
     @Column(name = "direccion", length = 200)
     private String direccion;
 
-    @Column(name = "fecha_emision")
-    private Date fecha_emision;
+    @Column(name = "fechaEmision")
+    private Date fechaEmision;
 
-    @Column(name = "sub_total")
-    private float sub_total;
+    @Column(name = "subtotal")
+    private float subtotal;
 
     @Column(name = "IGV")
     private float IGV;

@@ -21,15 +21,15 @@ public class inventario {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_lote")
+    @JoinColumn(name = "idlote")
     private lote lote;
 
-    @Column(name = "tipo_movimiento")
+    @Column(name = "tipomovimiento")
     private String tipo_movimiento;
 
-    @Column(name = "cantidad_movimiento")
+    @Column(name = "cantidadmovimiento")
     private String cantidad_movimiento;
 
-    @Column(name = "fecha_registro")
+    @Column(name = "fecharegistro")
     private Date fecha_registro;
 }

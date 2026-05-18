@@ -20,22 +20,22 @@ public class lote {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "cod_lote", length = 50)
+    @Column(name = "codlote", length = 50)
     private String codLote;
 
     @ManyToOne
-    @JoinColumn(name = "id_insumo")
+    @JoinColumn(name = "idinsumo")
     private insumo insumo;
 
-    @Column(name = "fecha_fabricacion")
-    private Date fecha_fabricacion;
+    @Column(name = "fechafabricacion")
+    private Date fechafabricacion;
 
-    @Column(name = "fecha_vencimiento")
-    private Date fecha_vencimiento;
+    @Column(name = "FechaVencimiento")
+    private Date FechaVencimiento;
 
-    @Column(name = "cantidad_recibido")
-    private int cantidad_recibido;
+    @Column(name = "cantidadrecibido")
+    private int cantidadrecibido;
 
-    @Column(name = "cantidad_actual")
-    private int cantidad_actual;
+    @Column(name = "cantidadactual")
+    private int cantidadactual;
 }

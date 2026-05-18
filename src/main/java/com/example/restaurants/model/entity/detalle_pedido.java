@@ -19,14 +19,14 @@ public class detalle_pedido {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_pedido")
+    @JoinColumn(name = "idpedido")
     private pedido pedido;
 
     @ManyToOne
-    @JoinColumn(name = "id_producto")
+    @JoinColumn(name = "idproducto")
     private producto producto;
 
-    @Column(name = "precio_unitario")
+    @Column(name = "preciounitario")
     private float precio_unitario;
 
     @Column(name = "cantidad")
@@ -35,7 +35,7 @@ public class detalle_pedido {
     @Column(name = "subtotal")
     private float subtotal;
 
-    @Column(name = "estado_item")
+    @Column(name = "estadoitem")
     private String estado_item;
 
 }
