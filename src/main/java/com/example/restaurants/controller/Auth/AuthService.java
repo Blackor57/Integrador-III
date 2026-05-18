@@ -39,7 +39,7 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("Error: El Rol por defecto no fue encontrado."));
         usuario user = usuario.builder()
                 .username(registerRequest.getUsername())
-                .password(registerRequest.getPassword())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .nombreCompleto(registerRequest.getNombreCompleto())
                 .email(registerRequest.getEmail())
                 .telefono(registerRequest.getTelefono())
