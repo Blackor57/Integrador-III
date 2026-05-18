@@ -31,6 +31,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authRequest ->
                                 authRequest.requestMatchers("/auth/**").permitAll()
+                                        .requestMatchers("/mesa/**").permitAll()
+                                        .requestMatchers("/pedido/**").permitAll()
+                                        .requestMatchers("/producto/**").permitAll()
+                                        .requestMatchers("/categoria/**").permitAll()
+                                        .requestMatchers("/rol/**").permitAll()
+                                        .requestMatchers("/subcategoria/**").permitAll()
                                         .anyRequest().authenticated()
                         )
                 .sessionManagement(sessionManagement ->

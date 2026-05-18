@@ -8,7 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface IRol extends JpaRepository<rol,Long> {
-
     Optional<rol> findByNombre(String nombre);
-
 }
