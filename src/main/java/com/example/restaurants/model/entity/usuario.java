@@ -29,10 +29,10 @@ public class usuario implements UserDetails{
     @Column(name = "usuario", length = 50, nullable = false)
     private String username;
 
-    @Column(name = "contraseña", length = 50, nullable = false)
+    @Column(name = "contraseña", nullable = false)
     private String password;
 
-    @Column(name = "NombreCompleto", length = 10, nullable = false)
+    @Column(name = "NombreCompleto", length = 50, nullable = false)
     private String nombreCompleto;
 
     @Column(name = "email", nullable = false)
