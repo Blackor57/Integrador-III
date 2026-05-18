@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public usuario buscarPorNombreUsuario(String nombreUsuario) {
+    public Optional<usuario> buscarPorNombreUsuario(String nombreUsuario) {
         return usuarioRepository.findByUsername(nombreUsuario);
     }
 
@@ -38,7 +39,7 @@ public class UsuarioService {
         usuario usuarioExistente = obtenerPorId(id);
 
         // Actualizamos solo los datos permitidos (no la contraseña ni el ID)
-        usuarioExistente.setNombre_Completo(datosActualizados.getNombre_Completo());
+        usuarioExistente.setNombreCompleto(datosActualizados.getNombreCompleto());
         usuarioExistente.setTelefono(datosActualizados.getTelefono());
         usuarioExistente.setDireccion(datosActualizados.getDireccion());
         usuarioExistente.setEmail(datosActualizados.getEmail());

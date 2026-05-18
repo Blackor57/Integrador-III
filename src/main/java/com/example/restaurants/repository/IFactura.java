@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface IFactura extends JpaRepository<factura, Long> {
-    factura findByDetalle_Id(Long detalle_pedido);
+    factura findByPedido_Id(Long idPedido);
     List<factura> findByRUC(char RUC);
-    List<factura> findByFechaEmision(Date fecha);
+    List<factura> findByFecha_emision(Date fecha);
 }

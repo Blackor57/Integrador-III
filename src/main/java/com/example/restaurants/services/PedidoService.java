@@ -90,7 +90,7 @@ public class PedidoService {
      */
     @Transactional(readOnly = true)
     public List<pedido> listarPorEstado(String estado) {
-        return pedidoRepository.findByEstado(estado);
+        return pedidoRepository.buscarPorEstado(estado);
     }
 
     /**
@@ -159,9 +159,9 @@ public class PedidoService {
      * Calcula los ingresos totales de todos los pedidos con estado 'PAGADO'.
      */
     @Transactional(readOnly = true)
-    public BigDecimal obtenerVentasTotales() {
-        BigDecimal ventas = pedidoRepository.obtenerVentasTotales();
-        return ventas != null ? ventas : BigDecimal.ZERO;
+    public Double obtenerVentasTotales() {
+        Double ventas = pedidoRepository.obtenerVentasTotales();
+        return ventas != null ? ventas : 0.0;
     }
 
 
@@ -172,10 +172,10 @@ public class PedidoService {
     @Transactional(readOnly = true)
     public String obtenerReporteProducto(Long idProducto) {
         Long cantidad = detallePedidoRepository.cantidadVendidaProducto(idProducto);
-        BigDecimal monto = detallePedidoRepository.montoGeneradoProducto(idProducto);
+        Double monto = detallePedidoRepository.montoGeneradoProducto(idProducto);
 
         long cantFinal = (cantidad != null) ? cantidad : 0L;
-        BigDecimal montoFinal = (monto != null) ? monto : BigDecimal.ZERO;
+        Double montoFinal = (monto != null) ? monto : 0.0;
 
         return String.format("Producto ID %d: Unidades vendidas = %d, Total generado = $%s",
                 idProducto, cantFinal, montoFinal.toString());

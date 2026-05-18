@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface IMesa extends JpaRepository<mesa,Long> {
-    Optional<mesa> findByNumeroMesa(Integer numeroMesa);
+    Optional<mesa> findByNombre(int nombre);
     List<mesa>  findByEstado (String estado);
     long countByEstado(String estado);
 }

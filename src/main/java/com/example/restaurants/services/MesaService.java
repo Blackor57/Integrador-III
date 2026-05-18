@@ -39,7 +39,7 @@ public class MesaService {
 
     @Transactional(readOnly = true)
     public mesa obtenerMesaporNumero(Integer nombre){
-        return mesaRepository.findByNumeroMesa(nombre)
+        return mesaRepository.findByNombre(nombre)
                 .orElseThrow(() -> new RuntimeException("No se encontro ninguna mesa registrada "+nombre));
     }
 
