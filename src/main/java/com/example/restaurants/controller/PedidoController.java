@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/pedido") // Ruta limpia y directa según tu estándar
@@ -25,9 +27,16 @@ public class PedidoController {
     }
 
     @PostMapping
-    public ResponseEntity<pedido> crearPedido(@RequestBody pedido pedido) {
+    public ResponseEntity<?> crearPedido(@RequestBody pedido pedido) {
         // Tu servicio ya maneja la lógica transaccional, cálculo de totales y actualización de mesas
-        return ResponseEntity.ok(pedidoService.crearPedido(pedido));
+        try {
+            pedido nuevo = pedidoService.crearPedido(pedido);
+            return ResponseEntity.ok(nuevo);
+        } catch (RuntimeException e) {
+            Map<String,String> error= new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        }
     }
 
     @PutMapping("/{id}/cancelar")

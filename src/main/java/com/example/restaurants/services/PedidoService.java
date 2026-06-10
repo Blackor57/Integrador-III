@@ -18,53 +18,96 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PedidoService {
 
-    @Autowired
+
     private final IPedido pedidoRepository;
-    @Autowired
     private final IDetalle_pedido detallePedidoRepository;
-    @Autowired
     private final IMesa mesaRepository;
 
     @Transactional
     public pedido crearPedido(pedido nuevoPedido) {
-        // 1. Validar y actualizar la Mesa (si es servicio en salón)
-        if ("MESA".equalsIgnoreCase(nuevoPedido.getTiposervicio()) && nuevoPedido.getMesa() != null) {
+
+        // 1. Validar tipo de servicio
+        if (nuevoPedido.getTiposervicio() == null) {
+            throw new RuntimeException("El tipo de servicio es obligatorio");
+        }
+
+        String tipoServicio = nuevoPedido.getTiposervicio().toUpperCase();
+
+        // ==========================================
+        // 🪑 CASO 1: SERVICIO EN MESA (PRESENCIAL)
+        // ==========================================
+        if ("MESA".equals(tipoServicio)) {
+
+            if (nuevoPedido.getMesa() == null || nuevoPedido.getMesa().getId() == null) {
+                throw new RuntimeException("Debe especificar una mesa para pedidos en salón");
+            }
             mesa mesaEntity = mesaRepository.findById(nuevoPedido.getMesa().getId())
                     .orElseThrow(() -> new RuntimeException("Mesa no encontrada"));
 
-            if (!"LIBRE".equals(mesaEntity.getEstado())) {
-                throw new RuntimeException("La mesa " + mesaEntity.getNombre() + " no está libre.");
+            if (!"LIBRE".equalsIgnoreCase(mesaEntity.getEstado())) {
+                throw new RuntimeException("La mesa " + mesaEntity.getNombre() + " no está libre");
             }
 
             // Ocupamos la mesa
             mesaEntity.setEstado("OCUPADO");
             mesaRepository.save(mesaEntity);
+
             nuevoPedido.setMesa(mesaEntity);
         }
 
+        // ==========================================
+        // 🚚 CASO 2: SERVICIO ONLINE / DELIVERY
+        // ==========================================
+        else {
+            // Nos aseguramos que NO tenga mesa
+            nuevoPedido.setMesa(null);
+        }
+
+        // ==========================================
+        // 2. DATOS GENERALES DEL PEDIDO
+        // ==========================================
         nuevoPedido.setFechacreacion(new Date());
         nuevoPedido.setEstadopedido("PENDIENTE");
 
         float totalPedido = 0;
 
-        // 2. Procesar detalles con el nuevo 'Estado_Item'
-        if (nuevoPedido.getDetalles() != null) {
-            for (detalle_pedido detalle : nuevoPedido.getDetalles()) {
-                detalle.setPedido(nuevoPedido);
-                detalle.setEstado_item("PENDIENTE"); // Listo para que cocina/bar lo vea
-
-                float subtotalDetalle = detalle.getCantidad() * detalle.getPrecio_unitario();
-                detalle.setSubtotal(subtotalDetalle);
-                totalPedido += subtotalDetalle;
-            }
+        // ==========================================
+        // 3. PROCESAR DETALLES
+        // ==========================================
+        if (nuevoPedido.getDetalles() == null || nuevoPedido.getDetalles().isEmpty()) {
+            throw new RuntimeException("El pedido debe tener al menos un detalle");
         }
 
+        for (detalle_pedido detalle : nuevoPedido.getDetalles()) {
+
+            if (detalle.getCantidad() <= 0) {
+                throw new RuntimeException("Cantidad inválida en el detalle");
+            }
+
+            if (detalle.getPrecioUnitario() <= 0) {
+                throw new RuntimeException("Precio inválido en el detalle");
+            }
+
+            detalle.setPedido(nuevoPedido);
+            detalle.setEstadoItem("PENDIENTE");
+
+            float subtotalDetalle = detalle.getCantidad() * detalle.getPrecioUnitario();
+            detalle.setSubtotal(subtotalDetalle);
+
+            totalPedido += subtotalDetalle;
+        }
+
+        // ==========================================
+        // 4. TOTALES
+        // ==========================================
         nuevoPedido.setSubtotal(totalPedido);
         nuevoPedido.setTotal(totalPedido);
 
+        // ==========================================
+        // 5. GUARDAR
+        // ==========================================
         return pedidoRepository.save(nuevoPedido);
     }
-
     /**
      * Busca un pedido por su ID.
      */
@@ -133,8 +176,8 @@ public class PedidoService {
         if (pedidoExistente.getDetalles() != null) {
             for (detalle_pedido detalle : pedidoExistente.getDetalles()) {
                 // Solo cancelamos si no ha sido entregado aún
-                if (!"ENTREGADO".equals(detalle.getEstado_item())) {
-                    detalle.setEstado_item("CANCELADO");
+                if (!"ENTREGADO".equals(detalle.getEstadoItem())) {
+                    detalle.setEstadoItem("CANCELADO");
                 }
             }
         }
@@ -179,6 +222,5 @@ public class PedidoService {
         return String.format("Producto ID %d: Unidades vendidas = %d, Total generado = $%s",
                 idProducto, cantFinal, montoFinal.toString());
     }
-
 
 }

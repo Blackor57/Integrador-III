@@ -27,15 +27,15 @@ public class detalle_pedido {
     private producto producto;
 
     @Column(name = "preciounitario")
-    private float precio_unitario;
+    private float precioUnitario;
 
     @Column(name = "cantidad")
-    private int cantidad;
+    private Integer cantidad;
 
     @Column(name = "subtotal")
     private float subtotal;
 
     @Column(name = "estadoitem")
-    private String estado_item;
+    private String estadoItem;
 
 }
