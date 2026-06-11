@@ -1,4 +1,5 @@
 package com.example.restaurants.controller;
+import com.example.restaurants.model.entity.EstadoItem;
 import com.example.restaurants.model.entity.pedido; // Tu entidad en minúsculas
 import com.example.restaurants.services.PedidoService; // Tu clase de servicio
 import lombok.RequiredArgsConstructor;
@@ -42,5 +43,18 @@ public class PedidoController {
     @PutMapping("/{id}/cancelar")
     public ResponseEntity<pedido> cancelarPedido(@PathVariable Long id) {
         return ResponseEntity.ok(pedidoService.cancelarPedido(id));
+    }
+
+    @PatchMapping("/detalle/{id}/estado")
+    public ResponseEntity<?> cambiarEstadoDetalle(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> body) {
+
+        EstadoItem estado =
+                EstadoItem.valueOf(body.get("estado"));
+
+        return ResponseEntity.ok(
+                pedidoService.cambiarEstadoDetalle(id, estado)
+        );
     }
 }

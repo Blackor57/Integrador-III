@@ -28,7 +28,7 @@ public class producto {
     private String descripcion;
 
     @Column(nullable = false)
-    private float precio;
+    private Float precio;
 
     @ManyToOne
     @JoinColumn(name = "id_subcategoria")

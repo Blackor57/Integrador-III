@@ -1,5 +1,6 @@
 package com.example.restaurants.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +32,7 @@ public class usuario implements UserDetails{
     private String username;
 
     @Column(name = "contraseña", nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column(name = "NombreCompleto", length = 50, nullable = false)
@@ -55,6 +57,7 @@ public class usuario implements UserDetails{
     private Collection<rol> roles;
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream()
                 .map(rol -> new SimpleGrantedAuthority(rol.getNombre()))
@@ -62,21 +65,25 @@ public class usuario implements UserDetails{
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

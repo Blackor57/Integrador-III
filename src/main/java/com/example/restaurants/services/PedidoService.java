@@ -1,11 +1,7 @@
 package com.example.restaurants.services;
 
-import com.example.restaurants.model.entity.detalle_pedido;
-import com.example.restaurants.model.entity.mesa;
-import com.example.restaurants.model.entity.pedido;
-import com.example.restaurants.repository.IDetalle_pedido;
-import com.example.restaurants.repository.IMesa;
-import com.example.restaurants.repository.IPedido;
+import com.example.restaurants.model.entity.*;
+import com.example.restaurants.repository.*;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +18,8 @@ public class PedidoService {
     private final IPedido pedidoRepository;
     private final IDetalle_pedido detallePedidoRepository;
     private final IMesa mesaRepository;
+    private final IProducto productoRepository;
+    private final IUsuario usuarioRepository;
 
     @Transactional
     public pedido crearPedido(pedido nuevoPedido) {
@@ -30,6 +28,19 @@ public class PedidoService {
         if (nuevoPedido.getTiposervicio() == null) {
             throw new RuntimeException("El tipo de servicio es obligatorio");
         }
+
+        if (nuevoPedido.getUsuario() == null ||
+                nuevoPedido.getUsuario().getId() == null) {
+
+            throw new RuntimeException("Debe especificar un usuario");
+        }
+
+        usuario usuarioDB = usuarioRepository
+                .findById(nuevoPedido.getUsuario().getId())
+                .orElseThrow(() ->
+                        new RuntimeException("Usuario no encontrado"));
+
+        nuevoPedido.setUsuario(usuarioDB);
 
         String tipoServicio = nuevoPedido.getTiposervicio().toUpperCase();
 
@@ -67,7 +78,7 @@ public class PedidoService {
         // 2. DATOS GENERALES DEL PEDIDO
         // ==========================================
         nuevoPedido.setFechacreacion(new Date());
-        nuevoPedido.setEstadopedido("PENDIENTE");
+        nuevoPedido.setEstadopedido(EstadoPedido.PENDIENTE);
 
         float totalPedido = 0;
 
@@ -84,15 +95,39 @@ public class PedidoService {
                 throw new RuntimeException("Cantidad inválida en el detalle");
             }
 
-            if (detalle.getPrecioUnitario() <= 0) {
-                throw new RuntimeException("Precio inválido en el detalle");
+            if (detalle.getProducto() == null || detalle.getProducto().getId() == null) {
+                throw new RuntimeException("Debe especificar un producto");
+            }
+
+            producto productoDB = productoRepository
+                    .findById(detalle.getProducto().getId())
+                    .orElseThrow(() -> new RuntimeException(
+                            "Producto no encontrado: " + detalle.getProducto().getId()));
+
+            detalle.setProducto(productoDB);
+            String area = productoDB
+                    .getSubcategoria()
+                    .getCategoria()
+                    .getRol()
+                    .getNombre();
+
+            if ("ROLE_BARMAN".equals(area)) {
+                detalle.setArea("BAR");
+            } else {
+                detalle.setArea("COCINA");
             }
 
             detalle.setPedido(nuevoPedido);
-            detalle.setEstadoItem("PENDIENTE");
 
-            float subtotalDetalle = detalle.getCantidad() * detalle.getPrecioUnitario();
+            Float precioReal = productoDB.getPrecio();
+
+            detalle.setPrecioUnitario(precioReal);
+
+            Float subtotalDetalle = detalle.getCantidad() * precioReal;
+
             detalle.setSubtotal(subtotalDetalle);
+
+            detalle.setEstadoItem(EstadoItem.EN_PREPARACION);
 
             totalPedido += subtotalDetalle;
         }
@@ -149,8 +184,25 @@ public class PedidoService {
      */
     @Transactional
     public pedido cambiarEstadoPedido(Long idPedido, String nuevoEstado) {
+
         pedido pedidoExistente = obtenerPorId(idPedido);
-        pedidoExistente.setEstadopedido(nuevoEstado);
+
+        List<String> estadosValidos = List.of(
+                "PENDIENTE",
+                "EN_PREPARACION",
+                "LISTO",
+                "ENTREGADO",
+                "PAGADO",
+                "CANCELADO"
+        );
+
+        if (!estadosValidos.contains(nuevoEstado.toUpperCase())) {
+            throw new RuntimeException("Estado inválido");
+        }
+        EstadoPedido estado =
+                EstadoPedido.valueOf(nuevoEstado.toUpperCase());
+        pedidoExistente.setEstadopedido(estado);
+
         return pedidoRepository.save(pedidoExistente);
     }
 
@@ -163,7 +215,7 @@ public class PedidoService {
         pedido pedidoExistente = obtenerPorId(idPedido);
 
         // 2. Cambiamos el estado principal del pedido
-        pedidoExistente.setEstadopedido("CANCELADO");
+        pedidoExistente.setEstadopedido(EstadoPedido.CANCELADO);
 
         // 3. Liberamos la mesa (si es que el pedido es en salón y tiene mesa)
         if (pedidoExistente.getMesa() != null) {
@@ -177,7 +229,7 @@ public class PedidoService {
             for (detalle_pedido detalle : pedidoExistente.getDetalles()) {
                 // Solo cancelamos si no ha sido entregado aún
                 if (!"ENTREGADO".equals(detalle.getEstadoItem())) {
-                    detalle.setEstadoItem("CANCELADO");
+                    detalle.setEstadoItem(EstadoItem.CANCELADO);
                 }
             }
         }
@@ -221,6 +273,19 @@ public class PedidoService {
 
         return String.format("Producto ID %d: Unidades vendidas = %d, Total generado = $%s",
                 idProducto, cantFinal, montoFinal.toString());
+    }
+
+    @Transactional
+    public detalle_pedido cambiarEstadoDetalle(
+            Long idDetalle,
+            EstadoItem nuevoEstado) {
+
+        detalle_pedido detalle = detallePedidoRepository.findById(idDetalle)
+                .orElseThrow(() -> new RuntimeException("Detalle no encontrado"));
+
+        detalle.setEstadoItem(nuevoEstado);
+
+        return detallePedidoRepository.save(detalle);
     }
 
 }

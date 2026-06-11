@@ -19,7 +19,7 @@ public class mesa {
     private Long id;
 
     @Column(name = "Numero_mesa")
-    private int nombre;
+    private Integer nombre;
 
     @Column(name = "estado", nullable = false)
     private String estado;

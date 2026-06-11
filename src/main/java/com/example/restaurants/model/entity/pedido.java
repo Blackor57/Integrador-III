@@ -1,5 +1,6 @@
 package com.example.restaurants.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,8 +33,9 @@ public class pedido {
     @Column(name = "fechacreacion",nullable=true)
     private Date fechacreacion;
 
-    @Column(name = "estadopedido",nullable=true, length = 255)
-    private String estadopedido;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estadopedido", nullable = false)
+    private EstadoPedido estadopedido;
 
     @Column(name = "tiposervicio",nullable=true, length = 255)
     private String tiposervicio;
@@ -42,11 +44,12 @@ public class pedido {
     private String notasespeciales;
 
     @Column(name = "subtotal",nullable=false)
-    private float subtotal;
+    private Float subtotal;
 
     @Column(name = "total",nullable=false)
-    private float total;
+    private Float total;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<detalle_pedido> detalles;
 }

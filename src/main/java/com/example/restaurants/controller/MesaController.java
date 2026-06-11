@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/mesa") // Ruta limpia y directa según tu estándar
@@ -34,5 +36,27 @@ public class MesaController {
     public ResponseEntity<Void> eliminarMesa(@PathVariable Long id) {
         mesaService.eliminarMesa(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/estado")
+    public ResponseEntity<?> actualizarEstado(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> body) {
+
+        try {
+            mesa mesaActualizada = mesaService.actualizarEstadoMesa(
+                    id,
+                    body.get("estado")
+            );
+
+            return ResponseEntity.ok(mesaActualizada);
+
+        } catch (RuntimeException e) {
+
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+
+            return ResponseEntity.badRequest().body(error);
+        }
     }
 }

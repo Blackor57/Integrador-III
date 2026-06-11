@@ -1,5 +1,6 @@
 package com.example.restaurants.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class detalle_pedido {
 
     @ManyToOne
     @JoinColumn(name = "idpedido")
+    @JsonBackReference
     private pedido pedido;
 
     @ManyToOne
@@ -27,15 +29,19 @@ public class detalle_pedido {
     private producto producto;
 
     @Column(name = "preciounitario")
-    private float precioUnitario;
+    private Float precioUnitario;
 
     @Column(name = "cantidad")
     private Integer cantidad;
 
     @Column(name = "subtotal")
-    private float subtotal;
+    private Float subtotal;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "estadoitem")
-    private String estadoItem;
+    private EstadoItem estadoItem;
+
+    @Column(name = "area")
+    private String area; // COCINA o BAR
 
 }

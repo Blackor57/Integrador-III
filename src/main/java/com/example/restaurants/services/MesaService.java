@@ -58,9 +58,16 @@ public class MesaService {
 
         mesaRepository.delete(mesaregistrada);
     }
+    @Transactional
+    public mesa actualizarEstadoMesa(Long idMesa, String estado) {
 
+        mesa mesaExistente = mesaRepository.findById(idMesa)
+                .orElseThrow(() -> new RuntimeException("Mesa no encontrada"));
 
+        mesaExistente.setEstado(estado.toUpperCase());
 
+        return mesaRepository.save(mesaExistente);
+    }
 
 
 }
