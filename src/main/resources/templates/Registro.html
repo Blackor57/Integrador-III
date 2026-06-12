@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LA ESTACIÓN Huaral - Registro</title>
+    
+    <!-- Tipografías -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/static/css/global.css">
+    <link rel="stylesheet" href="/static/css/Registro.css">
+</head>
+<body class="registro-page">
+    
+    <div class="registro-background" id="parallaxBgRegistro">
+        <div class="registro-overlay"></div>
+    </div>
+    
+    <div class="registro-container">
+        <div class="registro-card" id="registroCard">
+            <!-- Header -->
+            <div class="registro-header">
+                <div class="registro-brand">
+                    <h1 class="registro-title">LA ESTACIÓN</h1>
+                    <span class="registro-subtitle">Huaral</span>
+                </div>
+                <p class="registro-description">Crea tu cuenta y disfruta de nuestra auténtica comida peruana</p>
+            </div>
+            
+            <!-- Formulario -->
+            <form class="registro-form" id="registroForm" novalidate>
+                <div class="registro-grid">
+                    <!-- Columna Izquierda - Información Personal -->
+                    <div class="registro-column">
+                        <div class="column-header">
+                            <span class="column-icon">📝</span>
+                            <h3>Información Personal</h3>
+                        </div>
+                        
+                        <div class="form-group floating-label">
+                            <input 
+                                type="text" 
+                                id="nombreCompleto" 
+                                class="form-input" 
+                                placeholder="Edu Luis Perez" 
+                                required
+                            >
+                            <label for="nombreCompleto" class="form-label">
+                                <span class="label-icon">👤</span> Nombre Completo
+                            </label>
+                            <div class="tooltip-trigger" data-tooltip="Ingresa tu nombre y apellido completo">ⓘ</div>
+                        </div>
+                        
+                        <div class="form-group floating-label">
+                            <input 
+                                type="email" 
+                                id="emailRegistro" 
+                                class="form-input" 
+                                placeholder="eduben10@estacionhuaral.com" 
+                                required
+                            >
+                            <label for="emailRegistro" class="form-label">
+                                <span class="label-icon">📧</span> Correo Electrónico
+                            </label>
+                            <div class="tooltip-trigger" data-tooltip="Usaremos este email para enviarte confirmaciones">ⓘ</div>
+                        </div>
+                        
+                        <div class="form-group floating-label">
+                            <input 
+                                type="tel" 
+                                id="telefono" 
+                                class="form-input" 
+                                placeholder="951654321" 
+                                required
+                                pattern="[0-9]{9}"
+                            >
+                            <label for="telefono" class="form-label">
+                                <span class="label-icon">📱</span> Teléfono
+                            </label>
+                            <div class="tooltip-trigger" data-tooltip="Formato: 9 dígitos sin espacios">ⓘ</div>
+                        </div>
+                        
+                        <div class="form-group floating-label">
+                            <input 
+                                type="text" 
+                                id="direccion" 
+                                class="form-input" 
+                                placeholder="Av. Timoteo y Barney" 
+                                required
+                            >
+                            <label for="direccion" class="form-label">
+                                <span class="label-icon">📍</span> Dirección
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Columna Derecha - Seguridad -->
+                    <div class="registro-column">
+                        <div class="column-header">
+                            <span class="column-icon">🔐</span>
+                            <h3>Seguridad</h3>
+                        </div>
+                        
+                        <div class="form-group floating-label">
+                            <input 
+                                type="password" 
+                                id="passwordRegistro" 
+                                class="form-input" 
+                                placeholder="Mínimo 6 caracteres" 
+                                required
+                                minlength="6"
+                            >
+                            <label for="passwordRegistro" class="form-label">
+                                <span class="label-icon">🔒</span> Contraseña
+                            </label>
+                            <div class="password-strength" id="passwordStrength">
+                                <div class="strength-bar">
+                                    <div class="strength-fill" id="strengthFill"></div>
+                                </div>
+                                <span class="strength-text" id="strengthText">Esperando...</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group floating-label">
+                            <input 
+                                type="password" 
+                                id="confirmarPassword" 
+                                class="form-input" 
+                                placeholder="Repite tu contraseña" 
+                                required
+                            >
+                            <label for="confirmarPassword" class="form-label">
+                                <span class="label-icon">🔒</span> Confirmar Contraseña
+                            </label>
+                            <div class="match-indicator" id="matchIndicator" style="display:none;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span>Las contraseñas coinciden</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Selector de Avatar -->
+                        <div class="avatar-selector">
+                            <label class="form-label-static">🎨 Elegir Avatar</label>
+                            <div class="avatar-grid" id="avatarGrid">
+                                <div class="avatar-option selected" data-avatar="avatar1">
+                                    <img src="/static/img/avatar-default.png" alt="Avatar 1" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=font-size:24px;>👨</span>';">
+                                </div>
+                                <div class="avatar-option" data-avatar="avatar2">
+                                    <img src="/static/img/avatar-default.png" alt="Avatar 2" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=font-size:24px;>👩</span>';">
+                                </div>
+                                <div class="avatar-option" data-avatar="avatar3">
+                                    <img src="/static/img/avatar-default.png" alt="Avatar 3" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=font-size:24px;>👨‍🍳</span>';">
+                                </div>
+                                <div class="avatar-option" data-avatar="avatar4">
+                                    <img src="/static/img/avatar-default.png" alt="Avatar 4" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=font-size:24px;>👩‍🍳</span>';">
+                                </div>
+                                <div class="avatar-option" data-avatar="avatar5">
+                                    <img src="/static/img/avatar-default.png" alt="Avatar 5" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=font-size:24px;>🧑</span>';">
+                                </div>
+                                <div class="avatar-option avatar-upload" id="avatarUpload">
+                                    <span>+</span>
+                                    <input type="file" id="avatarInput" accept="image/*" hidden>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Checkboxes -->
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="terminos" required>
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-label">Acepto los <a href="#">términos y condiciones</a></span>
+                    </label>
+                </div>
+                
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="ofertas">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-label">Deseo recibir ofertas y promociones</span>
+                    </label>
+                </div>
+                
+                <!-- Botón Registro -->
+                <button type="submit" class="btn btn-primary btn-full" id="registroButton">
+                    <span class="btn-text">Crear Cuenta</span>
+                    <span class="btn-loader" style="display:none;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </span>
+                </button>
+                
+                <!-- Link Login -->
+                <p class="login-link">
+                    ¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí <span class="arrow">→</span></a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="/static/js/global.js"></script>
+    <script src="/static/js/Registro.js"></script>
+</body>
+</html>

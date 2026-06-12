@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LA ESTACIÓN Huaral - Nuestra Carta</title>
+    
+    <!-- Tipografías -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/static/css/global.css">
+    <link rel="stylesheet" href="/static/css/Inicio.css">
+</head>
+<body class="inicio-page">
+    
+    <!-- Header inyectado por JS -->
+    <header class="global-header" id="globalHeader">
+        <div class="header-container">
+            <div class="header-logo">
+                <a href="/inicio" class="logo-link">
+                    <span class="logo-icon">🍽️</span>
+                    <div class="logo-text">
+                        <span class="logo-main">ESTACIÓN</span>
+                        <span class="logo-sub">Huaral</span>
+                    </div>
+                </a>
+            </div>
+            
+            <nav class="header-nav" id="headerNav">
+                <a href="/inicio" class="nav-link active">
+                    <span class="nav-icon">🍽️</span>
+                    <span class="nav-text">Inicio</span>
+                </a>
+                <a href="/pedidos" class="nav-link">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Mis Pedidos</span>
+                </a>
+                <a href="/perfil" class="nav-link">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-text">Mi Perfil</span>
+                </a>
+                <a href="/login" class="nav-link nav-logout" id="logoutLink">
+                    <span class="nav-icon">🚪</span>
+                    <span class="nav-text">Salir</span>
+                </a>
+            </nav>
+            
+            <div class="header-actions">
+                <button class="cart-btn" id="cartButton" aria-label="Carrito de compras">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+                <button class="theme-toggle" id="themeToggle" aria-label="Cambiar modo oscuro">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menú">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        
+        <!-- Hero Section -->
+        <section class="hero-section" id="heroSection">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <span class="hero-badge">🍽️ Carta Digital</span>
+                <h1 class="hero-title" id="heroTitle">Nuestra Carta</h1>
+                <p class="hero-subtitle">Autenticidad en cada plato</p>
+                <a href="#promosSection" class="btn btn-hero">
+                    Ver promociones
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </a>
+            </div>
+            <div class="hero-particles" id="heroParticles"></div>
+        </section>
+        
+        <!-- Sección Categorías -->
+        <section class="categorias-section">
+            <div class="container">
+                <div class="categorias-scroll" id="categoriasScroll">
+                    <button class="categoria-chip active" data-categoria="todos">
+                        <span class="chip-icon">🍽️</span>
+                        <span class="chip-text">Todos</span>
+                    </button>
+                    <button class="categoria-chip" data-categoria="carnes">
+                        <span class="chip-icon">🥩</span>
+                        <span class="chip-text">Carnes</span>
+                    </button>
+                    <button class="categoria-chip" data-categoria="aves">
+                        <span class="chip-icon">🍗</span>
+                        <span class="chip-text">Aves</span>
+                    </button>
+                    <button class="categoria-chip" data-categoria="vegetariano">
+                        <span class="chip-icon">🥗</span>
+                        <span class="chip-text">Vegetariano</span>
+                    </button>
+                    <button class="categoria-chip" data-categoria="pastas">
+                        <span class="chip-icon">🍝</span>
+                        <span class="chip-text">Pastas</span>
+                    </button>
+                    <button class="categoria-chip" data-categoria="arroz">
+                        <span class="chip-icon">🍚</span>
+                        <span class="chip-text">Arroces</span>
+                    </button>
+                    <button class="categoria-chip" data-categoria="bebidas">
+                        <span class="chip-icon">🥤</span>
+                        <span class="chip-text">Bebidas</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sección Búsqueda -->
+        <section class="search-section">
+            <div class="container">
+                <div class="search-bar" id="searchBar">
+                    <span class="search-icon">🔍</span>
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        id="searchInput" 
+                        placeholder="Buscar platos... (ej: lomo, ceviche, pollo)"
+                    >
+                    <button class="search-clear" id="searchClear" style="display:none;">✕</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Grid de Platos -->
+        <section class="platos-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Platos Destacados</h2>
+                    <p class="section-description">Descubre nuestra selección de platos preparados con ingredientes frescos</p>
+                </div>
+                
+                <div class="platos-grid" id="platosGrid">
+                    <!-- Renderizado dinámicamente por JS -->
+                </div>
+                
+                <!-- Estado vacío -->
+                <div class="empty-state" id="emptyState" style="display:none;">
+                    <span class="empty-icon">🍽️</span>
+                    <h3>No se encontraron platos</h3>
+                    <p>Intenta con otra categoría o búsqueda</p>
+                </div>
+                
+                <!-- Loader -->
+                <div class="platos-loader" id="platosLoader" style="display:none;">
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sección Promos -->
+        <section class="promos-section" id="promosSection">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Promociones</h2>
+                    <p class="section-description">Aprovecha nuestras ofertas especiales</p>
+                </div>
+                
+                <div class="promos-carousel" id="promosCarousel">
+                    <div class="promo-card">
+                        <div class="promo-img" style="background: linear-gradient(135deg, #C85C2E, #E87A4A);">
+                            <span class="promo-discount">20% OFF</span>
+                        </div>
+                        <div class="promo-content">
+                            <h3 class="promo-title">Promo Familiar</h3>
+                            <p class="promo-desc">20% de descuento en combos familiares</p>
+                            <button class="btn btn-promo">Ver más →</button>
+                        </div>
+                    </div>
+                    
+                    <div class="promo-card">
+                        <div class="promo-img" style="background: linear-gradient(135deg, #5C7A3C, #8EB06B);">
+                            <span class="promo-discount">2x1</span>
+                        </div>
+                        <div class="promo-content">
+                            <h3 class="promo-title">Martes de Lomo</h3>
+                            <p class="promo-desc">2x1 en Lomo Saltado todos los martes</p>
+                            <button class="btn btn-promo">Ver más →</button>
+                        </div>
+                    </div>
+                    
+                    <div class="promo-card">
+                        <div class="promo-img" style="background: linear-gradient(135deg, #F5A623, #FFD700);">
+                            <span class="promo-discount">HAPPY</span>
+                        </div>
+                        <div class="promo-content">
+                            <h3 class="promo-title">Happy Hour</h3>
+                            <p class="promo-desc">De 4pm a 7pm, bebidas a mitad de precio</p>
+                            <button class="btn btn-promo">Ver más →</button>
+                        </div>
+                    </div>
+                    
+                    <div class="promo-card">
+                        <div class="promo-img" style="background: linear-gradient(135deg, #9B3A12, #C85C2E);">
+                            <span class="promo-discount">S/19.90</span>
+                        </div>
+                        <div class="promo-content">
+                            <h3 class="promo-title">Promo Aniversario</h3>
+                            <p class="promo-desc">Platos seleccionados desde S/ 19.90</p>
+                            <button class="btn btn-promo">Ver más →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- Carrito Drawer -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <aside class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h3>🛒 Tu Pedido</h3>
+            <button class="cart-close" id="cartClose">✕</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="cart-empty">
+                <span class="cart-empty-icon">🛒</span>
+                <p>Tu carrito está vacío</p>
+                <p class="cart-empty-sub">Agrega platos desde nuestra carta</p>
+            </div>
+        </div>
+        <div class="cart-footer" id="cartFooter" style="display:none;">
+            <div class="cart-totals">
+                <div class="cart-total-line">
+                    <span>Subtotal</span>
+                    <span id="cartSubtotal">S/ 0.00</span>
+                </div>
+                <div class="cart-total-line">
+                    <span>IGV (18%)</span>
+                    <span id="cartIGV">S/ 0.00</span>
+                </div>
+                <div class="cart-total-line cart-total-final">
+                    <span>Total</span>
+                    <span id="cartTotal">S/ 0.00</span>
+                </div>
+            </div>
+            <a href="/pedidos" class="btn btn-primary btn-full">Ir a Pedidos →</a>
+        </div>
+    </aside>
+    
+    <!-- FAB Carrito -->
+    <button class="fab-cart" id="fabCart" aria-label="Ver carrito">
+        <span class="fab-icon">🛒</span>
+        <span class="fab-count" id="fabCount">0</span>
+    </button>
+    
+    <!-- Footer inyectado por JS -->
+    <footer class="global-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <span class="footer-logo-icon">🍽️</span>
+                        <h3>LA ESTACIÓN <span>Huaral</span></h3>
+                    </div>
+                    <p class="footer-slogan">Autenticidad en cada plato</p>
+                    <div class="footer-socials">
+                        <a href="#" class="social-link" aria-label="WhatsApp">📱</a>
+                        <a href="#" class="social-link" aria-label="Twitter">🐦</a>
+                        <a href="#" class="social-link" aria-label="Instagram">📷</a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="#">Sobre nosotros</a></li>
+                        <li><a href="#">Contacto</a></li>
+                        <li><a href="#">Trabaja con nosotros</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Horarios</h4>
+                    <ul class="footer-hours">
+                        <li><span>Lun - Jue:</span> <span class="hour-highlight">12pm - 11pm</span></li>
+                        <li><span>Vie - Sáb:</span> <span class="hour-highlight">12pm - 12am</span></li>
+                        <li><span>Dom:</span> <span class="hour-highlight">12pm - 10pm</span></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Newsletter</h4>
+                    <p>Recibe nuestras promociones</p>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <input type="email" placeholder="Tu email" class="newsletter-input">
+                        <button type="submit" class="newsletter-btn">→</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2024 La Estación Huaral - Todos los derechos reservados</p>
+                <div class="footer-links">
+                    <a href="#">Términos</a>
+                    <a href="#">Privacidad</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="/static/js/global.js"></script>
+    <script src="/static/js/Inicio.js"></script>
+</body>
+</html>

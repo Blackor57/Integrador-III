@@ -1,15 +1,437 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LA ESTACIÓN Huaral - Mis Pedidos</title>
+    
+    <!-- Tipografías -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/static/css/global.css">
+    <link rel="stylesheet" href="/static/css/Pedidos.css">
+</head>
+<body class="pedidos-page">
+    
+    <!-- Header -->
+    <header class="global-header" id="globalHeader">
+        <div class="header-container">
+            <div class="header-logo">
+                <a href="/inicio" class="logo-link">
+                    <span class="logo-icon">🍽️</span>
+                    <div class="logo-text">
+                        <span class="logo-main">ESTACIÓN</span>
+                        <span class="logo-sub">Huaral</span>
+                    </div>
+                </a>
+            </div>
+            
+            <nav class="header-nav" id="headerNav">
+                <a href="/inicio" class="nav-link">
+                    <span class="nav-icon">🍽️</span>
+                    <span class="nav-text">Inicio</span>
+                </a>
+                <a href="/pedidos" class="nav-link active">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Mis Pedidos</span>
+                </a>
+                <a href="/perfil" class="nav-link">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-text">Mi Perfil</span>
+                </a>
+                <a href="/login" class="nav-link nav-logout" id="logoutLink">
+                    <span class="nav-icon">🚪</span>
+                    <span class="nav-text">Salir</span>
+                </a>
+            </nav>
+            
+            <div class="header-actions">
+                <button class="cart-btn" id="cartButton" aria-label="Carrito de compras">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count" id="cartCount">3</span>
+                </button>
+                <button class="theme-toggle" id="themeToggle" aria-label="Cambiar modo oscuro">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menú">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="container">
+                <h1 class="page-title">Mis Pedidos</h1>
+                <p class="page-subtitle">Sigue el estado de tus órdenes en tiempo real</p>
+            </div>
+        </section>
+        
+        <!-- Tabs -->
+        <section class="tabs-section">
+            <div class="container">
+                <div class="tabs" id="pedidosTabs">
+                    <button class="tab active" data-tab="activos">
+                        <span class="tab-icon">🔴</span>
+                        <span class="tab-text">Pedidos Activos</span>
+                        <span class="tab-badge" id="activosBadge">3</span>
+                    </button>
+                    <button class="tab" data-tab="historial">
+                        <span class="tab-icon">✅</span>
+                        <span class="tab-text">Historial</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tab 1: Pedidos Activos -->
+        <section class="pedidos-activos" id="tabActivos">
+            <div class="container">
+                <div class="pedidos-grid">
+                    
+                    <!-- Card 1 - Lomo Saltado -->
+                    <div class="pedido-card pedido-activo" id="pedido1">
+                        <div class="pedido-card-header">
+                            <div class="pedido-info">
+                                <h3 class="pedido-nombre">LOMO SALTADO</h3>
+                                <span class="pedido-badge badge-activo">Activo</span>
+                            </div>
+                            <span class="pedido-id">#ORD-001</span>
+                        </div>
+                        
+                        <div class="pedido-detalles">
+                            <div class="pedido-detalle-item">
+                                <span class="detalle-icon">🍟</span>
+                                <div class="detalle-info">
+                                    <span class="detalle-label">PORCION DE PAPAS</span>
+                                </div>
+                            </div>
+                            <div class="pedido-detalle-item">
+                                <span class="detalle-icon">🧾</span>
+                                <div class="detalle-info">
+                                    <span class="detalle-label">FACTURA</span>
+                                    <div class="detalle-tags">
+                                        <span class="tag">Almidón</span>
+                                        <span class="tag">salta 1</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pedido-timer">
+                            <span class="timer-icon">🕐</span>
+                            <span class="timer-text" id="timer1">10:00</span>
+                            <span class="timer-label">minutos</span>
+                        </div>
+                        
+                        <div class="pedido-stepper">
+                            <div class="stepper-steps">
+                                <div class="stepper-step completed">
+                                    <div class="step-dot"></div>
+                                    <span class="step-label">En espera</span>
+                                </div>
+                                <div class="stepper-line completed"></div>
+                                <div class="stepper-step active">
+                                    <div class="step-dot"></div>
+                                    <span class="step-label">Preparando</span>
+                                </div>
+                                <div class="stepper-line"></div>
+                                <div class="stepper-step">
+                                    <div class="step-dot"></div>
+                                    <span class="step-label">Listo</span>
+                                </div>
+                                <div class="stepper-line"></div>
+                                <div class="stepper-step">
+                                    <div class="step-dot"></div>
+                                    <span class="step-label">Entregado</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pedido-actions">
+                            <button class="btn btn-secondary btn-sm">📞 Contactar</button>
+                            <button class="btn btn-primary btn-sm">📍 Seguir orden</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 2 - Limonada -->
+                    <div class="pedido-card pedido-espera" id="pedido2">
+                        <div class="pedido-card-header">
+                            <div class="pedido-info">
+                                <h3 class="pedido-nombre">LIMONADA</h3>
+                                <span class="pedido-badge badge-espera">En espera</span>
+                            </div>
+                            <span class="pedido-id">#ORD-002</span>
+                        </div>
+                        
+                        <div class="pedido-detalles">
+                            <div class="pedido-detalle-item">
+                                <span class="detalle-icon">🧾</span>
+                                <div class="detalle-info">
+                                    <span class="detalle-label">BOLETA</span>
+                                    <div class="detalle-tags">
+                                        <span class="tag">Espirita</span>
+                                        <span class="tag">en espera salta 1</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pedido-timer">
+                            <span class="timer-icon">🕐</span>
+                            <span class="timer-text" id="timer2">15:00</span>
+                            <span class="timer-label">minutos</span>
+                        </div>
+                        
+                        <div class="pedido-stepper">
+                            <div class="stepper-steps">
+                                <div class="stepper-step active">
+                                    <div class="step-dot"></div>
+                                    <span class="step-label">En espera</span>
+                                </div>
+                                <div class="stepper-line"></div>
+                                <div class="stepper-step">
+                                    <div class="step-dot"></div>
+                                    <span class="step-label">Preparando</span>
+                                </div>
+                                <div class="stepper-line"></div>
+                                <div class="stepper-step">
+                                    <div class="step-dot"></div>
+                                    <span class="step-label">Listo</span>
+                                </div>
+                                <div class="stepper-line"></div>
+                                <div class="stepper-step">
+                                    <div class="step-dot"></div>
+                                    <span class="step-label">Entregado</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pedido-actions">
+                            <button class="btn btn-danger-outline btn-sm">✕ Cancelar pedido</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 3 - Tallarines Verdes -->
+                    <div class="pedido-card pedido-urgente" id="pedido3">
+                        <div class="pedido-card-header">
+                            <div class="pedido-info">
+                                <h3 class="pedido-nombre">TALLARINES VERDES</h3>
+                                <span class="pedido-badge badge-espera">En espera</span>
+                            </div>
+                            <span class="pedido-id">#ORD-003</span>
+                        </div>
+                        
+                        <div class="pedido-detalles">
+                            <div class="pedido-detalle-item">
+                                <span class="detalle-icon">📋</span>
+                                <div class="detalle-info">
+                                    <span class="detalle-label">Nothing</span>
+                                </div>
+                            </div>
+                            <div class="pedido-detalle-item">
+                                <span class="detalle-icon">🧾</span>
+                                <div class="detalle-info">
+                                    <span class="detalle-label">BOLETA</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pedido-timer pedido-timer-urgent">
+                            <span class="timer-icon">🕐</span>
+                            <span class="timer-text" id="timer3">1:00</span>
+                            <span class="timer-label">minuto</span>
+                        </div>
+                        
+                        <div class="pedido-stepper">
+                            <div class="stepper-steps">
+                                <div class="stepper-step completed">
+                                    <div class="step-dot"></div>
+                                    <span class="step-label">En espera</span>
+                                </div>
+                                <div class="stepper-line completed"></div>
+                                <div class="stepper-step completed">
+                                    <div class="step-dot"></div>
+                                    <span class="step-label">Preparando</span>
+                                </div>
+                                <div class="stepper-line completed"></div>
+                                <div class="stepper-step active">
+                                    <div class="step-dot"></div>
+                                    <span class="step-label">Listo</span>
+                                </div>
+                                <div class="stepper-line"></div>
+                                <div class="stepper-step">
+                                    <div class="step-dot"></div>
+                                    <span class="step-label">Entregado</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pedido-actions">
+                            <button class="btn btn-secondary btn-sm">📞 Contactar</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tab 2: Historial -->
+        <section class="pedidos-historial" id="tabHistorial" style="display:none;">
+            <div class="container">
+                <div class="historial-list">
+                    <div class="historial-item">
+                        <div class="historial-info">
+                            <h4>Lomo Saltado + Bebida</h4>
+                            <span class="historial-fecha">15 Ene 2024</span>
+                        </div>
+                        <span class="historial-total">S/ 45.90</span>
+                        <span class="historial-estado entregado">Entregado ✓</span>
+                        <button class="btn btn-text btn-sm">Volver a pedir</button>
+                    </div>
+                    <div class="historial-item">
+                        <div class="historial-info">
+                            <h4>Pollo a la Brasa Familiar</h4>
+                            <span class="historial-fecha">10 Ene 2024</span>
+                        </div>
+                        <span class="historial-total">S/ 89.90</span>
+                        <span class="historial-estado entregado">Entregado ✓</span>
+                        <button class="btn btn-text btn-sm">Volver a pedir</button>
+                    </div>
+                    <div class="historial-item">
+                        <div class="historial-info">
+                            <h4>Ceviche Mixto</h4>
+                            <span class="historial-fecha">05 Ene 2024</span>
+                        </div>
+                        <span class="historial-total">S/ 48.90</span>
+                        <span class="historial-estado entregado">Entregado ✓</span>
+                        <button class="btn btn-text btn-sm">Volver a pedir</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sección CARTO (Carrito actual) -->
+        <section class="carto-section">
+            <div class="container">
+                <div class="carto-card" id="cartoCard">
+                    <div class="carto-header">
+                        <h3>🛒 TU PEDIDO ACTUAL</h3>
+                        <span class="carto-id">#CART-001</span>
+                    </div>
+                    
+                    <div class="carto-items" id="cartoItems">
+                        <div class="carto-item">
+                            <div class="carto-item-info">
+                                <span class="carto-item-nombre">Lomo Saltado</span>
+                                <span class="carto-item-cantidad">x1</span>
+                            </div>
+                            <span class="carto-item-precio">S/ 38.90</span>
+                        </div>
+                        <div class="carto-item">
+                            <div class="carto-item-info">
+                                <span class="carto-item-nombre">Tallarines Verdes</span>
+                                <span class="carto-item-cantidad">x2</span>
+                            </div>
+                            <span class="carto-item-precio">S/ 45.80</span>
+                        </div>
+                        <div class="carto-item">
+                            <div class="carto-item-info">
+                                <span class="carto-item-nombre">Limonada</span>
+                                <span class="carto-item-cantidad">x1</span>
+                            </div>
+                            <span class="carto-item-precio">S/ 12.00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="carto-totals">
+                        <div class="carto-total-line">
+                            <span>Subtotal</span>
+                            <span id="cartoSubtotal">S/ 96.70</span>
+                        </div>
+                        <div class="carto-total-line">
+                            <span>IGV (18%)</span>
+                            <span id="cartoIGV">S/ 17.41</span>
+                        </div>
+                        <div class="carto-total-line carto-total-final">
+                            <span>Total</span>
+                            <span id="cartoTotal">S/ 114.11</span>
+                        </div>
+                    </div>
+                    
+                    <div class="carto-notas">
+                        <label for="cartoNotas">Notas especiales</label>
+                        <textarea id="cartoNotas" placeholder="Sin cebolla, sin picante, etc." rows="2"></textarea>
+                    </div>
+                    
+                    <button class="btn btn-primary btn-full" id="confirmarPedido">
+                        <span>✅ CONFIRMAR PEDIDO</span>
+                    </button>
+                    
+                    <div class="carto-metodos">
+                        <span class="metodo-label">Aceptamos:</span>
+                        <div class="metodo-icons">
+                            <span class="metodo-icon">💳 Visa</span>
+                            <span class="metodo-icon">💳 MC</span>
+                            <span class="metodo-icon">📱 Yape</span>
+                            <span class="metodo-icon">💵 Efectivo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- Footer -->
+    <footer class="global-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <span class="footer-logo-icon">🍽️</span>
+                        <h3>LA ESTACIÓN <span>Huaral</span></h3>
+                    </div>
+                    <p class="footer-slogan">Autenticidad en cada plato</p>
+                    <div class="footer-socials">
+                        <a href="#" class="social-link">📱</a>
+                        <a href="#" class="social-link">🐦</a>
+                        <a href="#" class="social-link">📷</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Horarios</h4>
+                    <ul class="footer-hours">
+                        <li><span>Lun - Jue:</span> <span class="hour-highlight">12pm - 11pm</span></li>
+                        <li><span>Vie - Sáb:</span> <span class="hour-highlight">12pm - 12am</span></li>
+                        <li><span>Dom:</span> <span class="hour-highlight">12pm - 10pm</span></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contacto</h4>
+                    <p>📞 951 654 321</p>
+                    <p>✉️ info@estacionhuaral.com</p>
+                    <p>📍 Av. Timoteo y Barney</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 La Estación Huaral</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="/static/js/global.js"></script>
+    <script src="/static/js/Pedidos.js"></script>
+</body>
 </html>

@@ -1,0 +1,594 @@
+/* ============================================
+   LA ESTACIÓN HUARAL - PEDIDOS
+   ============================================ */
+
+.pedidos-page {
+    background: var(--color-bg);
+    min-height: 100vh;
+}
+
+/* ============================================
+   PAGE HEADER
+   ============================================ */
+.page-header {
+    background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+    padding: 48px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.05) 0%, transparent 60%);
+}
+
+.page-title {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.page-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    position: relative;
+}
+
+/* ============================================
+   TABS
+   ============================================ */
+.tabs-section {
+    padding: var(--space-6) 0;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+}
+
+.tabs {
+    display: flex;
+    gap: var(--space-6);
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+    position: relative;
+    font-family: var(--font-body);
+}
+
+.tab:hover {
+    color: var(--color-text);
+    background: var(--color-border);
+}
+
+.tab.active {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--color-primary);
+    border-radius: 3px 3px 0 0;
+}
+
+.tab-badge {
+    background: var(--color-error);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 50px;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* ============================================
+   PEDIDOS ACTIVOS
+   ============================================ */
+.pedidos-activos {
+    padding: var(--space-8) 0;
+}
+
+.pedidos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: var(--space-8);
+}
+
+/* Card de pedido */
+.pedido-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    box-shadow: var(--shadow-2);
+    transition: all var(--transition-base);
+    border: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.pedido-card:hover {
+    box-shadow: var(--shadow-4);
+    transform: translateY(-2px);
+}
+
+.pedido-card.pedido-urgente {
+    border-color: rgba(211, 47, 47, 0.3);
+}
+
+.pedido-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.pedido-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.pedido-nombre {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.pedido-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: fit-content;
+}
+
+.badge-activo { background: #E8F5E9; color: #2E7D32; }
+.badge-espera { background: #FFF8E1; color: #F57F17; }
+.badge-listo { background: #E3F2FD; color: #1565C0; }
+
+[data-theme="dark"] .badge-activo { background: rgba(46,125,50,0.2); }
+[data-theme="dark"] .badge-espera { background: rgba(245,127,23,0.2); }
+[data-theme="dark"] .badge-listo { background: rgba(21,101,192,0.2); }
+
+.pedido-id {
+    font-size: 0.75rem;
+    color: var(--color-text-tertiary);
+    font-weight: 500;
+    font-family: monospace;
+}
+
+/* Detalles */
+.pedido-detalles {
+    margin-bottom: 20px;
+}
+
+.pedido-detalle-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.detalle-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.detalle-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detalle-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+.detalle-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    padding: 2px 10px;
+    background: var(--color-border);
+    border-radius: 20px;
+    font-size: 0.7rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+/* Timer */
+.pedido-timer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--color-bg);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-family: monospace;
+}
+
+.pedido-timer-urgent {
+    background: rgba(211, 47, 47, 0.08);
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.timer-icon {
+    font-size: 1.5rem;
+}
+
+.timer-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.pedido-timer-urgent .timer-text {
+    color: var(--color-error);
+}
+
+.timer-label {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+}
+
+/* Stepper */
+.pedido-stepper {
+    margin-bottom: 20px;
+}
+
+.stepper-steps {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.stepper-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    flex: 1;
+}
+
+.step-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-border);
+    border: 2px solid var(--color-border);
+    z-index: 1;
+    transition: all var(--transition-base);
+}
+
+.stepper-step.completed .step-dot {
+    background: var(--color-success);
+    border-color: var(--color-success);
+}
+
+.stepper-step.active .step-dot {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 6px rgba(200, 92, 46, 0.15);
+    animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(200, 92, 46, 0.15); }
+    50% { box-shadow: 0 0 0 12px rgba(200, 92, 46, 0); }
+}
+
+.step-label {
+    font-size: 0.65rem;
+    color: var(--color-text-tertiary);
+    text-align: center;
+    font-weight: 500;
+}
+
+.stepper-step.completed .step-label,
+.stepper-step.active .step-label {
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+.stepper-line {
+    position: absolute;
+    top: 7px;
+    left: calc(50% + 10px);
+    right: calc(-50% + 10px);
+    height: 2px;
+    background: var(--color-border);
+    z-index: 0;
+}
+
+.stepper-line.completed {
+    background: var(--color-success);
+}
+
+/* Acciones */
+.pedido-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* ============================================
+   HISTORIAL
+   ============================================ */
+.pedidos-historial {
+    padding: var(--space-8) 0;
+}
+
+.historial-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.historial-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    padding: 20px 24px;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    transition: all var(--transition-base);
+}
+
+.historial-item:hover {
+    box-shadow: var(--shadow-2);
+}
+
+.historial-info {
+    flex: 1;
+}
+
+.historial-info h4 {
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 2px;
+}
+
+.historial-fecha {
+    font-size: 0.8rem;
+    color: var(--color-text-tertiary);
+}
+
+.historial-total {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+}
+
+.historial-estado {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.historial-estado.entregado {
+    background: #E8F5E9;
+    color: #2E7D32;
+}
+
+/* ============================================
+   CARTO
+   ============================================ */
+.carto-section {
+    padding: var(--space-8) 0 var(--space-16);
+}
+
+.carto-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    padding: 32px;
+    box-shadow: var(--shadow-2);
+    border: 1px solid var(--color-border);
+}
+
+.carto-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--color-border);
+}
+
+.carto-header h3 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--color-text);
+}
+
+.carto-id {
+    font-family: monospace;
+    color: var(--color-text-tertiary);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.carto-items {
+    margin-bottom: 24px;
+}
+
+.carto-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.carto-item-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.carto-item-nombre {
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.carto-item-cantidad {
+    background: var(--color-border);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+}
+
+.carto-item-precio {
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.carto-totals {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: var(--color-bg);
+    border-radius: 12px;
+}
+
+.carto-total-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.carto-total-final {
+    font-weight: 700;
+    color: var(--color-text);
+    font-size: 1.2rem;
+    padding-top: 12px;
+    border-top: 2px solid var(--color-border);
+    margin-top: 8px;
+}
+
+.carto-total-final span:last-child {
+    color: var(--color-primary);
+    font-size: 1.4rem;
+}
+
+.carto-notas {
+    margin-bottom: 24px;
+}
+
+.carto-notas label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--color-text);
+}
+
+.carto-notas textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--color-border);
+    border-radius: 12px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    resize: vertical;
+    color: var(--color-text);
+    background: var(--color-bg);
+    transition: border-color var(--transition-base);
+}
+
+.carto-notas textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+#confirmarPedido {
+    margin-bottom: 16px;
+    padding: 16px;
+    font-size: 1.1rem;
+}
+
+.carto-metodos {
+    text-align: center;
+}
+
+.metodo-label {
+    font-size: 0.8rem;
+    color: var(--color-text-tertiary);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.metodo-icons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.metodo-icon {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .pedidos-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .pedido-card {
+        padding: 20px;
+    }
+    
+    .carto-card {
+        padding: 20px;
+    }
+    
+    .historial-item {
+        flex-wrap: wrap;
+    }
+}
