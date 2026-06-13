@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface IDetalle_pedido extends JpaRepository<detalle_pedido,Long> {
     List<detalle_pedido> findByPedido_Id(Long idPedido);
+    List<detalle_pedido> findByArea(String area);
     boolean existsByPedidoId(Long idPedido);
     @Query("""
     SELECT d.producto.id, SUM(d.cantidad)

@@ -37,6 +37,7 @@ public class SecurityConfig {
                                         .requestMatchers("/categoria/**").permitAll()
                                         .requestMatchers("/rol/**").permitAll()
                                         .requestMatchers("/subcategoria/**").permitAll()
+                                        .requestMatchers("/detalle/**").permitAll()
                                         .anyRequest().authenticated()
                         )
                 .sessionManagement(sessionManagement ->

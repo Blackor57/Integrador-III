@@ -143,9 +143,7 @@ public class PedidoService {
         // ==========================================
         return pedidoRepository.save(nuevoPedido);
     }
-    /**
-     * Busca un pedido por su ID.
-     */
+
     @Transactional(readOnly = true)
     public pedido obtenerPorId(Long id) {
         // Nota: Si mantienes Integer en tu repositorio, usamos .intValue().
@@ -237,18 +235,12 @@ public class PedidoService {
         return pedidoRepository.save(pedidoExistente);
     }
 
-    // ==========================================
-    /**
-     * Devuelve un reporte de los productos más vendidos usando la query de tu repositorio de detalles.
-     */
+
     @Transactional(readOnly = true)
     public List<Object[]> obtenerProductosMasVendidos() {
         return detallePedidoRepository.productosMasVendidos();
     }
     // METODOS DE REPORTES Y ESTADÍSTICAS
-
-    // ==========================================
-
     /**
      * Calcula los ingresos totales de todos los pedidos con estado 'PAGADO'.
      */
@@ -257,8 +249,6 @@ public class PedidoService {
         Double ventas = pedidoRepository.obtenerVentasTotales();
         return ventas != null ? ventas : 0.0;
     }
-
-
 
     /**
      * Obtiene las estadísticas financieras específicas de un producto.

@@ -13,7 +13,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "inventario")
+@Table(name = "boleta")
 public class boleta {
 
     @Id
@@ -22,7 +22,7 @@ public class boleta {
 
     @ManyToOne
     @JoinColumn(name = "idpedido")
-    private detalle_pedido pedido;
+    private pedido pedido;
 
     @Column(name = "DNI")
     private char dni;

@@ -4,6 +4,8 @@ import com.example.restaurants.model.entity.pedido; // Tu entidad en minúsculas
 import com.example.restaurants.services.PedidoService; // Tu clase de servicio
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -11,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/pedido") // Ruta limpia y directa según tu estándar
+@RequestMapping("/pedido")
 @RequiredArgsConstructor
 public class PedidoController {
 
@@ -19,7 +21,9 @@ public class PedidoController {
 
     @GetMapping
     public ResponseEntity<List<pedido>> obtenerTodos() {
-        return ResponseEntity.ok(pedidoService.listarTodos());
+
+        return ResponseEntity.ok(pedidoService.listarTodos()
+        );
     }
 
     @GetMapping("/{id}")
