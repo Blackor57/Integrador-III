@@ -19,4 +19,5 @@ public class RegisterRequest {
     private String telefono;
     private String direccion;
     private Date fechaRegistro;
+    private Long idRol;
 }
