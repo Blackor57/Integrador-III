@@ -2,6 +2,7 @@ package com.example.restaurants.controller;
 
 import com.example.restaurants.model.entity.rol;
 import com.example.restaurants.services.RolService;
+import com.example.restaurants.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.List;
 public class RolController {
 
     private final RolService rolService;
+    private UsuarioService usuarioService;
 
     @GetMapping
     public ResponseEntity<List<rol>> listarTodos() {
@@ -45,4 +47,5 @@ public class RolController {
         rolService.eliminarRol(id);
         return ResponseEntity.noContent().build();
     }
+
 }

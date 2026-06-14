@@ -2,9 +2,11 @@ package com.example.restaurants.services;
 
 import com.example.restaurants.model.entity.rol;
 import com.example.restaurants.model.entity.usuario;
+import com.example.restaurants.repository.IRol;
 import com.example.restaurants.repository.IUsuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,8 @@ public class UsuarioService {
 
     @Autowired
     private final IUsuario usuarioRepository;
+
+    private final IRol rolRepository;
 
     @Transactional(readOnly =true)
     public List<usuario> listarUsuarios(){
@@ -62,6 +66,28 @@ public class UsuarioService {
         usuario usuarioExistente = obtenerPorId(id);
         usuarioRepository.delete(usuarioExistente);
     }
+
+    @Transactional
+    public usuario asignarRol(Long idUsuario, Long idRol) {
+        // 1. Validar y obtener el usuario existente
+        usuario usuarioExistente = obtenerPorId(idUsuario);
+
+        // 2. Validar y obtener el rol que YA existe en la tabla de roles
+        rol rolExistente = rolRepository.findById(idRol)
+                .orElseThrow(() -> new RuntimeException("El rol con ID " + idRol + " no existe"));
+
+        // 3. Validar que el usuario no tenga ya ese rol asignado para evitar redundancia
+        if (usuarioExistente.getRoles().contains(rolExistente)) {
+            throw new RuntimeException("El usuario ya tiene asignado este rol");
+        }
+
+        // 4. Agregamos el rol a la colección.
+        // Al guardar el usuario, JPA insertará automáticamente la fila en 'usuarios_roles'
+        usuarioExistente.getRoles().add(rolExistente);
+
+        return usuarioRepository.save(usuarioExistente);
+    }
+
 
     /*@Transactional
     public void desactivarUsuario(Long id) {
