@@ -1,6 +1,7 @@
 package com.example.restaurants.repository;
 
 
+import com.example.restaurants.model.entity.EstadoPedido;
 import com.example.restaurants.model.entity.pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,17 +10,20 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-
+import java.util.Date;
 @Repository
 public interface IPedido extends JpaRepository<pedido, Long> {
 
     @Query("SELECT p FROM pedido p WHERE p.mesa.id = :idMesa AND p.estadopedido NOT IN ('PAGADO', 'CANCELADO')")
     Optional<pedido> buscarPedidoActivoPorMesa(@Param("idMesa") Long idMesa);
 
+    @Query("SELECT p FROM pedido p WHERE p.fechacreacion BETWEEN :inicio AND :fin AND p.estadopedido = com.example.restaurants.model.entity.EstadoPedido.PAGADO")
+    List<pedido> buscarPedidosPorRango(@Param("inicio") Date inicio, @Param("fin") Date fin);
+
     List<pedido> findByUsuarioId(Long idUsuario);
 
     @Query("SELECT p FROM pedido p WHERE p.estadopedido = :estado")
-    List<pedido> buscarPorEstado(@Param("estado") String estado);
+    List<pedido> buscarPorEstado(@Param("estado") EstadoPedido estado);
 
     @Query("SELECT p FROM pedido p WHERE p.tiposervicio = :tipo")
     List<pedido> buscarPorTipoServicio(@Param("tipo") String tipo);

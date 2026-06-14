@@ -3,11 +3,13 @@ import com.example.restaurants.model.entity.EstadoItem;
 import com.example.restaurants.model.entity.pedido; // Tu entidad en minúsculas
 import com.example.restaurants.services.PedidoService; // Tu clase de servicio
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,5 +112,59 @@ public class PedidoController {
         return ResponseEntity.ok(
                 pedidoService.cambiarEstadoDetalle(id, estado)
         );
+    }
+    @PatchMapping("/{idPedido}/tiporecibo")
+    public ResponseEntity<?> cambiarTipoRecibo(
+            @PathVariable Long idPedido,
+            @RequestBody Map<String, String> payload) {
+
+        try {
+            String tipo = payload.get("tipo");
+
+            if (tipo == null || tipo.trim().isEmpty()) {
+                throw new RuntimeException("El campo 'tipo' es obligatorio en el JSON.");
+            }
+
+            pedido pedidoActualizado = pedidoService.cambiarTipoRecibo(idPedido, tipo);
+            return ResponseEntity.ok(pedidoActualizado);
+
+        } catch (RuntimeException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+    }
+
+    @GetMapping("/estado/{estado}")
+    public ResponseEntity<?> obtenerPedidosPorEstado(@PathVariable String estado) {
+        try {
+            List<pedido> pedidos = pedidoService.listarPorEstado(estado);
+
+            if (pedidos.isEmpty()) {
+                // Devuelve un 204 No Content si la lista está vacía pero no hubo error
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(pedidos);
+
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        }
+    }
+
+    @GetMapping("/reporte/fechas")
+    public ResponseEntity<?> obtenerVentasPorRango(
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date inicio,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fin) {
+
+        try {
+            List<pedido> pedidos = pedidoService.listarPedidosPorRango(inicio, fin);
+            return ResponseEntity.ok(pedidos);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Error al filtrar fechas: " + e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        }
     }
 }
