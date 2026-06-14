@@ -1,0 +1,8 @@
+services:
+  backend:
+    build: .  # <-- Esta línea es la clave, le dice que construya desde el directorio actual
+    image: sistema-laestacion:v1
+    container_name: erp_backend
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
