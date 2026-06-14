@@ -34,13 +34,13 @@ public class recibo {
     private String direccion;
 
     @Column(name = "subtotal", nullable=true)
-    private float subtotal;
+    private Float subtotal;
 
     @Column(name = "IGV", nullable=true)
-    private float IGV;
+    private Float IGV;
 
     @Column(name = "Total", nullable=true)
-    private float Total;
+    private Float Total;
 
     // ===== DATOS BOLETA =====
     @Column(name = "DNI", length = 8, nullable=true)

@@ -44,9 +44,7 @@ public class PedidoService {
 
         String tipoServicio = nuevoPedido.getTiposervicio().toUpperCase();
 
-        // ==========================================
-        // 🪑 CASO 1: SERVICIO EN MESA (PRESENCIAL)
-        // ==========================================
+        //  CASO 1: SERVICIO EN MESA (PRESENCIAL)
         if ("MESA".equals(tipoServicio)) {
 
             if (nuevoPedido.getMesa() == null || nuevoPedido.getMesa().getId() == null) {
@@ -66,25 +64,19 @@ public class PedidoService {
             nuevoPedido.setMesa(mesaEntity);
         }
 
-        // ==========================================
         // 🚚 CASO 2: SERVICIO ONLINE / DELIVERY
-        // ==========================================
         else {
             // Nos aseguramos que NO tenga mesa
             nuevoPedido.setMesa(null);
         }
 
-        // ==========================================
         // 2. DATOS GENERALES DEL PEDIDO
-        // ==========================================
         nuevoPedido.setFechacreacion(new Date());
         nuevoPedido.setEstadopedido(EstadoPedido.PENDIENTE);
 
         float totalPedido = 0;
 
-        // ==========================================
         // 3. PROCESAR DETALLES
-        // ==========================================
         if (nuevoPedido.getDetalles() == null || nuevoPedido.getDetalles().isEmpty()) {
             throw new RuntimeException("El pedido debe tener al menos un detalle");
         }
@@ -131,16 +123,10 @@ public class PedidoService {
 
             totalPedido += subtotalDetalle;
         }
-
-        // ==========================================
         // 4. TOTALES
-        // ==========================================
         nuevoPedido.setSubtotal(totalPedido);
         nuevoPedido.setTotal(totalPedido);
 
-        // ==========================================
-        // 5. GUARDAR
-        // ==========================================
         return pedidoRepository.save(nuevoPedido);
     }
 
@@ -165,7 +151,13 @@ public class PedidoService {
      */
     @Transactional(readOnly = true)
     public List<pedido> listarPorEstado(String estado) {
-        return pedidoRepository.buscarPorEstado(estado);
+        try {
+            // Convertimos el texto (ej. "pagado") a tu Enum oficial (PAGADO)
+            EstadoPedido estadoEnum = EstadoPedido.valueOf(estado.toUpperCase());
+            return pedidoRepository.buscarPorEstado(estadoEnum);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Estado de pedido inválido. Usa PENDIENTE, PAGADO, CANCELADO, etc.");
+        }
     }
 
     /**
@@ -176,34 +168,6 @@ public class PedidoService {
         return pedidoRepository.buscarPedidoActivoPorMesa(idMesa)
                 .orElseThrow(() -> new RuntimeException("No se encontró una cuenta activa para cobrar en la mesa: " + idMesa));
     }
-
-    /**
-     * Cambia el estado de un pedido (por ejemplo, de PENDIENTE a PAGADO).
-     */
-    @Transactional
-    public pedido cambiarEstadoPedido(Long idPedido, String nuevoEstado) {
-
-        pedido pedidoExistente = obtenerPorId(idPedido);
-
-        List<String> estadosValidos = List.of(
-                "PENDIENTE",
-                "EN_PREPARACION",
-                "LISTO",
-                "ENTREGADO",
-                "PAGADO",
-                "CANCELADO"
-        );
-
-        if (!estadosValidos.contains(nuevoEstado.toUpperCase())) {
-            throw new RuntimeException("Estado inválido");
-        }
-        EstadoPedido estado =
-                EstadoPedido.valueOf(nuevoEstado.toUpperCase());
-        pedidoExistente.setEstadopedido(estado);
-
-        return pedidoRepository.save(pedidoExistente);
-    }
-
     /**
      * Cancela un pedido cambiando su estado.
      */
@@ -283,6 +247,27 @@ public class PedidoService {
         return pedidoRepository.save(pedidoExistente);
     }
 
+    @Transactional
+    public pedido cambiarTipoRecibo(Long idPedido, String nuevoTipo) {
+        // 1. Buscamos el pedido
+        pedido pedidoExistente = obtenerPorId(idPedido);
+
+        // 2. Control anti-fraude: No se puede cambiar si ya se pagó
+        if (pedidoExistente.getEstadopedido() == EstadoPedido.PAGADO) {
+            throw new RuntimeException("No se puede cambiar el tipo de comprobante porque la orden ya fue pagada.");
+        }
+
+        // 3. Convertimos el texto (String) al formato oficial de tu Enum
+        try {
+            TipoRecibo tipoEnum = TipoRecibo.valueOf(nuevoTipo.toUpperCase());
+            pedidoExistente.setTiporecibo(tipoEnum);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Tipo de recibo inválido. Solo se acepta BOLETA o FACTURA.");
+        }
+
+        // 4. Guardamos los cambios
+        return pedidoRepository.save(pedidoExistente);
+    }
 
     @Transactional(readOnly = true)
     public List<Object[]> obtenerProductosMasVendidos() {
@@ -324,6 +309,12 @@ public class PedidoService {
         detalle.setEstadoItem(nuevoEstado);
 
         return detallePedidoRepository.save(detalle);
+    }
+
+    @Transactional(readOnly = true)
+    public List<pedido> listarPedidosPorRango(Date inicio, Date fin) {
+        // Aseguramos que la fecha fin incluya todo el día
+        return pedidoRepository.buscarPedidosPorRango(inicio, fin);
     }
 
 }

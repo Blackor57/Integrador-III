@@ -41,6 +41,8 @@ public class SecurityConfig {
                                         .requestMatchers("/insumo/**").permitAll()
                                         .requestMatchers("/inventario/**").permitAll()
                                         .requestMatchers("/lote/**").permitAll()
+                                        .requestMatchers("/recibo/**").permitAll()
+                                        .requestMatchers("/reporte/**").permitAll()
                                         .anyRequest().authenticated()
                         )
                 .sessionManagement(sessionManagement ->
