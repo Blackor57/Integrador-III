@@ -27,5 +27,5 @@ public class receta {
     private producto producto;
 
     @Column(name = "cantidad")
-    private int cantidad;
+    private Integer cantidad;
 }

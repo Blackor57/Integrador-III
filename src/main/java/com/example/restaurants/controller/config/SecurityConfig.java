@@ -43,6 +43,7 @@ public class SecurityConfig {
                                         .requestMatchers("/lote/**").permitAll()
                                         .requestMatchers("/recibo/**").permitAll()
                                         .requestMatchers("/reporte/**").permitAll()
+                                        .requestMatchers("/receta/**").permitAll()
                                         .anyRequest().authenticated()
                         )
                 .sessionManagement(sessionManagement ->

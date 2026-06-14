@@ -20,6 +20,7 @@ public class PedidoService {
     private final IMesa mesaRepository;
     private final IProducto productoRepository;
     private final IUsuario usuarioRepository;
+    private final ProductoService productoService;
 
     @Transactional
     public pedido crearPedido(pedido nuevoPedido) {
@@ -96,6 +97,11 @@ public class PedidoService {
                     .orElseThrow(() -> new RuntimeException(
                             "Producto no encontrado: " + detalle.getProducto().getId()));
 
+            if (!productoService.verificarDisponibilidad(productoDB.getId())) {
+                throw new RuntimeException("El producto '" + productoDB.getNombreproducto() + "' se encuentra AGOTADO por falta de insumos.");
+            }
+
+            productoService.descontarStock(productoDB.getId(), detalle.getCantidad());
             detalle.setProducto(productoDB);
             String area = productoDB
                     .getSubcategoria()
@@ -195,8 +201,16 @@ public class PedidoService {
         // 4. Cancelamos todos los ítems para que desaparezcan de la pantalla de la Cocina/Bar
         if (pedidoExistente.getDetalles() != null) {
             for (detalle_pedido detalle : pedidoExistente.getDetalles()) {
-                // Solo cancelamos si no ha sido entregado aún
-                if (!"ENTREGADO".equals(detalle.getEstadoItem())) {
+                String estadoActual = detalle.getEstadoItem().toString();
+
+                // Si el estado es PENDIENTE (el cocinero aún no lo prepara), regresamos la mercadería al almacén
+                if ("PENDIENTE".equals(estadoActual)) {
+                    productoService.devolverStock(detalle.getProducto().getId(), detalle.getCantidad());
+                }
+                // Si ya estaba EN_PREPARACION o ENTREGADO, NO se devuelve (se asume como pérdida o merma de restaurante)
+
+                // En cualquier caso, el ítem queda tachado de la cuenta
+                if (!"ENTREGADO".equals(estadoActual)) {
                     detalle.setEstadoItem(EstadoItem.CANCELADO);
                 }
             }

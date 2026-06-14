@@ -1,7 +1,11 @@
 package com.example.restaurants.services;
 
+import com.example.restaurants.model.entity.lote;
 import com.example.restaurants.model.entity.producto;
+import com.example.restaurants.model.entity.receta;
+import com.example.restaurants.repository.ILote;
 import com.example.restaurants.repository.IProducto;
+import com.example.restaurants.repository.IReceta;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,8 @@ public class ProductoService {
 
     @Autowired
     private final IProducto productoRepository;
+    private final IReceta recetaRepository;
+    private final ILote loteRepository;
 
     @Transactional
     public producto crearProducto(producto nuevoProducto) {
@@ -28,9 +34,39 @@ public class ProductoService {
         return productoRepository.save(nuevoProducto);
     }
 
+    public boolean verificarDisponibilidad(Long idProducto) {
+        List<receta> ingredientes = recetaRepository.findByProductoId(idProducto);
+
+        // Si el producto no tiene receta registrada, asumimos que es de stock infinito (ej: agua de caño) o venta directa
+        if (ingredientes.isEmpty()) {
+            return true;
+        }
+
+        // Revisamos ingrediente por ingrediente
+        for (receta r : ingredientes) {
+            Integer stockReal = loteRepository.obtenerStockTotalInsumo(r.getInsumo().getId());
+
+            // Si el stock real es menor a lo que pide la receta, el plato se bloquea
+            if (stockReal < r.getCantidad()) {
+                return false;
+            }
+        }
+        return true; // Si pasó todas las validaciones, hay stock de todo
+    }
+
+    /**
+     * LISTAR MENÚ: Ahora el menú evalúa el stock antes de mostrarse
+     */
     @Transactional(readOnly = true)
     public List<producto> listarTodos() {
-        return productoRepository.findAll();
+        List<producto> menu = productoRepository.findAll();
+
+        // Calculamos la disponibilidad en tiempo real para cada plato
+        for (producto p : menu) {
+            p.setDisponible(verificarDisponibilidad(p.getId()));
+        }
+
+        return menu;
     }
 
     @Transactional(readOnly = true)
@@ -41,8 +77,11 @@ public class ProductoService {
 
     @Transactional(readOnly = true)
     public List<producto> listarPorSubcategoria(Long idSubcategoria) {
-        // Asegúrate de corregir el nombre del método en tu IProducto
-        return productoRepository.findBySubcategoriaId(idSubcategoria);
+        List<producto> menu = productoRepository.findBySubcategoriaId(idSubcategoria);
+        for (producto p : menu) {
+            p.setDisponible(verificarDisponibilidad(p.getId()));
+        }
+        return menu;
     }
 
     @Transactional
@@ -64,5 +103,67 @@ public class ProductoService {
         return productoRepository.save(productoExistente);
     }
 
+    @Transactional
+    public void descontarStock(Long idProducto, int cantidadPedida) {
+        // 1. Buscamos qué ingredientes lleva el plato
+        List<receta> ingredientes = recetaRepository.findByProductoId(idProducto);
+
+        // 2. Recorremos cada ingrediente (Ej: Carne, Papas, Arroz)
+        for (receta r : ingredientes) {
+            // Multiplicamos lo que pide la receta por la cantidad de platos (Ej: 1 carne x 2 Lomo Saltados = 2 carnes necesarias)
+            int cantidadNecesaria = r.getCantidad() * cantidadPedida;
+
+            // Traemos los lotes disponibles de ese insumo
+            List<lote> lotes = loteRepository.obtenerLotesDisponibles(r.getInsumo().getId());
+
+            // 3. Empezamos a restar de los lotes más antiguos
+            for (lote lote : lotes) {
+                if (cantidadNecesaria == 0) break; // Si ya cubrimos lo necesario, pasamos al siguiente ingrediente
+
+                if (lote.getCantidadactual() >= cantidadNecesaria) {
+                    // Si este lote tiene suficiente, le restamos todo lo necesario
+                    lote.setCantidadactual(lote.getCantidadactual() - cantidadNecesaria);
+                    loteRepository.save(lote);
+                    cantidadNecesaria = 0;
+                } else {
+                    // Si este lote no alcanza, lo vaciamos y seguimos buscando en el siguiente lote
+                    cantidadNecesaria -= lote.getCantidadactual();
+                    lote.setCantidadactual(0);
+                    loteRepository.save(lote);
+                }
+            }
+
+            // 4. Si después de revisar todos los lotes, aún falta ingrediente, bloqueamos la venta
+            if (cantidadNecesaria > 0) {
+                throw new RuntimeException("Stock insuficiente para el insumo: " + r.getInsumo().getNombre() + ". Se canceló el pedido.");
+            }
+        }
+    }
+
+    @Transactional
+    public void devolverStock(Long idProducto, int cantidadDevuelta) {
+        List<receta> ingredientes = recetaRepository.findByProductoId(idProducto);
+
+        if (ingredientes.isEmpty()) {
+            return; // Si es botella de agua, no hacemos nada
+        }
+
+        for (receta r : ingredientes) {
+            int cantidadAReponer = r.getCantidad() * cantidadDevuelta;
+
+            // Buscamos los lotes de este insumo
+            List<lote> lotes = loteRepository.obtenerLotesDisponibles(r.getInsumo().getId());
+
+            if (!lotes.isEmpty()) {
+                // Le devolvemos el stock al lote que vence más pronto para aprovecharlo
+                lote loteSeleccionado = lotes.get(0);
+                loteSeleccionado.setCantidadactual(loteSeleccionado.getCantidadactual() + cantidadAReponer);
+                loteRepository.save(loteSeleccionado);
+                System.out.println("-> [DEVOLUCIÓN] Se regresaron " + cantidadAReponer + " unidades al lote " + loteSeleccionado.getId());
+            } else {
+                System.out.println("-> [ALERTA] No se encontró un lote activo para devolver el insumo ID: " + r.getInsumo().getId());
+            }
+        }
+    }
 
 }
