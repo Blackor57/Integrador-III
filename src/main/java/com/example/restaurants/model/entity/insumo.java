@@ -22,6 +22,6 @@ public class insumo {
     private String nombre;
 
     @Column(name = "stock_minimo")
-    private int stockMinimo;
+    private Integer stockMinimo;
 
 }

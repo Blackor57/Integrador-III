@@ -38,6 +38,9 @@ public class SecurityConfig {
                                         .requestMatchers("/rol/**").permitAll()
                                         .requestMatchers("/subcategoria/**").permitAll()
                                         .requestMatchers("/detalle/**").permitAll()
+                                        .requestMatchers("/insumo/**").permitAll()
+                                        .requestMatchers("/inventario/**").permitAll()
+                                        .requestMatchers("/lote/**").permitAll()
                                         .anyRequest().authenticated()
                         )
                 .sessionManagement(sessionManagement ->
