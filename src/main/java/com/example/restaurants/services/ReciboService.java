@@ -13,5 +13,5 @@ import java.util.Date;
 public class ReciboService {
 
     private final IRecibo reciboRepository;
-    
+
 }
