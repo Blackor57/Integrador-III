@@ -37,6 +37,9 @@ public class pedido {
     @Column(name = "estadopedido", nullable = false)
     private EstadoPedido estadopedido;
 
+    @Column(length = 255)
+    private String motivoAnulacion;
+
     @Column(name = "tiposervicio",nullable=true, length = 255)
     private String tiposervicio;
 
@@ -48,6 +51,10 @@ public class pedido {
 
     @Column(name = "total",nullable=false)
     private Float total;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tiporecibo", nullable=true)
+    private TipoRecibo tiporecibo;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference

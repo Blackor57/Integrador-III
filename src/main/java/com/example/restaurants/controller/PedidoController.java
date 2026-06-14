@@ -44,9 +44,59 @@ public class PedidoController {
         }
     }
 
-    @PutMapping("/{id}/cancelar")
-    public ResponseEntity<pedido> cancelarPedido(@PathVariable Long id) {
-        return ResponseEntity.ok(pedidoService.cancelarPedido(id));
+    @PutMapping("/{idPedido}/cancelar")
+    public ResponseEntity<?> cancelarPedido(
+            @PathVariable Long idPedido,
+            @RequestBody Map<String, String> payload) {
+
+        try {
+            // Extraemos el motivo del JSON que envía el cliente/Postman
+            String motivo = payload.get("motivo");
+
+            // Ejecutamos la regla de negocio que armaste en el Service
+            pedido pedidoCancelado = pedidoService.cancelarPedido(idPedido, motivo);
+
+            return ResponseEntity.ok(pedidoCancelado);
+
+        } catch (RuntimeException e) {
+            // Si falta el motivo o el pedido no existe, devolvemos un error 400 amigable
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+    }
+
+    @PutMapping("/{idPedido}/entregar/{idDetalle}")
+    public ResponseEntity<?> entregarItemDePedido(
+            @PathVariable Long idPedido,
+            @PathVariable Long idDetalle) {
+
+        try {
+            // Ejecutamos la lógica operativa
+            pedido pedidoActualizado = pedidoService.entregarItem(idPedido, idDetalle);
+
+            return ResponseEntity.ok(pedidoActualizado);
+
+        } catch (RuntimeException e) {
+            // Manejo de errores seguro para el cliente HTTP
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+    }
+
+    @GetMapping("/mesa/{idMesa}")
+    public ResponseEntity<?> obtenerPedidoPorMesa(@PathVariable Long idMesa) {
+        try {
+            // Llamamos al servicio que ya tiene el filtro inteligente
+            pedido pedidoActivo = pedidoService.obtenerPorMesa(idMesa);
+            return ResponseEntity.ok(pedidoActivo);
+        } catch (RuntimeException e) {
+            // Si la mesa no tiene pedidos activos, devolvemos un JSON con el error limpio
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        }
     }
 
     @PatchMapping("/detalle/{id}/estado")

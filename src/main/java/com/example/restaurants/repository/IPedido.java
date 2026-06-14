@@ -13,7 +13,8 @@ import java.util.Optional;
 @Repository
 public interface IPedido extends JpaRepository<pedido, Long> {
 
-    Optional<pedido> findByMesaId(Long idMesa);
+    @Query("SELECT p FROM pedido p WHERE p.mesa.id = :idMesa AND p.estadopedido NOT IN ('PAGADO', 'CANCELADO')")
+    Optional<pedido> buscarPedidoActivoPorMesa(@Param("idMesa") Long idMesa);
 
     List<pedido> findByUsuarioId(Long idUsuario);
 

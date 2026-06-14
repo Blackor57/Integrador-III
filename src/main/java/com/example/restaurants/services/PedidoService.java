@@ -173,8 +173,8 @@ public class PedidoService {
      */
     @Transactional(readOnly = true)
     public pedido obtenerPorMesa(Long idMesa) {
-        return pedidoRepository.findByMesaId(idMesa)
-                .orElseThrow(() -> new RuntimeException("No se encontró un pedido activo para la mesa: " + idMesa));
+        return pedidoRepository.buscarPedidoActivoPorMesa(idMesa)
+                .orElseThrow(() -> new RuntimeException("No se encontró una cuenta activa para cobrar en la mesa: " + idMesa));
     }
 
     /**
@@ -208,12 +208,18 @@ public class PedidoService {
      * Cancela un pedido cambiando su estado.
      */
     @Transactional
-    public pedido cancelarPedido(Long idPedido) {
+    public pedido cancelarPedido(Long idPedido, String motivo) {
+        // Validación inicial: Bloqueamos cualquier intento de cancelación sin justificación
+        if (motivo == null || motivo.trim().isEmpty()) {
+            throw new RuntimeException("Para control de auditoría, es obligatorio proporcionar un motivo de anulación.");
+        }
+
         // 1. Buscamos el pedido en la base de datos
         pedido pedidoExistente = obtenerPorId(idPedido);
 
-        // 2. Cambiamos el estado principal del pedido
+        // 2. Cambiamos el estado principal del pedido y registramos la justificación
         pedidoExistente.setEstadopedido(EstadoPedido.CANCELADO);
+        pedidoExistente.setMotivoAnulacion(motivo); // <-- Aquí guardamos el porqué
 
         // 3. Liberamos la mesa (si es que el pedido es en salón y tiene mesa)
         if (pedidoExistente.getMesa() != null) {
@@ -232,6 +238,48 @@ public class PedidoService {
             }
         }
         // 5. Guardamos todos los cambios juntos (el @Transactional asegura que si algo falla, no se guarde nada a medias)
+        return pedidoRepository.save(pedidoExistente);
+    }
+
+    @Transactional
+    public pedido entregarItem(Long idPedido, Long idDetalle) {
+        // 1. Traemos el pedido completo de la base de datos
+        pedido pedidoExistente = obtenerPorId(idPedido);
+
+        boolean todosEntregados = true;
+        boolean itemEncontrado = false;
+
+        // 2. Recorremos los ítems para encontrar exactamente el que se está entregando
+        if (pedidoExistente.getDetalles() != null) {
+            for (detalle_pedido detalle : pedidoExistente.getDetalles()) {
+
+                // Si encontramos el producto específico, lo marcamos como ENTREGADO
+                if (detalle.getId().equals(idDetalle)) {
+                    detalle.setEstadoItem(EstadoItem.ENTREGADO); // Ajusta si usas String en vez de Enum
+                    itemEncontrado = true;
+                }
+
+                // 3. Auditoría del resto de la orden:
+                // Si hay algún ítem que NO esté ENTREGADO y que NO haya sido CANCELADO,
+                // significa que la mesa sigue esperando platos.
+                if (!"ENTREGADO".equals(detalle.getEstadoItem().toString()) &&
+                        !"CANCELADO".equals(detalle.getEstadoItem().toString())) {
+                    todosEntregados = false;
+                }
+            }
+        }
+
+        // Validación de seguridad para evitar errores de digitación
+        if (!itemEncontrado) {
+            throw new RuntimeException("El ítem con ID " + idDetalle + " no pertenece a este pedido o no existe.");
+        }
+
+        // 4. Automatización de negocio: Si ya no falta ningún plato, la orden general pasa a ATENDIDO
+        if (todosEntregados) {
+            pedidoExistente.setEstadopedido(EstadoPedido.ENTREGADO); // Ajusta si usas String
+        }
+
+        // 5. Guardamos el impacto en la base de datos
         return pedidoRepository.save(pedidoExistente);
     }
 
