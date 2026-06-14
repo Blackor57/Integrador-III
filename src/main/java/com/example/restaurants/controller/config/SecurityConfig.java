@@ -44,6 +44,7 @@ public class SecurityConfig {
                                         .requestMatchers("/recibo/**").permitAll()
                                         .requestMatchers("/reporte/**").permitAll()
                                         .requestMatchers("/receta/**").permitAll()
+                                            .requestMatchers("/feedback/**").permitAll()
                                         .anyRequest().authenticated()
                         )
                 .sessionManagement(sessionManagement ->
