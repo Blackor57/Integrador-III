@@ -37,4 +37,5 @@ RUN apk add --no-cache wget && \
 EXPOSE 8080
 
 # Comando inmutable de arranque del sistema incluyendo el agente de New Relic
-ENTRYPOINT ["java", "-javaagent:/app/newrelic/newrelic.jar", "-jar", "app.jar"]
+# Comando de arranque que inyecta las variables directamente a la JVM
+ENTRYPOINT ["sh", "-c", "java -javaagent:/app/newrelic/newrelic.jar -Dnewrelic.config.license_key=$NEW_RELIC_LICENSE_KEY -Dnewrelic.config.app_name=$NEW_RELIC_APP_NAME -jar app.jar"]
