@@ -1,33 +1,28 @@
-# ETAPA 1: Construcción (Build)
-# Utilizamos una imagen base con el JDK completo para poder compilar
+# ETAPA 1: Construcción (Build) - Se queda exactamente igual (¡Perfecta!)
 FROM eclipse-temurin:21-jdk-alpine AS builder
-
 WORKDIR /app
-
-# Copiamos primero los archivos de dependencias para aprovechar el caché de capas de Docker
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
-
-# Descargamos las dependencias de Maven (esto ahorra tiempo en futuras compilaciones si el pom.xml no cambia)
 RUN ./mvnw dependency:go-offline
-
-# Copiamos el código fuente real
 COPY src ./src
-
-# Compilamos el proyecto omitiendo los tests para acelerar la creación de la imagen
 RUN ./mvnw clean package -DskipTests
 
-# ETAPA 2: Ejecución (Run)
-# Utilizamos una imagen mucho más ligera solo con el JRE
+# ETAPA 2: Ejecución (Run) - Aquí añadimos New Relic
 FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
-# Extraemos ÚNICAMENTE el ejecutable generado en la ETAPA 1
+# 1. Copiamos el .jar compilado desde la etapa anterior
 COPY --from=builder /app/target/Restaurants-0.0.1-SNAPSHOT.jar app.jar
 
-# Documentamos el puerto que expone el servicio internamente
+# 2. Instalamos 'wget' temporalmente para descargar el agente de New Relic
+# Las imágenes alpine vienen sin herramientas de red por defecto
+RUN apk add --no-cache wget && \
+    mkdir -p /app/newrelic && \
+    wget -O /app/newrelic/newrelic.jar https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic.jar && \
+    apk del wget # Borramos wget para mantener la imagen ultra ligera
+
 EXPOSE 8080
 
-# Comando inmutable de arranque del sistema
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# 3. Modificamos el ENTRYPOINT para activar el agente (-javaagent)
+ENTRYPOINT ["java", "-javaagent:/app/newrelic/newrelic.jar", "-jar", "app.jar"]

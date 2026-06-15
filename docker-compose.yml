@@ -1,8 +1,18 @@
+version: '3.8'
+
 services:
   backend:
-    build: .  # <-- Esta línea es la clave, le dice que construya desde el directorio actual
+    build: .
     image: sistema-laestacion:v1
     container_name: erp_backend
     ports:
       - "8080:8080"
     restart: unless-stopped
+    environment:
+      # --- VARIABLES DE TU APP (Las que ya uses, por ejemplo BD) ---
+      # SPRING_DATASOURCE_URL: jdbc:postgresql://...
+      
+      # --- VARIABLES REQUERIDAS POR NEW RELIC ---
+      - NEW_RELIC_LICENSE_KEY=E286AC28FBDBA0533780DAE06F2A15546BB9C81AD8C10930027F472F812D4D8D
+      - NEW_RELIC_APP_NAME=Sistema-LaEstacion-Backend
+      - NEW_RELIC_LOG_FILE_NAME=STDOUT
