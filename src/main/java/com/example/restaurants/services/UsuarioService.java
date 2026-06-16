@@ -108,23 +108,15 @@ public class UsuarioService {
 
     @Transactional
     public void desactivarUsuario(Long id) {
-        // 1. Obtener el usuario existente
         usuario usuarioExistente = obtenerPorId(id);
+        usuarioExistente.setActivo(false);
+        usuarioRepository.save(usuarioExistente);
+    }
 
-        // 2. Buscar el rol restrictivo (ID 7) en la base de datos
-        rol rolDesactivado = rolRepository.findById(7L)
-                .orElseThrow(() -> new RuntimeException("El rol de desactivación (ID 7) no existe en la base de datos"));
-
-        // 3. Cambiar el estado del usuario para el Login
-        usuarioExistente.setActivo(false); // Ya no podrá pasar el filtro de Spring Security
-
-        // 4. Limpiar TODOS los roles actuales de su colección interna
-        usuarioExistente.getRoles().clear();
-
-        // 5. Asignar el rol ID 7 automáticamente
-        usuarioExistente.getRoles().add(rolDesactivado);
-
-        // 6. Guardar los cambios heredados
+    @Transactional
+    public void activarUsuario(Long id) {
+        usuario usuarioExistente = obtenerPorId(id);
+        usuarioExistente.setActivo(true);
         usuarioRepository.save(usuarioExistente);
     }
 }

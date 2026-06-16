@@ -54,15 +54,23 @@ public class UsuarioController {
         return ResponseEntity.noContent().build(); // Retorna un 204 No Content (éxito sin cuerpo)
     }
 
-    // 7. ELIMINAR USUARIO
+    // 7. DESACTIVAR USUARIO
     @PutMapping("/{id}/desactivar")
     public ResponseEntity<Map<String, String>> desactivarUsuario(@PathVariable Long id) {
         usuarioService.desactivarUsuario(id);
-
         Map<String, String> response = new HashMap<>();
-        response.put("mensaje", "Usuario desactivado con éxito. Se removieron sus accesos y se asignó el rol restrictivo.");
+        response.put("mensaje", "Usuario desactivado con éxito.");
         response.put("status", "SUSPENDED");
+        return ResponseEntity.ok(response);
+    }
 
+    // 8. ACTIVAR USUARIO (¡El que te faltaba!)
+    @PutMapping("/{id}/activar")
+    public ResponseEntity<Map<String, String>> activarUsuario(@PathVariable Long id) {
+        usuarioService.activarUsuario(id);
+        Map<String, String> response = new HashMap<>();
+        response.put("mensaje", "Usuario reactivado con éxito. Roles originales restaurados.");
+        response.put("status", "ACTIVE");
         return ResponseEntity.ok(response);
     }
 }

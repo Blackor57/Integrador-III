@@ -64,7 +64,8 @@ public class AuthService {
                 .telefono(registerRequest.getTelefono())
                 .direccion(registerRequest.getDireccion())
                 .fecRegistro(registerRequest.getFechaRegistro())
-                .roles(rolesAsignar) // Asignamos la lista mutable
+                .roles(rolesAsignar)// Asignamos la lista mutable
+                .activo(true)
                 .build();
 
         usuariorepository.save(user);

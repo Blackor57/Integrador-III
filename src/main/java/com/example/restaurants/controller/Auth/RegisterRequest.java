@@ -20,4 +20,5 @@ public class RegisterRequest {
     private String direccion;
     private Date fechaRegistro;
     private Long idRol;
+    private boolean activo;
 }
