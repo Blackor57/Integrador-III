@@ -50,6 +50,7 @@ public class SecurityConfig {
                                         .requestMatchers("/reporte/**").permitAll()
                                         .requestMatchers("/receta/**").permitAll()
                                             .requestMatchers("/feedback/**").permitAll()
+                                            .requestMatchers("/usuario/**").permitAll()
                                         .anyRequest().authenticated()
                         )
                 .sessionManagement(sessionManagement ->
