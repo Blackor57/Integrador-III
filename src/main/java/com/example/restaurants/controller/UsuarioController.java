@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/usuario")
@@ -39,10 +41,28 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.asignarRol(idUsuario, idRol));
     }
 
-    // 5. ELIMINAR USUARIO
+    // 5. QUITAR UN ROL A UN USUARIO
+    @DeleteMapping("/{idUsuario}/roles/{idRol}")
+    public ResponseEntity<usuario> quitarRol(@PathVariable Long idUsuario, @PathVariable Long idRol) {
+        return ResponseEntity.ok(usuarioService.quitarRol(idUsuario, idRol));
+    }
+
+    // 6. ELIMINAR USUARIO
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
         usuarioService.EliminarUsuario(id);
         return ResponseEntity.noContent().build(); // Retorna un 204 No Content (éxito sin cuerpo)
+    }
+
+    // 7. ELIMINAR USUARIO
+    @PutMapping("/{id}/desactivar")
+    public ResponseEntity<Map<String, String>> desactivarUsuario(@PathVariable Long id) {
+        usuarioService.desactivarUsuario(id);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("mensaje", "Usuario desactivado con éxito. Se removieron sus accesos y se asignó el rol restrictivo.");
+        response.put("status", "SUSPENDED");
+
+        return ResponseEntity.ok(response);
     }
 }

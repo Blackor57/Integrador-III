@@ -50,6 +50,9 @@ public class usuario implements UserDetails{
     @Column(name = "fecregistro")
     private Date fecRegistro;
 
+    @Column(name = "activo", nullable = false)
+    private boolean activo = true;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "usuarios_roles",
             joinColumns = @JoinColumn(name = "id_usuario", referencedColumnName = "id"),
