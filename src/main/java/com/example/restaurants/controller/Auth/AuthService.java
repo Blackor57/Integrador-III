@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -63,7 +64,7 @@ public class AuthService {
                 .email(registerRequest.getEmail())
                 .telefono(registerRequest.getTelefono())
                 .direccion(registerRequest.getDireccion())
-                .fecRegistro(registerRequest.getFechaRegistro())
+                .fecRegistro(new Date())
                 .roles(rolesAsignar)// Asignamos la lista mutable
                 .activo(true)
                 .build();
