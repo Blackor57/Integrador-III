@@ -21,6 +21,11 @@ public interface IPedido extends JpaRepository<pedido, Long> {
     List<pedido> buscarPedidosPorRango(@Param("inicio") Date inicio, @Param("fin") Date fin);
 
     List<pedido> findByUsuarioId(Long idUsuario);
+    long countByUsuarioId(Long usuarioId);
+
+    // 2. Cuenta los pedidos que aún no se han entregado o pagado
+    @Query("SELECT COUNT(p) FROM pedido p WHERE p.usuario.id = :usuarioId AND p.estadopedido IN ('PENDIENTE', 'EN_PREPARACION')")
+    long countPedidosActivos(@Param("usuarioId") Long usuarioId);
 
     @Query("SELECT p FROM pedido p WHERE p.estadopedido = :estado")
     List<pedido> buscarPorEstado(@Param("estado") EstadoPedido estado);
