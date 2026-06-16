@@ -26,8 +26,16 @@ WORKDIR /app
 # Extraemos ÚNICAMENTE el ejecutable generado en la ETAPA 1
 COPY --from=builder /app/target/Restaurants-0.0.1-SNAPSHOT.jar app.jar
 
+# ¡NUEVA CONFIGURACIÓN DE NEW RELIC (Versión 8 Estable)!
+# Instalamos wget, descargamos el agente versión 8.11.0 y limpiamos la herramienta para reducir espacio
+RUN apk add --no-cache wget && \
+    mkdir -p /app/newrelic && \
+    wget -O /app/newrelic/newrelic.jar https://download.newrelic.com/newrelic/java-agent/newrelic-agent/8.11.0/newrelic-agent-8.11.0.jar && \
+    apk del wget
+
 # Documentamos el puerto que expone el servicio internamente
 EXPOSE 8080
 
-# Comando inmutable de arranque del sistema
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Comando inmutable de arranque del sistema incluyendo el agente de New Relic
+# Comando de arranque que inyecta las variables directamente a la JVM
+ENTRYPOINT ["sh", "-c", "java -javaagent:/app/newrelic/newrelic.jar -Dnewrelic.config.license_key=$NEW_RELIC_LICENSE_KEY -Dnewrelic.config.app_name=$NEW_RELIC_APP_NAME -jar app.jar"]
