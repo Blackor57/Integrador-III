@@ -1,11 +1,14 @@
 package com.example.restaurants.controller;
 
 import com.example.restaurants.model.entity.usuario;
+import com.example.restaurants.repository.IFeedback;
+import com.example.restaurants.repository.IPedido;
 import com.example.restaurants.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +19,9 @@ import java.util.Map;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+    private final IPedido pedidoRepository;
+    private final IFeedback feedbackRepository;
+
 
     // 1. LISTAR TODOS LOS USUARIOS
     @GetMapping
@@ -72,5 +78,33 @@ public class UsuarioController {
         response.put("mensaje", "Usuario reactivado con éxito. Roles originales restaurados.");
         response.put("status", "ACTIVE");
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/mi-perfil")
+    public ResponseEntity<Map<String, Object>> obtenerMiPerfil(Principal principal) {
+        usuario usuarioLogueado = usuarioService.buscarPorNombreUsuario(principal.getName())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        long totalPedidos = pedidoRepository.countByUsuarioId(usuarioLogueado.getId());
+        long pedidosActivos = pedidoRepository.countPedidosActivos(usuarioLogueado.getId());
+
+        // --- NUEVA LÓGICA DE FEEDBACK ---
+        Double promedioEstrellas = feedbackRepository.obtenerPromedioCalificacion(usuarioLogueado.getId());
+        // Redondeamos a 1 decimal para que se vea elegante en el frontend (ej: 4.87 -> 4.9)
+        double calificacionRedondeada = Math.round(promedioEstrellas * 10.0) / 10.0;
+
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("id", usuarioLogueado.getId());
+        respuesta.put("nombreCompleto", usuarioLogueado.getNombreCompleto());
+        respuesta.put("email", usuarioLogueado.getEmail());
+        respuesta.put("telefono", usuarioLogueado.getTelefono());
+        respuesta.put("direccion", usuarioLogueado.getDireccion());
+        respuesta.put("roles", usuarioLogueado.getRoles());
+
+        respuesta.put("totalPedidos", totalPedidos);
+        respuesta.put("pedidosActivos", pedidosActivos);
+        respuesta.put("calificacion", calificacionRedondeada); // <-- ¡Dato 100% real!
+
+        return ResponseEntity.ok(respuesta);
     }
 }
