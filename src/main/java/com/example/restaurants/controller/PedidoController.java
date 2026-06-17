@@ -1,12 +1,15 @@
 package com.example.restaurants.controller;
 import com.example.restaurants.model.entity.EstadoItem;
 import com.example.restaurants.model.entity.pedido; // Tu entidad en minúsculas
+import com.example.restaurants.model.entity.usuario;
 import com.example.restaurants.services.PedidoService; // Tu clase de servicio
+import com.example.restaurants.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -20,6 +23,7 @@ import java.util.Map;
 public class PedidoController {
 
     private final PedidoService pedidoService;
+    private final UsuarioService usuarioService;
 
     @GetMapping
     public ResponseEntity<List<pedido>> obtenerTodos() {
@@ -166,5 +170,22 @@ public class PedidoController {
             error.put("error", "Error al filtrar fechas: " + e.getMessage());
             return ResponseEntity.badRequest().body(error);
         }
+    }
+
+    @GetMapping("/usuario/mis-pedidos")
+    public ResponseEntity<List<pedido>> obtenerMisPedidos() {
+
+        // 1. Obtenemos quién está logueado leyendo el token que interceptó Spring Security
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        // 2. Buscamos el ID real de ese usuario en la BD usando su correo/username
+        usuario usuarioLogueado = usuarioService.buscarPorNombreUsuario(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // 3. Traemos sus pedidos
+        List<pedido> historialPedidos = pedidoService.obtenerPedidosPorUsuario(usuarioLogueado.getId());
+
+        return ResponseEntity.ok(historialPedidos);
     }
 }

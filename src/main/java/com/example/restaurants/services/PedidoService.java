@@ -144,6 +144,10 @@ public class PedidoService {
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado con el ID: " + id));
     }
 
+    public List<pedido> obtenerPedidosPorUsuario(Long idUsuario) {
+        return pedidoRepository.findByUsuarioId(idUsuario);
+    }
+
     /**
      * Devuelve una lista con todos los pedidos del restaurante.
      */
