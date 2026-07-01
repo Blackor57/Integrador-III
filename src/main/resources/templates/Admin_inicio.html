@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Estación - Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #0c0402; /* Fondo oscuro sólido para dashboard */
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-[#0c0402] font-sans antialiased">
+
+    <!-- =========================================================================
+         NAVBAR ADMIN
+         ========================================================================= -->
+   <nav class="w-full bg-[#fdfbf7] border-b border-stone-200 shadow-sm px-4 md:px-8 py-3 flex items-center justify-between text-stone-800 z-40">
+        <div class="flex items-center gap-2.5 cursor-pointer">
+            <div class="text-[#cf6937] text-2xl">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+            </div>
+            <div class="leading-none">
+                <div class="flex items-center gap-1.5">
+                    <span class="block font-serif font-black tracking-widest text-[#cf6937] text-base md:text-lg uppercase">Estación</span>
+                    <span class="bg-[#cf6937] text-white font-mono text-[9px] font-bold px-1 py-0.5 rounded-sm">ADMIN</span>
+                </div>
+                <span class="block text-[8px] tracking-[0.4em] text-stone-500 uppercase font-medium">Huaral</span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-4 md:gap-6">
+            <a href="Admin_inicio.html" class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 group text-[#cf6937]">
+                <i class="fa-solid fa-users-gear text-xs"></i>
+                <span class="hidden sm:inline">Inicio</span>
+                 <div class="active-indicator absolute bottom-[-14px] left-0 w-full h-[3px] bg-[#cf6937] rounded-full"></div>
+            </a>
+            <a href="Admin_Usuario.html" class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]">
+                <i class="fa-solid fa-users-gear text-xs"></i>
+                <span class="hidden sm:inline">Usuario</span>
+            </a>
+            <a href="Admin_pedidos.html" class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-bold transition-colors flex items-center group text-stone-600 hover:text-[#cf6937]">
+                <i class="fa-solid fa-clipboard text-xs"></i>
+                <span class="hidden sm:inline">Pedidos</span>
+               
+            </a>
+            <a href="Admin_productos.html" class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]">
+                <i class="fa-solid fa-bowl-food text-xs"></i>
+                <span class="hidden sm:inline">Producto</span>
+            </a>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <div class="text-right hidden sm:block leading-none">
+                <span class="block text-xs font-bold text-stone-800">EDU</span>
+                <span class="text-[9px] text-stone-500">Administrador</span>
+            </div>
+            <button id="navBtnLogout" class="w-9 h-9 rounded-full border border-stone-200 bg-white hover:bg-red-50 text-stone-500 hover:text-red-600 flex items-center justify-center transition-colors shadow-xs cursor-pointer">
+                <i class="fa-solid fa-power-off text-sm"></i>
+            </button>
+        </div>
+    </nav>
+<main class="flex-1 flex flex-col h-screen overflow-hidden bg-[#0c0402]">
+        
+        <header class="h-20 px-8 flex items-center justify-between flex-shrink-0 border-b border-stone-800/60 bg-[#0c0402]/90 backdrop-blur-sm z-10">
+            <div>
+                <h1 class="text-xl font-bold text-white tracking-wide">Bienvenido, Edu 👋</h1>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <div class="relative hidden md:block w-64 group">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-stone-500 group-focus-within:text-[#f5be38] transition-colors"><i class="fa-solid fa-magnifying-glass text-sm"></i></span>
+                    <input type="text" placeholder="Buscar..." class="w-full bg-[#1c0e0a] text-stone-200 placeholder-stone-500 text-sm rounded-full pl-10 pr-4 py-2.5 border border-stone-800 outline-none focus:border-[#f5be38] transition-all">
+                </div>
+
+                <button class="relative w-10 h-10 rounded-full border border-stone-800 bg-[#1c0e0a] hover:bg-stone-800 text-stone-400 flex items-center justify-center transition-colors">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-[#e07a48] border-2 border-[#0c0402] rounded-full"></span>
+                </button>
+
+                <div class="flex items-center gap-3 pl-4 border-l border-stone-800">
+                    <div class="text-right hidden sm:block leading-none">
+                        <span class="block text-sm font-bold text-white">Edu Perez</span>
+                        <span class="text-[10px] text-stone-400">Administrador</span>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-[#3d2a21] border-2 border-[#f5be38] flex items-center justify-center text-lg shadow-inner">
+                        👨‍🍳
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 custom-scroll">
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-5 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-sack-dollar"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-emerald-100/60 font-medium uppercase tracking-wider">Ingresos Hoy</p>
+                        <h3 class="text-2xl font-bold text-emerald-400 font-mono">S/. 11,256</h3>
+                    </div>
+                </div>
+
+                <div class="bg-purple-500/10 border border-purple-500/20 rounded-2xl p-5 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-receipt"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-purple-100/60 font-medium uppercase tracking-wider">Órdenes Hoy</p>
+                        <h3 class="text-2xl font-bold text-purple-400 font-mono">245</h3>
+                    </div>
+                </div>
+
+                <div class="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-5 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-blue-100/60 font-medium uppercase tracking-wider">Gasto Promedio</p>
+                        <h3 class="text-2xl font-bold text-blue-400 font-mono">S/. 45.90</h3>
+                    </div>
+                </div>
+
+                <div class="bg-rose-500/10 border border-rose-500/20 rounded-2xl p-5 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-rose-100/60 font-medium uppercase tracking-wider">Ingreso Mensual</p>
+                        <h3 class="text-2xl font-bold text-rose-400 font-mono">S/. 42,227</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <div class="bg-[#1c0e0a]/80 border border-stone-800 rounded-2xl p-6 lg:col-span-1 flex flex-col shadow-lg">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-white font-bold tracking-wide">Estados de Pedido</h3>
+                            <p class="text-[10px] text-stone-500 mt-0.5">Febrero, 2026</p>
+                        </div>
+                        <select class="bg-[#2a1a14] text-stone-300 text-xs px-2 py-1 rounded border border-stone-700 outline-none">
+                            <option>Mensual</option>
+                            <option>Semanal</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex-grow flex items-center justify-center relative min-h-[200px]">
+                        <canvas id="salesDonutChart"></canvas>
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <span class="text-2xl font-bold text-white">100%</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 space-y-2 text-xs">
+                        <div class="flex justify-between items-center text-stone-300">
+                            <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#f87171]"></span> Entregados</span>
+                            <span class="font-bold">65%</span>
+                        </div>
+                        <div class="flex justify-between items-center text-stone-300">
+                            <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#c084fc]"></span> Preparando</span>
+                            <span class="font-bold">22%</span>
+                        </div>
+                        <div class="flex justify-between items-center text-stone-300">
+                            <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#34d399]"></span> En Espera</span>
+                            <span class="font-bold">13%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#1c0e0a]/80 border border-stone-800 rounded-2xl p-6 lg:col-span-2 flex flex-col shadow-lg">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="text-white font-bold tracking-wide">Flujo de Órdenes</h3>
+                            <p class="text-[10px] text-stone-500 mt-0.5">Cantidad de pedidos por día</p>
+                        </div>
+                        <select class="bg-[#2a1a14] text-stone-300 text-xs px-2 py-1 rounded border border-stone-700 outline-none">
+                            <option>Semanal</option>
+                            <option>Mensual</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex-grow w-full relative min-h-[220px]">
+                        <canvas id="orderBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-[#1c0e0a]/80 border border-stone-800 rounded-2xl p-6 shadow-lg">
+                <div class="flex justify-between items-center mb-5">
+                    <h3 class="text-white font-bold tracking-wide">Platos en Tendencia</h3>
+                    <div class="flex gap-2">
+                        <button class="w-7 h-7 rounded-full bg-[#2a1a14] border border-stone-700 text-stone-400 hover:text-white flex items-center justify-center transition-colors"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                        <button class="w-7 h-7 rounded-full bg-[#2a1a14] border border-stone-700 text-stone-400 hover:text-white flex items-center justify-center transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    
+                    <div class="bg-[#0c0402] border border-stone-800 rounded-xl overflow-hidden group">
+                        <div class="h-32 bg-[#2a1a14] relative overflow-hidden flex items-center justify-center text-5xl">
+                            <span class="group-hover:scale-110 transition-transform duration-300">🍛</span>
+                        </div>
+                        <div class="p-4 flex justify-between items-end">
+                            <div>
+                                <h4 class="text-sm font-bold text-white">Lomo Saltado</h4>
+                                <p class="text-[10px] text-stone-500 mt-1">124 Órdenes hoy</p>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-[#f5be38]">S/. 32.00</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#0c0402] border border-stone-800 rounded-xl overflow-hidden group">
+                        <div class="h-32 bg-[#2a1a14] relative overflow-hidden flex items-center justify-center text-5xl">
+                            <span class="group-hover:scale-110 transition-transform duration-300">🍚</span>
+                        </div>
+                        <div class="p-4 flex justify-between items-end">
+                            <div>
+                                <h4 class="text-sm font-bold text-white">Arroz Chaufa</h4>
+                                <p class="text-[10px] text-stone-500 mt-1">98 Órdenes hoy</p>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-[#f5be38]">S/. 25.00</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#0c0402] border border-stone-800 rounded-xl overflow-hidden group">
+                        <div class="h-32 bg-[#2a1a14] relative overflow-hidden flex items-center justify-center text-5xl">
+                            <span class="group-hover:scale-110 transition-transform duration-300">🍗</span>
+                        </div>
+                        <div class="p-4 flex justify-between items-end">
+                            <div>
+                                <h4 class="text-sm font-bold text-white">Pollo a la Brasa</h4>
+                                <p class="text-[10px] text-stone-500 mt-1">85 Órdenes hoy</p>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-[#f5be38]">S/. 29.50</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <!-- Lógica de control para alternar los estilos activos de los botones del Nav -->
+     <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // Configuración Global de Chart.js para Tema Oscuro
+            Chart.defaults.color = '#78716c'; // text-stone-500
+            Chart.defaults.font.family = "ui-sans-serif, system-ui, sans-serif";
+
+            // 1. Renderizar Gráfico de Dona (Estados de Pedido)
+            const ctxDonut = document.getElementById('salesDonutChart').getContext('2d');
+            new Chart(ctxDonut, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Entregados', 'Preparando', 'En Espera'],
+                    datasets: [{
+                        data: [65, 22, 13],
+                        backgroundColor: [
+                            '#f87171', // red-400
+                            '#c084fc', // purple-400
+                            '#34d399'  // emerald-400
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%', // Grosor de la dona
+                    plugins: {
+                        legend: { display: false }, // Ocultamos leyenda nativa para usar la HTML personalizada
+                        tooltip: {
+                            backgroundColor: '#2a1a14',
+                            titleColor: '#fff',
+                            bodyColor: '#e5e7eb',
+                            borderColor: '#543d32',
+                            borderWidth: 1
+                        }
+                    }
+                }
+            });
+
+            // 2. Renderizar Gráfico de Barras (Flujo de Órdenes)
+            const ctxBar = document.getElementById('orderBarChart').getContext('2d');
+            
+            // Simulación de barra activa (Martes/Tue) con color diferente
+            const barColors = ['#2a1a14', '#2a1a14', '#2a1a14', '#f5be38', '#2a1a14', '#2a1a14', '#2a1a14'];
+            const hoverColors = ['#3d2a21', '#3d2a21', '#3d2a21', '#f5be38', '#3d2a21', '#3d2a21', '#3d2a21'];
+
+            new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+                    datasets: [{
+                        label: 'Pedidos',
+                        data: [120, 150, 180, 265, 200, 240, 280],
+                        backgroundColor: barColors,
+                        hoverBackgroundColor: hoverColors,
+                        borderRadius: 6, // Bordes redondeados de la imagen referencia
+                        barThickness: 16 // Grosor de barra similar al de la imagen
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#2a1a14',
+                            titleColor: '#fff',
+                            bodyColor: '#e5e7eb',
+                            borderColor: '#543d32',
+                            borderWidth: 1,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + ' Órdenes';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#1c0e0a', // Líneas de grid oscuras
+                                drawBorder: false
+                            },
+                            ticks: { stepSize: 50 }
+                        },
+                        x: {
+                            grid: { display: false, drawBorder: false }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+     <!-- Script navegacion-->
+    <script>
+        (function() {
+            const navButtons = document.querySelectorAll('.admin-nav-btn');
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const moduleName = button.getAttribute('data-module');
+
+                    // 1. Cambiar los estilos visuales del botón activo
+                    navButtons.forEach(btn => {
+                        btn.classList.remove('text-[#cf6937]', 'font-bold');
+                        btn.classList.add('text-stone-600', 'font-medium');
+                        btn.querySelector('.active-indicator').classList.add('hidden');
+                    });
+                    
+                    button.classList.remove('text-stone-600', 'font-medium');
+                    button.classList.add('text-[#cf6937]', 'font-bold');
+                    button.querySelector('.active-indicator').classList.remove('hidden');
+
+                    // 2. Variable lista para usar en tus redirecciones de backend o router de JS
+                    console.log(`Módulo Admin Seleccionado: ${moduleName}`);
+                });
+            });
+
+            // Evento Logout
+            document.getElementById('navBtnLogout')?.addEventListener('click', () => {
+                localStorage.clear();
+                window.location.href = 'login.html';
+            });
+        })();
+    </script>
+</body>
+</html>

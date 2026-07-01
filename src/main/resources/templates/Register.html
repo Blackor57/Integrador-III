@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Estación - Registro</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        background: radial-gradient(circle, #2d1710 0%, #150905 100%);
+      }
+      /* Personalización de scrollbar para el formulario si es necesario */
+      .custom-scroll::-webkit-scrollbar {
+        width: 5px;
+      }
+      .custom-scroll::-webkit-scrollbar-track {
+        background: #2a1a14;
+      }
+      .custom-scroll::-webkit-scrollbar-thumb {
+        background: #f5be38;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen flex items-center justify-center p-4 antialiased selection:bg-amber-500"
+  >
+    <main
+      class="w-full max-w-4xl bg-[#3d2a21]/90 backdrop-blur-lg border border-[#543d32] rounded-[2.5rem] px-6 py-8 md:px-12 md:py-10 shadow-2xl"
+    >
+      <header class="text-center mb-10">
+        <h1
+          class="text-4xl md:text-5xl font-serif font-bold tracking-widest text-[#f5be38] uppercase"
+        >
+          La Estación
+        </h1>
+        <p class="text-xs tracking-[0.4em] text-[#d4af77] uppercase mt-1">
+          Huaral
+        </p>
+        <p class="text-sm text-stone-300/80 mt-4 font-light">
+          Crea tu cuenta y disfruta de nuestra auténtica comida peruana
+        </p>
+      </header>
+
+      <form id="registerForm" class="space-y-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+          <div class="space-y-5">
+            <div
+              class="flex items-center gap-3 border-b border-[#f5be38]/30 pb-2 mb-6"
+            >
+              <i class="fa-solid fa-address-card text-[#f5be38]"></i>
+              <h2
+                class="text-[#f5be38] uppercase text-sm font-bold tracking-wider"
+              >
+                Información Personal
+              </h2>
+            </div>
+
+            <div class="relative group">
+              <div class="relative">
+                <span
+                  class="absolute inset-y-0 left-0 flex items-center pl-4 text-stone-400 group-focus-within:text-[#f5be38]"
+                >
+                  <i class="fa-regular fa-user"></i>
+                </span>
+                <input
+                  type="text"
+                  name="fullName"
+                  placeholder="Nombre completo"
+                  class="w-full bg-[#2a1a14]/60 text-stone-100 text-sm rounded-2xl pl-11 pr-4 py-3.5 border border-stone-500/20 focus:border-[#f5be38] outline-none transition-all"
+                />
+              </div>
+            </div>
+
+            <div class="relative group">
+              <div class="relative">
+                <span
+                  class="absolute inset-y-0 left-0 flex items-center pl-4 text-stone-400 group-focus-within:text-[#f5be38]"
+                >
+                  <i class="fa-regular fa-envelope"></i>
+                </span>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Correo electrónico"
+                  class="w-full bg-[#2a1a14]/60 text-stone-100 text-sm rounded-2xl pl-11 pr-4 py-3.5 border border-stone-500/20 focus:border-[#f5be38] outline-none transition-all"
+                />
+              </div>
+            </div>
+
+            <div class="relative group">
+              <div class="relative">
+                <span
+                  class="absolute inset-y-0 left-0 flex items-center pl-4 text-stone-400 group-focus-within:text-[#f5be38]"
+                >
+                  <i class="fa-solid fa-at"></i>
+                </span>
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Nombre de usuario"
+                  class="w-full bg-[#2a1a14]/60 text-stone-100 text-sm rounded-2xl pl-11 pr-4 py-3.5 border border-stone-500/20 focus:border-[#f5be38] outline-none transition-all"
+                />
+              </div>
+            </div>
+
+            <div class="relative group">
+              <div class="relative">
+                <span
+                  class="absolute inset-y-0 left-0 flex items-center pl-4 text-stone-400 group-focus-within:text-[#f5be38]"
+                >
+                  <i class="fa-solid fa-phone-flip text-xs"></i>
+                </span>
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Número de teléfono"
+                  class="w-full bg-[#2a1a14]/60 text-stone-100 text-sm rounded-2xl pl-11 pr-4 py-3.5 border border-stone-500/20 focus:border-[#f5be38] outline-none transition-all"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-5">
+            <div
+              class="flex items-center gap-3 border-b border-[#f5be38]/30 pb-2 mb-6"
+            >
+              <i class="fa-solid fa-shield-halved text-[#f5be38]"></i>
+              <h2
+                class="text-[#f5be38] uppercase text-sm font-bold tracking-wider"
+              >
+                Seguridad
+              </h2>
+            </div>
+
+            <div class="relative group">
+              <div class="relative">
+                <span
+                  class="absolute inset-y-0 left-0 flex items-center pl-4 text-stone-400 group-focus-within:text-[#f5be38]"
+                >
+                  <i class="fa-solid fa-lock"></i>
+                </span>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Contraseña"
+                  class="w-full bg-[#2a1a14]/60 text-stone-100 text-sm rounded-2xl pl-11 pr-4 py-3.5 border border-stone-500/20 focus:border-[#f5be38] outline-none transition-all"
+                />
+              </div>
+              <p class="text-[10px] text-stone-500 mt-2 ml-1">
+                Mínimo 8 caracteres, letras y números
+              </p>
+            </div>
+
+            <div class="relative group">
+              <div class="relative">
+                <span
+                  class="absolute inset-y-0 left-0 flex items-center pl-4 text-stone-400 group-focus-within:text-[#f5be38]"
+                >
+                  <i class="fa-solid fa-circle-check"></i>
+                </span>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  placeholder="Confirmar contraseña"
+                  class="w-full bg-[#2a1a14]/60 text-stone-100 text-sm rounded-2xl pl-11 pr-4 py-3.5 border border-stone-500/20 focus:border-[#f5be38] outline-none transition-all"
+                />
+              </div>
+            </div>
+
+            <div class="hidden md:block h-10"></div>
+          </div>
+        </div>
+
+        <div class="pt-6 border-t border-[#543d32] space-y-6">
+          <div class="space-y-3">
+            <div class="flex items-start">
+              <input
+                type="checkbox"
+                id="terms"
+                name="terms"
+                required
+                class="mt-1 w-4 h-4 rounded border-stone-500/40 text-[#e07a48] bg-[#2a1a14] accent-[#e07a48] cursor-pointer"
+              />
+              <label for="terms" class="ml-3 text-xs text-stone-300">
+                Acepto los
+                <a href="#" class="text-[#f5be38] underline"
+                  >términos y condiciones</a
+                >
+                de servicio.
+              </label>
+            </div>
+            <div class="flex items-start">
+              <input
+                type="checkbox"
+                id="offers"
+                name="offers"
+                class="mt-1 w-4 h-4 rounded border-stone-500/40 text-[#e07a48] bg-[#2a1a14] accent-[#e07a48] cursor-pointer"
+              />
+              <label for="offers" class="ml-3 text-xs text-stone-300">
+                Deseo recibir ofertas y promociones exclusivas.
+              </label>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full bg-[#e07a48] hover:bg-[#cf6937] text-white font-bold py-4 rounded-2xl shadow-xl shadow-[#e07a48]/20 transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center gap-3"
+          >
+            <span id="btnText">CREAR MI CUENTA</span>
+            <i
+              id="spinner"
+              class="fa-solid fa-circle-notch animate-spin hidden"
+            ></i>
+          </button>
+        </div>
+      </form>
+
+      <footer class="mt-8 text-center">
+        <p class="text-xs text-stone-400">
+          ¿Ya tienes cuenta?
+          <a
+            href="login.html"
+            class="text-[#f5be38] font-bold hover:underline ml-1"
+            >Inicia sesión aquí →</a
+          >
+        </p>
+      </footer>
+    </main>
+
+    <script>
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const btnText = document.getElementById("btnText");
+          const spinner = document.getElementById("spinner");
+          const password = document.getElementById("password").value;
+          const confirm = document.getElementById("confirmPassword").value;
+
+          // Validación simple de contraseñas
+          if (password !== confirm) {
+            alert("Las contraseñas no coinciden");
+            return;
+          }
+
+          // Preparar datos para el Backend
+          const formData = new FormData(e.target);
+          const data = Object.fromEntries(formData.entries());
+
+          // UI Feedback (Loading)
+          btnText.textContent = "PROCESANDO...";
+          spinner.classList.remove("hidden");
+          e.target
+            .querySelectorAll("input, button")
+            .forEach((el) => (el.disabled = true));
+
+          try {
+            // Mapeamos los datos para que coincidan exactamente con RegisterRequest.java
+            const response = await fetch(
+              "http://localhost:8080/auth/register",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  username: data.username,
+                  password: data.password,
+                  nombreCompleto: data.fullName, // Traducción al backend
+                  email: data.email,
+                  telefono: data.phone, // Traducción al backend
+                  direccion: "", // Lo mandamos vacío porque no está en el form
+                }),
+              },
+            );
+
+            if (!response.ok) {
+              throw new Error(
+                "No se pudo registrar la cuenta. Es posible que el usuario o correo ya existan.",
+              );
+            }
+
+            // Si todo sale bien
+            alert("¡Cuenta creada con éxito! Bienvenido a La Estación.");
+
+            // Redirigimos al usuario al login para que inicie sesión con su nueva cuenta
+            window.location.href = "login.html";
+          } catch (error) {
+            console.error(error);
+            alert(error.message || "Error de red al conectar con el servidor.");
+          } finally {
+            btnText.textContent = "CREAR MI CUENTA";
+            spinner.classList.add("hidden");
+            e.target
+              .querySelectorAll("input, button")
+              .forEach((el) => (el.disabled = false));
+          }
+        });
+    </script>
+  </body>
+</html>
