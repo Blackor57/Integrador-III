@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Estación - Nuestra Carta</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .hero-bg {
+        background: radial-gradient(circle at center, #1c0e0a 0%, #0c0402 100%);
+      }
+      /* Ocultar barra de scroll en navegadores basada en WebKit (Chrome/Safari) */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      /* Ocultar barra de scroll en Firefox e IE */
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-[#0c0402] min-h-screen font-sans antialiased flex flex-col justify-between"
+  >
+    <nav
+      class="w-full bg-[#fdfbf7] border-b border-stone-200 shadow-sm px-4 md:px-8 py-3 flex items-center justify-between selection:bg-amber-500 selection:text-white z-50"
+    >
+      <div class="flex items-center gap-3 cursor-pointer">
+        <div class="text-[#bba3cc] text-2xl md:text-3xl">
+          <i class="fa-solid fa-utensils"></i>
+        </div>
+        <div class="leading-none">
+          <span
+            class="block font-serif font-black tracking-widest text-[#cf6937] text-lg md:text-xl uppercase"
+          >
+            Estación
+          </span>
+          <span
+            class="block text-[9px] md:text-[10px] tracking-[0.4em] text-stone-500 uppercase font-medium"
+          >
+            Huaral
+          </span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-6 md:gap-8">
+        <a
+          href="index.html"
+          class="nav-link relative py-2 text-sm font-medium transition-colors flex items-center gap-2 group text-stone-600 hover:text-[#cf6937]"
+          data-page="inicio"
+        >
+          <i
+            class="fa-solid fa-utensils text-xs text-stone-400 group-hover:text-[#bba3cc] transition-colors"
+          ></i>
+          <span class="hidden sm:inline">Inicio</span>
+          <div
+            class="active-indicator absolute bottom-0 left-0 w-full h-[3px] bg-[#cf6937] rounded-full hidden"
+          ></div>
+        </a>
+
+        <a
+          href="pedido.html"
+          class="nav-link relative py-2 text-sm font-medium transition-colors flex items-center gap-2 group text-stone-600 hover:text-[#cf6937]"
+          data-page="pedidos"
+        >
+          <i
+            class="fa-regular fa-clipboard text-stone-400 group-hover:text-[#cf6937] transition-colors"
+          ></i>
+          <span class="hidden sm:inline">Mis Pedidos</span>
+          <div
+            class="active-indicator absolute bottom-0 left-0 w-full h-[3px] bg-[#cf6937] rounded-full hidden"
+          ></div>
+        </a>
+
+        <a
+          href="perfil.html"
+          class="nav-link relative py-2 text-sm font-medium transition-colors flex items-center gap-2 group text-stone-600 hover:text-[#cf6937]"
+          data-page="perfil"
+        >
+          <i
+            class="fa-solid fa-user text-xs text-stone-400 group-hover:text-[#cf6937] transition-colors"
+          ></i>
+          <span class="hidden sm:inline">Mi Perfil</span>
+          <div
+            class="active-indicator absolute bottom-0 left-0 w-full h-[3px] bg-[#cf6937] rounded-full hidden"
+          ></div>
+        </a>
+
+        <button
+          id="navBtnLogout"
+          class="py-2 text-sm font-medium text-stone-600 hover:text-red-600 transition-colors flex items-center gap-2 group cursor-pointer"
+        >
+          <i
+            class="fa-solid fa-door-open text-xs text-stone-400 group-hover:text-red-500 transition-colors"
+          ></i>
+          <span class="hidden sm:inline">Salir</span>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-3 md:gap-4">
+        <button
+          class="relative w-10 h-10 rounded-full border border-stone-200 bg-white hover:bg-stone-50 text-stone-600 flex items-center justify-center transition-colors shadow-sm cursor-pointer"
+          aria-label="Ver carrito"
+        >
+          <i class="fa-solid fa-cart-shopping text-sm text-blue-900"></i>
+          <span
+            class="absolute -top-1.5 -right-1.5 bg-[#cf6937] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#fdfbf7]"
+          >
+            0
+          </span>
+        </button>
+
+        <button
+          id="navBtnThemeToggle"
+          class="w-10 h-10 rounded-full border border-stone-200 bg-white hover:bg-stone-50 text-amber-500 flex items-center justify-center transition-colors shadow-sm cursor-pointer"
+          aria-label="Cambiar tema"
+        >
+          <i class="fa-solid fa-moon text-sm"></i>
+        </button>
+      </div>
+    </nav>
+
+    <main
+      class="flex-grow flex flex-col justify-between min-h-[calc(100vh-65px)]"
+    >
+      <section
+        class="hero-bg flex-grow flex flex-col items-center justify-center text-center px-4 relative overflow-hidden py-16"
+      >
+        <div
+          class="inline-flex items-center gap-2 bg-[#2d1b14] border border-stone-800 text-stone-300 text-[11px] font-medium tracking-wider uppercase px-4 py-1.5 rounded-full mb-6 shadow-md"
+        >
+          <span>🍽️</span> Pagina de Inicio
+        </div>
+
+        <div class="flex items-center justify-center gap-4 max-w-2xl">
+          <h2
+            class="text-4xl md:text-6xl font-serif font-bold text-white tracking-wide leading-tight"
+          >
+            Bienvenido a La Estación!
+          </h2>
+          <div class="w-[3px] h-12 md:h-16 bg-[#f5be38] rounded-full"></div>
+        </div>
+
+        <p
+          class="text-stone-400 text-sm md:text-base mt-3 font-light tracking-wide"
+        >
+          Con Los mejores platos tradicionales de Huaral
+        </p>
+
+        <button
+          onclick="window.location.href = './carta.html'"
+          class="mt-8 bg-white hover:bg-stone-100 text-stone-900 font-medium text-xs tracking-wide px-6 py-3 rounded-full shadow-lg transition-all flex items-center gap-2 border border-stone-200 active:scale-95 cursor-pointer"
+        >
+          Ver Carta
+          <i class="fa-solid fa-chevron-down text-[10px] text-stone-500"></i>
+        </button>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        // 1. Manejo del Estado Activo Dinámico del Navbar (Línea Naranja)
+        const currentPath = window.location.pathname.split("/").pop();
+
+        document.querySelectorAll(".nav-link").forEach((link) => {
+          const href = link.getAttribute("href");
+          const indicator = link.querySelector(".active-indicator");
+          const icon = link.querySelector("i");
+
+          if (
+            currentPath === href ||
+            (currentPath === "" && href === "index.html")
+          ) {
+            link.classList.remove("text-stone-600", "hover:text-[#cf6937]");
+            link.classList.add("text-[#cf6937]");
+
+            if (icon) {
+              icon.classList.remove("text-stone-400");
+              icon.classList.add("text-[#cf6937]");
+            }
+            if (indicator) {
+              indicator.classList.remove("hidden");
+            }
+          }
+        });
+
+        // 2. Control Visual de Cambio de Categorías de la Carta
+        document.querySelectorAll(".category-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const currentActive = btn.parentElement.querySelector(
+              ".bg-\\[\\#e07a48\\]",
+            );
+            if (currentActive) {
+              currentActive.classList.remove(
+                "bg-[#e07a48]",
+                "text-white",
+                "font-semibold",
+                "shadow-sm",
+              );
+              currentActive.classList.add(
+                "bg-white",
+                "text-stone-700",
+                "border",
+                "border-stone-200",
+                "font-medium",
+              );
+            }
+
+            btn.classList.remove(
+              "bg-white",
+              "text-stone-700",
+              "border",
+              "border-stone-200",
+              "font-medium",
+            );
+            btn.classList.add(
+              "bg-[#e07a48]",
+              "text-white",
+              "font-semibold",
+              "shadow-sm",
+            );
+
+            console.log(
+              "Filtrando backend por categoría:",
+              btn.textContent.trim(),
+            );
+          });
+        });
+
+        // 3. Evento para Cerrar Sesión
+        document
+          .getElementById("navBtnLogout")
+          ?.addEventListener("click", () => {
+            console.log("Navbar: Limpiando sesión del usuario...");
+            localStorage.removeItem("token");
+            sessionStorage.clear();
+            window.location.href = "login.html";
+          });
+
+        // 4. Evento Alternar Tema (Opcional)
+        document
+          .getElementById("navBtnThemeToggle")
+          ?.addEventListener("click", () => {
+            console.log("Navbar: Alternando modo de color...");
+          });
+      })();
+    </script>
+  </body>
+</html>
