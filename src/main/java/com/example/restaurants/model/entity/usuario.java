@@ -51,7 +51,7 @@ public class usuario implements UserDetails{
     private Date fecRegistro;
 
     @Column(name = "activo", nullable = false)
-    private boolean activo = true;
+    private Boolean activo = true;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "usuarios_roles",
