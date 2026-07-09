@@ -67,7 +67,7 @@ public class PedidoController {
         } catch (RuntimeException e) {
             // Si falta el motivo o el pedido no existe, devolvemos un error 400 amigable
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", e.getMessage());
+            errorResponse.put("Debe insertar un motivo", e.getMessage());
             return ResponseEntity.badRequest().body(errorResponse);
         }
     }
