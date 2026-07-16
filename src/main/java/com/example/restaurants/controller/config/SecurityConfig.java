@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authRequest ->
-                                authRequest .requestMatchers(
+                                authRequest .requestMatchers( 
                                                 "/",
                                                 "/**/*.html",
                                                 "/**/*.css",
