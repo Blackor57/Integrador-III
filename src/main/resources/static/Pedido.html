@@ -256,8 +256,59 @@
       </div>
     </div>
 
-    <script src="/static/JS/Pedido.js">
-     
-    </script>
+    <div
+      id="modalDetalles"
+      class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden"
+    >
+      <div
+        class="bg-[#1c0e0a] border border-stone-700 w-full max-w-md rounded-2xl shadow-2xl flex flex-col max-h-[85vh] animate-in fade-in zoom-in duration-200"
+      >
+        <!-- Header -->
+        <div
+          class="p-5 border-b border-stone-800 flex justify-between items-center bg-[#2a1a14] rounded-t-2xl shrink-0"
+        >
+          <h3
+            class="font-serif font-bold text-[#f5be38] text-lg uppercase tracking-wide"
+          >
+            Pedido #<span id="detPedidoId"></span>
+          </h3>
+          <button
+            id="btnCloseDetalles"
+            class="text-stone-400 hover:text-white transition-colors cursor-pointer text-lg"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Lista de Items (Scrollable) -->
+        <div class="p-5 overflow-y-auto no-scrollbar flex-grow bg-[#1c0e0a]">
+          <h4
+            class="text-[10px] text-stone-500 font-bold uppercase tracking-widest mb-3"
+          >
+            Productos Solicitados
+          </h4>
+          <div id="listaDetalles" class="space-y-3">
+            <!-- Los detalles se inyectan aquí con JS -->
+          </div>
+        </div>
+
+        <!-- Footer con Total -->
+        <div
+          class="p-5 bg-[#2a1a14] border-t border-stone-800 rounded-b-2xl shrink-0"
+        >
+          <div
+            class="flex justify-between items-center text-lg font-bold text-[#f5be38]"
+          >
+            <span class="uppercase text-sm text-stone-300">Total a Pagar</span>
+            <span class="font-mono text-xl"
+              >S/. <span id="detPedidoTotal">0.00</span></span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/JS/Pedido.js"></script>
+    <script src="/JS/LogOut.js"></script>
   </body>
 </html>

@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Estación - Nueva Orden</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        background: radial-gradient(
+          circle at top left,
+          #1c0e0a 0%,
+          #0c0402 100%
+        );
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* Animación suave para cuando se añade un producto al carrito */
+      .cart-item-enter {
+        animation: slideIn 0.2s ease-out forwards;
+      }
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="h-screen overflow-hidden font-sans antialiased flex flex-col selection:bg-amber-500 selection:text-white text-stone-200"
+  >
+    <!-- NAVBAR SIMPLIFICADO PARA EL POS -->
+    <nav
+      class="w-full bg-[#fdfbf7] border-b border-stone-200 shadow-sm px-4 md:px-8 py-3 flex items-center justify-between text-stone-800 shrink-0 z-50"
+    >
+      <div
+        class="flex items-center gap-3 cursor-pointer"
+        onclick="window.location.href = 'Mesas.html'"
+      >
+        <div
+          class="text-[#cf6937] text-2xl hover:scale-110 transition-transform"
+        >
+          <i class="fa-solid fa-arrow-left"></i>
+        </div>
+        <div class="leading-none ml-2">
+          <span
+            class="block font-serif font-black tracking-widest text-[#cf6937] text-lg uppercase"
+            >Volver</span
+          >
+          <span
+            class="block text-[10px] tracking-[0.2em] text-stone-500 uppercase font-medium"
+            >A Mesas</span
+          >
+        </div>
+      </div>
+
+      <div
+        class="flex items-center gap-4 bg-[#2a1a14]/5 text-stone-700 px-4 py-1.5 rounded-lg border border-stone-200"
+      >
+        <i class="fa-solid fa-chair text-[#cf6937]"></i>
+        <span class="font-bold uppercase tracking-wider text-sm"
+          >Creando orden para:
+          <span id="displayMesaId" class="text-[#cf6937] text-lg"
+            >...</span
+          ></span
+        >
+      </div>
+    </nav>
+
+    <!-- MAIN POS LAYOUT -->
+    <main class="flex-grow flex flex-col md:flex-row overflow-hidden">
+      <!-- PANEL IZQUIERDO: PRODUCTOS -->
+      <section
+        class="w-full md:w-3/5 lg:w-2/3 flex flex-col bg-transparent border-r border-stone-800 p-4 md:p-6 overflow-hidden"
+      >
+        <div class="mb-4 flex justify-between items-end">
+          <div>
+            <h2
+              class="text-xl font-serif font-bold tracking-wider text-white uppercase"
+            >
+              Menú Disponible
+            </h2>
+            <p class="text-xs text-stone-400 mt-1">
+              Selecciona los productos para agregarlos a la comanda.
+            </p>
+          </div>
+        </div>
+
+        <!-- Grid de Productos (Scrollable) -->
+        <div
+          id="gridProductos"
+          class="flex-grow overflow-y-auto no-scrollbar grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-20"
+        >
+          <!-- Productos inyectados por JS -->
+        </div>
+      </section>
+
+      <!-- PANEL DERECHO: CARRITO / COMANDA -->
+      <section
+        class="w-full md:w-2/5 lg:w-1/3 flex flex-col bg-[#1c0e0a] border-l border-stone-800 shadow-2xl z-10 overflow-hidden"
+      >
+        <div class="p-5 border-b border-stone-800 bg-[#2a1a14]/40 shrink-0">
+          <h3
+            class="text-lg font-bold text-[#f5be38] uppercase tracking-wide flex items-center gap-2"
+          >
+            <i class="fa-solid fa-receipt"></i> Comanda Actual
+          </h3>
+        </div>
+
+        <!-- Lista de items en el carrito (Scrollable) -->
+        <div
+          id="cartItemsContainer"
+          class="flex-grow overflow-y-auto no-scrollbar p-5 space-y-3"
+        >
+          <div
+            class="text-center text-stone-500 text-sm mt-10 italic"
+            id="emptyCartMsg"
+          >
+            <i class="fa-solid fa-basket-shopping text-3xl mb-3 opacity-50"></i
+            ><br />
+            La comanda está vacía.
+          </div>
+          <!-- Items inyectados por JS -->
+        </div>
+
+        <!-- Footer del Carrito (Totales y Formulario Final) -->
+        <div
+          class="p-5 bg-[#2a1a14] border-t border-stone-800 shrink-0 space-y-4"
+        >
+          <div class="grid grid-cols-2 gap-3 mb-2">
+            <div>
+              <label
+                class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]"
+                >Tipo Servicio</label
+              >
+              <select
+                id="inputTipoServicio"
+                class="w-full bg-[#1c0e0a] text-stone-200 border border-stone-700 rounded-lg p-2 outline-none focus:border-[#f5be38] text-xs"
+              >
+                <option value="MESA">SALÓN</option>
+                <option value="RECOJO">PARA LLEVAR</option>
+              </select>
+            </div>
+            <div>
+              <label
+                class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]"
+                >Notas Generales</label
+              >
+              <input
+                type="text"
+                id="inputNotas"
+                placeholder="Ej: Sin cubiertos..."
+                class="w-full bg-[#1c0e0a] text-stone-200 border border-stone-700 rounded-lg p-2 outline-none focus:border-[#f5be38] text-xs"
+              />
+            </div>
+          </div>
+
+          <div
+            class="flex justify-between items-center text-sm font-medium text-stone-300"
+          >
+            <span>Subtotal</span>
+            <span class="font-mono"
+              >S/. <span id="lblSubtotal">0.00</span></span
+            >
+          </div>
+
+          <div
+            class="flex justify-between items-center text-xl font-bold text-[#f5be38] border-t border-stone-700/50 pt-3"
+          >
+            <span class="uppercase">Total</span>
+            <span class="font-mono">S/. <span id="lblTotal">0.00</span></span>
+          </div>
+
+          <button
+            id="btnEnviarPedido"
+            class="w-full py-3.5 mt-2 rounded-xl bg-green-600 hover:bg-green-500 text-white font-bold uppercase tracking-wider transition-colors shadow-lg shadow-green-900/20 flex justify-center items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <i class="fa-solid fa-paper-plane"></i> PROCESAR PEDIDO
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        // =====================================================================
+        // CONFIGURACIÓN Y ESTADO
+        // =====================================================================
+        const API_PRODUCTOS = "http://localhost:8080/producto";
+        const API_PEDIDOS = "http://localhost:8080/pedido";
+
+        // Extraer el ID de la mesa desde la URL (Ej: Nueva_Orden.html?mesa=2)
+        const urlParams = new URLSearchParams(window.location.search);
+        const idMesa = urlParams.get("mesa") || null;
+
+        document.getElementById("displayMesaId").textContent = idMesa
+          ? `MESA ${idMesa}`
+          : "NO ESPECIFICADA";
+
+        // Carrito en memoria: { idProducto: { producto: {}, cantidad: 1, subtotal: 0.0 } }
+        let carrito = {};
+
+        function getHeaders() {
+          const headers = { "Content-Type": "application/json" };
+          const token = localStorage.getItem("tu_token_jwt");
+          if (token) headers["Authorization"] = `Bearer ${token}`;
+          return headers;
+        }
+
+        // =====================================================================
+        // 1. CARGAR MENÚ DE PRODUCTOS
+        // =====================================================================
+        async function cargarProductos() {
+          try {
+            const response = await fetch(API_PRODUCTOS, {
+              headers: getHeaders(),
+            });
+            if (!response.ok) throw new Error("Fallo al obtener productos");
+
+            const productos = await response.json();
+            const grid = document.getElementById("gridProductos");
+            grid.innerHTML = "";
+
+            // Filtramos solo los productos disponibles (Lógica de eliminación lógica)
+            const productosActivos = productos.filter(
+              (p) => p.disponible !== false,
+            );
+
+            productosActivos.forEach((prod) => {
+              const precioF = parseFloat(prod.precio).toFixed(2);
+
+              const article = document.createElement("article");
+              article.className =
+                "bg-[#3d2a21]/60 border border-[#543d32] rounded-2xl p-4 flex flex-col justify-between shadow-md hover:border-[#f5be38]/50 hover:bg-[#3d2a21]/80 transition-all cursor-pointer group";
+              // Al hacer clic, añadimos al carrito
+              article.onclick = () => agregarAlCarrito(prod);
+
+              article.innerHTML = `
+                            <div>
+                                <div class="text-[9px] font-mono text-stone-500 mb-1">${prod.codproducto || ""}</div>
+                                <h3 class="font-bold text-stone-200 text-sm leading-tight group-hover:text-white">${prod.nombreproducto}</h3>
+                                <p class="text-[10px] text-stone-400 mt-1.5 line-clamp-2 leading-snug">${prod.descripcion || ""}</p>
+                            </div>
+                            <div class="mt-4 flex justify-between items-center border-t border-stone-800 pt-2">
+                                <span class="font-mono font-bold text-[#f5be38] text-sm">S/. ${precioF}</span>
+                                <div class="w-6 h-6 rounded-full bg-[#2a1a14] border border-stone-700 flex items-center justify-center text-stone-400 group-hover:bg-[#f5be38] group-hover:text-stone-900 group-hover:border-[#f5be38] transition-colors">
+                                    <i class="fa-solid fa-plus text-[10px]"></i>
+                                </div>
+                            </div>
+                        `;
+              grid.appendChild(article);
+            });
+          } catch (error) {
+            console.error(error);
+            document.getElementById("gridProductos").innerHTML =
+              `<p class="text-red-400 col-span-full">Error al cargar el menú.</p>`;
+          }
+        }
+
+        // =====================================================================
+        // 2. LÓGICA DEL CARRITO (AUTOMATIZADA)
+        // =====================================================================
+        function agregarAlCarrito(producto) {
+          const id = producto.id;
+          const precio = parseFloat(producto.precio);
+
+          if (carrito[id]) {
+            // Si ya existe, sumamos cantidad y actualizamos subtotal
+            carrito[id].cantidad += 1;
+            carrito[id].subtotal = carrito[id].cantidad * precio;
+          } else {
+            // Si es nuevo en el carrito
+            carrito[id] = {
+              producto: producto,
+              cantidad: 1,
+              precioUnitario: precio,
+              subtotal: precio,
+            };
+          }
+          renderizarCarrito();
+        }
+
+        function modificarCantidad(id, delta) {
+          if (!carrito[id]) return;
+
+          carrito[id].cantidad += delta;
+
+          if (carrito[id].cantidad <= 0) {
+            delete carrito[id];
+          } else {
+            carrito[id].subtotal =
+              carrito[id].cantidad * carrito[id].precioUnitario;
+          }
+          renderizarCarrito();
+        }
+
+        function renderizarCarrito() {
+          const container = document.getElementById("cartItemsContainer");
+          const btnEnviar = document.getElementById("btnEnviarPedido");
+          const emptyMsg = document.getElementById("emptyCartMsg");
+
+          const items = Object.values(carrito);
+          let totalSuma = 0;
+
+          if (items.length === 0) {
+            container.innerHTML = "";
+            container.appendChild(emptyMsg);
+            emptyMsg.style.display = "block";
+            btnEnviar.disabled = true;
+          } else {
+            container.innerHTML = "";
+            btnEnviar.disabled = false;
+
+            items.forEach((item) => {
+              totalSuma += item.subtotal;
+
+              const div = document.createElement("div");
+              div.className =
+                "bg-[#2a1a14]/60 border border-stone-800 rounded-xl p-3 flex justify-between items-center cart-item-enter";
+
+              div.innerHTML = `
+                            <div class="flex-grow pr-2">
+                                <h4 class="font-bold text-stone-200 text-xs truncate max-w-[150px]">${item.producto.nombreproducto}</h4>
+                                <div class="font-mono text-[#f5be38] text-[11px] font-bold mt-0.5">S/. ${item.subtotal.toFixed(2)}</div>
+                            </div>
+                            <div class="flex items-center gap-2 bg-[#1c0e0a] rounded-lg border border-stone-700 px-1 py-1 shrink-0">
+                                <button class="w-6 h-6 flex items-center justify-center text-stone-400 hover:text-white rounded transition-colors cursor-pointer" onclick="modificarCantidad(${item.producto.id}, -1)">
+                                    <i class="fa-solid fa-minus text-[10px]"></i>
+                                </button>
+                                <span class="font-mono text-xs font-bold text-white w-4 text-center">${item.cantidad}</span>
+                                <button class="w-6 h-6 flex items-center justify-center text-stone-400 hover:text-white rounded transition-colors cursor-pointer" onclick="modificarCantidad(${item.producto.id}, 1)">
+                                    <i class="fa-solid fa-plus text-[10px]"></i>
+                                </button>
+                            </div>
+                        `;
+              container.appendChild(div);
+            });
+          }
+
+          // Actualizar Textos de Totales (El sistema entiende automáticamente el costo total)
+          document.getElementById("lblSubtotal").textContent =
+            totalSuma.toFixed(2);
+          document.getElementById("lblTotal").textContent =
+            totalSuma.toFixed(2);
+        }
+
+        // Hacer la función accesible globalmente para los botones de cantidad (onclick)
+        window.modificarCantidad = modificarCantidad;
+
+        // =====================================================================
+        // 3. ENVIAR EL PEDIDO AL BACKEND (POST CON RELACIONES INTEGRADAS)
+        // =====================================================================
+        document
+          .getElementById("btnEnviarPedido")
+          .addEventListener("click", async () => {
+            const items = Object.values(carrito);
+            if (items.length === 0) return;
+
+            const btn = document.getElementById("btnEnviarPedido");
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> PROCESANDO...`;
+
+            const totalCalculado = items.reduce(
+              (sum, item) => sum + item.subtotal,
+              0,
+            );
+            const tiposervicio =
+              document.getElementById("inputTipoServicio").value;
+            const notas = document.getElementById("inputNotas").value;
+
+            // Armado del JSON exactamente como lo exige Hibernate y tu Entidad
+            const payload = {
+              mesa:
+                idMesa && !isNaN(parseInt(idMesa))
+                  ? { id: parseInt(idMesa) }
+                  : null,
+              usuario: {
+                id: parseInt(localStorage.getItem("userId")),
+              },
+              estadopedido: "PENDIENTE",
+              tiposervicio: tiposervicio,
+              notasespeciales: notas,
+              subtotal: totalCalculado,
+              total: totalCalculado,
+
+              // La lista mapeada al @OneToMany
+              detalles: items.map((item) => ({
+                producto: { id: item.producto.id },
+                cantidad: item.cantidad,
+                precioUnitario: item.precioUnitario,
+                subtotal: item.subtotal,
+                estadoItem: "EN_PREPARACION", // Estado inicial para cocina/bar
+              })),
+            };
+
+            try {
+              const response = await fetch(API_PEDIDOS, {
+                method: "POST",
+                headers: getHeaders(),
+                body: JSON.stringify(payload),
+              });
+
+              if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Fallo al crear pedido");
+              }
+
+              // Éxito: Limpiar y redirigir
+              alert("¡Pedido creado y enviado a cocina exitosamente!");
+              window.location.href = "Mesas.html";
+            } catch (error) {
+              alert("Error al procesar: " + error.message);
+              console.error(error);
+              btn.disabled = false;
+              btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> PROCESAR PEDIDO`;
+            }
+          });
+
+        // Arranque
+        cargarProductos();
+      })();
+    </script>
+  </body>
+</html>

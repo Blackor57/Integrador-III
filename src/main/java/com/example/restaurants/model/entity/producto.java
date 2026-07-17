@@ -28,8 +28,7 @@ public class producto {
     @Column(length = 200, nullable = false)
     private String descripcion;
 
-    @Transient
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Column(name = "disponible", nullable = false)
     private Boolean disponible = true;
 
     @Column(nullable = false)
@@ -38,5 +37,6 @@ public class producto {
     @ManyToOne
     @JoinColumn(name = "id_subcategoria")
     private subcategoria subcategoria;
+
 
 }

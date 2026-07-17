@@ -7,9 +7,11 @@ import com.example.restaurants.repository.IUsuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +21,7 @@ public class UsuarioService {
 
     private final IUsuario usuarioRepository;
     private final IRol rolRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Transactional(readOnly =true)
@@ -118,5 +121,13 @@ public class UsuarioService {
         usuario usuarioExistente = obtenerPorId(id);
         usuarioExistente.setActivo(true);
         usuarioRepository.save(usuarioExistente);
+    }
+
+    @Transactional
+    public usuario guardarUsuario(usuario nuevoUsuario) {
+        nuevoUsuario.setPassword(passwordEncoder.encode(nuevoUsuario.getPassword()));
+        nuevoUsuario.setFecRegistro(new Date());
+        nuevoUsuario.setActivo(true);
+        return usuarioRepository.save(nuevoUsuario);
     }
 }

@@ -4,6 +4,7 @@ import com.example.restaurants.controller.JWT.JWTAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,7 +34,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
     {
         return http
-                .cors(withDefaults())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authRequest ->
                                 authRequest .requestMatchers( 
@@ -45,6 +46,7 @@ public class SecurityConfig {
                                                 "/**/*.jpg",
                                                 "/**/*.ico"
                                         ).permitAll()
+                                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                         .requestMatchers("/auth/**").permitAll()
                                         .requestMatchers("/mesa/**").permitAll()
                                         .requestMatchers("/pedido/**").permitAll()
@@ -61,7 +63,7 @@ public class SecurityConfig {
                                         .requestMatchers("/receta/**").permitAll()
                                             .requestMatchers("/feedback/**").permitAll()
                                             .requestMatchers("/public/**").permitAll()
-                                            .requestMatchers("/usuario").hasRole("USER")
+                                            .requestMatchers("/usuario/**").permitAll()
                                             .requestMatchers("/admin/**").hasRole("ADMIN")
                                             .requestMatchers("/barman/**").hasRole("BARMAN")
                                             .requestMatchers("/cocina/**").hasRole("COCINA")

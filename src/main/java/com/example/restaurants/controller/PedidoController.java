@@ -1,7 +1,9 @@
 package com.example.restaurants.controller;
 import com.example.restaurants.model.entity.EstadoItem;
+import com.example.restaurants.model.entity.mesa;
 import com.example.restaurants.model.entity.pedido; // Tu entidad en minúsculas
 import com.example.restaurants.model.entity.usuario;
+import com.example.restaurants.services.MesaService;
 import com.example.restaurants.services.PedidoService; // Tu clase de servicio
 import com.example.restaurants.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class PedidoController {
 
     private final PedidoService pedidoService;
     private final UsuarioService usuarioService;
+    private final MesaService mesaService;
 
     @GetMapping
     public ResponseEntity<List<pedido>> obtenerTodos() {
@@ -41,7 +44,30 @@ public class PedidoController {
     public ResponseEntity<?> crearPedido(@RequestBody pedido pedido) {
         // Tu servicio ya maneja la lógica transaccional, cálculo de totales y actualización de mesas
         try {
+            if (pedido.getUsuario() == null || pedido.getUsuario().getId() == null) {
+                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                String username = auth.getName();
+                usuario user = usuarioService.buscarPorNombreUsuario(username)
+                        .orElseThrow(() -> new RuntimeException("Usuario no identificado"));
+                pedido.setUsuario(user);
+            }
+            if (pedido.getMesa() != null && pedido.getMesa().getId() != null) {
+                // Buscamos la mesa real en la base de datos
+                mesa mesaBd = mesaService.obtenerPorId(pedido.getMesa().getId());
+
+                // Si la mesa existe, la forzamos en el pedido
+                if (mesaBd != null) {
+                    pedido.setMesa(mesaBd);
+
+                    // Opcional: Cambiar el estado de la mesa a "OCUPADA" automáticamente
+                    // mesaBd.setEstado("OCUPADA");
+                    // mesaService.actualizarMesa(mesaBd);
+                } else {
+                    throw new RuntimeException("La mesa indicada no existe en la BD");
+                }
+            }
             pedido nuevo = pedidoService.crearPedido(pedido);
+
             return ResponseEntity.ok(nuevo);
         } catch (RuntimeException e) {
             Map<String,String> error= new HashMap<>();

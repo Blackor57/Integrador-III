@@ -16,6 +16,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/usuario")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -106,5 +107,12 @@ public class UsuarioController {
         respuesta.put("calificacion", calificacionRedondeada); // <-- ¡Dato 100% real!
 
         return ResponseEntity.ok(respuesta);
+    }
+
+    // 9. CREAR UN NUEVO USUARIO
+    @PostMapping
+    public ResponseEntity<usuario> crearUsuario(@RequestBody usuario nuevoUsuario) {
+        usuario usuarioCreado = usuarioService.guardarUsuario(nuevoUsuario);
+        return ResponseEntity.ok(usuarioCreado);
     }
 }

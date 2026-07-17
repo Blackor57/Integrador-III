@@ -28,6 +28,7 @@ public class ProductoService {
         if (nuevoProducto.getPrecio() <= 0) {
             throw new IllegalArgumentException("El precio del producto debe ser mayor a 0.");
         }
+        nuevoProducto.setDisponible(true);
 
         // (Opcional) Aquí podrías validar si el cod_producto ya existe llamando a un método del repositorio
 
@@ -166,4 +167,17 @@ public class ProductoService {
         }
     }
 
+    @Transactional
+    public void desactivarProducto(Long id) {
+        producto productoExistente = obtenerPorId(id);
+        productoExistente.setDisponible(false); // Lo marcamos como no disponible
+        productoRepository.save(productoExistente);
+    }
+
+    @Transactional
+    public void activarProducto(Long id) {
+        producto productoExistente = obtenerPorId(id);
+        productoExistente.setDisponible(true); // Lo volvemos a activar
+        productoRepository.save(productoExistente);
+    }
 }

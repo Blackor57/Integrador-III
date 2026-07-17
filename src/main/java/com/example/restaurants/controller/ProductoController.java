@@ -39,4 +39,17 @@ public class ProductoController {
     public ResponseEntity<producto> actualizarProducto(@PathVariable Long id, @RequestBody producto productoActualizado) {
         return ResponseEntity.ok(productoService.actualizarProducto(id, productoActualizado));
     }
+
+    @PutMapping("/{id}/desactivar")
+    public ResponseEntity<Void> desactivarProducto(@PathVariable Long id) {
+        productoService.desactivarProducto(id);
+        return ResponseEntity.ok().build();
+    }
+
+    // 7. ACTIVAR PRODUCTO
+    @PutMapping("/{id}/activar")
+    public ResponseEntity<Void> activarProducto(@PathVariable Long id) {
+        productoService.activarProducto(id);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -43,7 +43,27 @@ public class PedidoService {
 
         nuevoPedido.setUsuario(usuarioDB);
 
-        String tipoServicio = nuevoPedido.getTiposervicio().toUpperCase();
+        boolean esCliente = usuarioDB.getRoles().stream()
+                .anyMatch(r -> r.getNombre().toUpperCase().contains("USER") ||
+                        r.getNombre().toUpperCase().contains("CLIENTE"));
+
+        String tipoServicio;
+
+        // Si es un cliente normal
+        if (esCliente) {
+            // Forzamos a que el pedido sea PARA LLEVAR, sin importar lo que envíe el frontend
+            tipoServicio = "RECOJO";
+            nuevoPedido.setTiposervicio(tipoServicio);
+        }
+        // Si es personal (MOZO, CAJA, ADMIN, etc.)
+        else {
+            if (nuevoPedido.getTiposervicio() == null) {
+                throw new RuntimeException("El tipo de servicio es obligatorio para el personal");
+            }
+            // Respetamos la decisión del trabajador (SALÓN o PARA LLEVAR)
+            tipoServicio = nuevoPedido.getTiposervicio().toUpperCase();
+            nuevoPedido.setTiposervicio(tipoServicio); // Aseguramos que se guarde en mayúsculas
+        }
 
         //  CASO 1: SERVICIO EN MESA (PRESENCIAL)
         if ("MESA".equals(tipoServicio)) {
