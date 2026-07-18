@@ -44,11 +44,36 @@ public class UsuarioService {
     public usuario actualizarPerfil(Long id, usuario datosActualizados) {
         usuario usuarioExistente = obtenerPorId(id);
 
-        // Actualizamos solo los datos permitidos (no la contraseña ni el ID)
-        usuarioExistente.setNombreCompleto(datosActualizados.getNombreCompleto());
-        usuarioExistente.setTelefono(datosActualizados.getTelefono());
-        usuarioExistente.setDireccion(datosActualizados.getDireccion());
-        usuarioExistente.setEmail(datosActualizados.getEmail());
+        // 1. Validaciones para no sobreescribir con nulos
+        if (datosActualizados.getNombreCompleto() != null) {
+            usuarioExistente.setNombreCompleto(datosActualizados.getNombreCompleto());
+        }
+
+        if (datosActualizados.getTelefono() != null) {
+            usuarioExistente.setTelefono(datosActualizados.getTelefono());
+        }
+
+        if (datosActualizados.getDireccion() != null) {
+            usuarioExistente.setDireccion(datosActualizados.getDireccion());
+        }
+
+        if (datosActualizados.getEmail() != null) {
+            usuarioExistente.setEmail(datosActualizados.getEmail());
+        }
+
+        // 2. Manejo de la contraseña (Opcional)
+        // Si el usuario escribió una contraseña nueva en el formulario, se actualiza
+        if (datosActualizados.getPassword() != null && !datosActualizados.getPassword().isEmpty()) {
+
+            // ⚠️ IMPORTANTE: Como vi en tus errores anteriores que usas JWT y Spring Security,
+            // seguramente tus contraseñas están encriptadas. Debes usar tu PasswordEncoder aquí.
+            // Si tienes inyectado un passwordEncoder en tu servicio, descomenta la línea de abajo y borra la otra:
+
+            // usuarioExistente.setPassword(passwordEncoder.encode(datosActualizados.getPassword()));
+
+            // Si NO usas passwordEncoder o lo manejas de otra forma, usa esta:
+            usuarioExistente.setPassword(datosActualizados.getPassword());
+        }
 
         return usuarioRepository.save(usuarioExistente);
     }

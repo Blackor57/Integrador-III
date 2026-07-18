@@ -85,12 +85,12 @@
       </div>
 
       <div class="flex items-center gap-3 md:gap-4">
-        <button
+        <button id="btnOpenCarrito"
           class="relative w-10 h-10 rounded-full border border-stone-200 bg-white hover:bg-stone-50 text-stone-600 flex items-center justify-center transition-colors shadow-sm cursor-pointer"
           aria-label="Ver carrito"
         >
           <i class="fa-solid fa-cart-shopping text-sm text-blue-900"></i>
-          <span
+          <span id="badgeCarritoTop"
             class="absolute -top-1.5 -right-1.5 bg-[#cf6937] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#fdfbf7]"
             >0</span
           >
@@ -125,25 +125,28 @@
       >
         <div class="flex items-center gap-6 text-sm">
           <button
-            class="flex items-center gap-2 font-bold text-[#e07a48] border-b-2 border-[#e07a48] pb-3 -mb-[14px] cursor-pointer"
+            id="btnTabActivos"
+            class="flex items-center gap-2 font-bold text-[#e07a48] border-b-2 border-[#e07a48] pb-3 -mb-[14px] cursor-pointer transition-all"
           >
             <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
             Pedidos Activos
           </button>
           <button
-            class="flex items-center gap-2 font-medium text-stone-500 hover:text-stone-300 pb-3 -mb-[14px] transition-colors cursor-pointer"
+            id="btnTabHistorial"
+            class="flex items-center gap-2 font-medium text-stone-500 hover:text-stone-300 border-b-2 border-transparent pb-3 -mb-[14px] transition-all cursor-pointer"
           >
             <i class="fa-regular fa-square-check text-green-500"></i>
             Historial
           </button>
         </div>
 
-        <button
-          id="btnOpenModal"
-          class="bg-[#e07a48] hover:bg-[#cf6937] text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer self-start sm:self-auto"
+        <!-- BOTÓN ACTUALIZADO: Ahora es un enlace (<a>) que redirige directo a carta.html -->
+        <a
+          href="carta.html"
+          class="bg-[#e07a48] hover:bg-[#cf6937] text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition-all inline-flex items-center justify-center gap-2 cursor-pointer self-start sm:self-auto"
         >
           <i class="fa-solid fa-plus"></i> NUEVO PEDIDO
-        </button>
+        </a>
       </div>
 
       <div
@@ -152,110 +155,7 @@
       ></div>
     </main>
 
-    <div
-      id="modalContainer"
-      class="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden"
-    >
-      <div
-        class="bg-[#3d2a21] border border-[#543d32] w-full max-w-md rounded-[2rem] p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in duration-200"
-      >
-        <div
-          class="flex justify-between items-center border-b border-stone-800 pb-3"
-        >
-          <h3
-            class="font-serif font-bold text-[#f5be38] text-lg uppercase tracking-wide"
-          >
-            Nuevo Pedido
-          </h3>
-          <button
-            id="btnCloseModal"
-            class="text-stone-400 hover:text-white transition-colors cursor-pointer text-lg"
-          >
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-
-        <form id="apiOrderForm" class="space-y-4 text-xs">
-          <div>
-            <label
-              class="block text-stone-400 font-semibold mb-1.5 uppercase tracking-wider text-[10px]"
-              >Mesa de Servicio (Id_mesa)</label
-            >
-            <select
-              name="id_mesa"
-              class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-3 outline-none focus:border-[#f5be38]"
-              required
-            >
-              <option value="1">Mesa 01 - Sala Principal</option>
-              <option value="2">Mesa 02 - Terraza</option>
-              <option value="3">Mesa 03 - Comedor VIP</option>
-            </select>
-          </div>
-
-          <div>
-            <label
-              class="block text-stone-400 font-semibold mb-1.5 uppercase tracking-wider text-[10px]"
-              >Tipo de Comprobante (Tipo_servicio)</label
-            >
-            <div class="grid grid-cols-2 gap-3">
-              <label
-                class="border border-stone-700 bg-[#2a1a14]/60 p-3 rounded-xl flex items-center gap-2 cursor-pointer text-stone-300"
-              >
-                <input
-                  type="radio"
-                  name="tipo_servicio"
-                  value="BOLETA"
-                  class="accent-[#e07a48]"
-                  checked
-                />
-                Boleta
-              </label>
-              <label
-                class="border border-stone-700 bg-[#2a1a14]/60 p-3 rounded-xl flex items-center gap-2 cursor-pointer text-stone-300"
-              >
-                <input
-                  type="radio"
-                  name="tipo_servicio"
-                  value="FACTURA"
-                  class="accent-[#e07a48]"
-                />
-                Factura
-              </label>
-            </div>
-          </div>
-
-          <div>
-            <label
-              class="block text-stone-400 font-semibold mb-1.5 uppercase tracking-wider text-[10px]"
-              >Notas Especiales de Cocina</label
-            >
-            <textarea
-              name="notas_especiales"
-              rows="2"
-              placeholder="Ej: Sin sal, salsas aparte, término medio..."
-              class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-3 outline-none focus:border-[#f5be38] resize-none"
-            ></textarea>
-          </div>
-
-          <div class="pt-3 border-t border-stone-800 flex justify-end gap-2">
-            <button
-              type="button"
-              id="btnCancelModal"
-              class="px-4 py-2.5 rounded-xl border border-stone-700 text-stone-400 hover:text-stone-200 transition-colors cursor-pointer"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              class="px-5 py-2.5 rounded-xl bg-[#e07a48] hover:bg-[#cf6937] text-white font-bold transition-colors cursor-pointer shadow-md"
-            >
-              CREAR PEDIDO
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-
+    <!-- MODAL: DETALLES DEL PEDIDO (El único modal que queda) -->
     <div
       id="modalDetalles"
       class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden"
@@ -308,6 +208,7 @@
       </div>
     </div>
 
+    <script src="/JS/Carrito.js"></script>
     <script src="/JS/Pedido.js"></script>
     <script src="/JS/LogOut.js"></script>
   </body>

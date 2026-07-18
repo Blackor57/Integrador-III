@@ -53,17 +53,32 @@
                 <i class="fa-solid fa-bowl-food text-xs"></i>
                 <span class="hidden sm:inline">Producto</span>
             </a>
+            <a
+          href="Admin_Mesas.html"
+          class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 group text-[#cf6937]"
+        >
+          <i class="fa-solid fa-chair text-xs"></i>
+          <span class="hidden sm:inline">Mesas</span>
+        </a>
         </div>
 
         <div class="flex items-center gap-3">
-            <div class="text-right hidden sm:block leading-none">
-                <span class="block text-xs font-bold text-stone-800">EDU</span>
-                <span class="text-[9px] text-stone-500">Administrador</span>
-            </div>
-            <button id="navBtnLogout" class="w-9 h-9 rounded-full border border-stone-200 bg-white hover:bg-red-50 text-stone-500 hover:text-red-600 flex items-center justify-center transition-colors shadow-xs cursor-pointer">
-                <i class="fa-solid fa-power-off text-sm"></i>
-            </button>
+        <div class="text-right hidden sm:block leading-none">
+          <!-- Le agregamos el id="nombreAdmin" para inyectar el nombre con JS -->
+          <span
+            id="nombreAdmin"
+            class="block text-xs font-bold text-stone-800 uppercase"
+            >Cargando...</span
+          >
+          <span class="text-[9px] text-stone-500">Administrador</span>
         </div>
+        <button
+          id="navBtnLogout"
+          class="w-9 h-9 rounded-full border border-stone-200 bg-white hover:bg-red-50 text-stone-500 hover:text-red-600 flex items-center justify-center transition-colors shadow-xs cursor-pointer"
+        >
+          <i class="fa-solid fa-power-off text-sm"></i>
+        </button>
+      </div>
     </nav>
 
     <!-- =========================================================================
@@ -85,29 +100,19 @@
             <table class="w-full text-left border-collapse text-xs whitespace-nowrap">
                 <thead>
                     <tr class="bg-[#2a1a14]/80 border-b border-[#543d32]/60 text-[#d4af77] font-semibold uppercase tracking-wider text-[10px]">
-                        <th class="p-4 font-mono">id (BIGINT)</th>
-                        <th class="p-4">usuario (VARCHAR)</th>
-                        <th class="p-4">nombre_completo (VARCHAR)</th>
-                        <th class="p-4">email (VARCHAR)</th>
-                        <th class="p-4">telefono (VARCHAR)</th>
-                        <th class="p-4">direccion (VARCHAR)</th>
-                        <th class="p-4">fecregistro (DATETIME)</th>
+                        <th class="p-4 font-mono">id </th>
+                        <th class="p-4">usuario </th>
+                        <th class="p-4">nombre_completo </th>
+                        <th class="p-4">email </th>
+                        <th class="p-4">telefono </th>
+                        <th class="p-4">direccion </th>
+                        <th class="p-4 ">Rol </th>
+                        <th class="p-4">fecregistro </th>
                         <th class="p-4 text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="tableBodyUsuarios" class="divide-y divide-stone-800/40 text-stone-300">
                     <tr class="hover:bg-[#2a1a14]/30 transition-colors" data-id="1">
-                        <td class="p-4 font-mono text-stone-500">1</td>
-                        <td class="p-4 font-bold text-white font-mono" data-field="usuario">edulp26</td>
-                        <td class="p-4 font-medium text-stone-200" data-field="nombre_completo">Edu Luis Perez</td>
-                        <td class="p-4 font-mono text-stone-300" data-field="email">eduben10@estacionhuaral.com</td>
-                        <td class="p-4 font-mono text-stone-400" data-field="telefono">951654321</td>
-                        <td class="p-4 text-stone-400 max-w-xs truncate" data-field="direccion">Av. Timoteo y Barney</td>
-                        <td class="p-4 font-mono text-stone-500">2026-06-15 22:11:45</td>
-                        <td class="p-4 text-center space-x-3">
-                            <button class="text-stone-400 hover:text-[#f5be38] transition-colors cursor-pointer btn-edit" title="Modificar datos"><i class="fa-regular fa-pen-to-square"></i></button>
-                            <button class="text-stone-400 hover:text-red-400 transition-colors cursor-pointer btn-delete" title="Eliminar registro (DELETE)"><i class="fa-regular fa-trash-can"></i></button>
-                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -131,24 +136,35 @@
                         <input type="text" name="usuario" placeholder="Ej: user99" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]" required>
                     </div>
                     <div>
-                        <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Contraseña (VARCHAR)</label>
+                        <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Contraseña</label>
                         <input type="password" name="contraseña" placeholder="********" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]" required>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Nombre Completo (VARCHAR)</label>
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Nombre Completo</label>
                     <input type="text" name="nombre_completo" placeholder="Ej: Juan Perez" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]" required>
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Email (VARCHAR)</label>
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Email</label>
                     <input type="email" name="email" placeholder="juan@estacionhuaral.com" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]" required>
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Teléfono (VARCHAR)</label>
+  <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[10px]">Asignar Rol</label>
+  <select name="rol" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-3 outline-none focus:border-[#f5be38]" required>
+    <option value="ROLE_USER">Usuario / Cliente</option>
+    <option value="ROLE_ADMIN">Administrador</option>
+    <option value="ROLE_MOZO">Mozo</option>
+    <option value="ROLE_BARMAN">Barman</option>
+    <option value="ROLE_COCINA">Cocina</option>
+    <option value="ROLE_CAJA">Caja</option>
+  </select>
+</div>
+                <div>
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Teléfono </label>
                     <input type="text" name="telefono" placeholder="Ej: 999888777" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]">
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Dirección (VARCHAR)</label>
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Dirección</label>
                     <input type="text" name="direccion" placeholder="Ej: Calle Lima 456" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]">
                 </div>
                 <div class="pt-3 border-t border-stone-800 flex justify-end gap-2 text-xs">
@@ -167,7 +183,7 @@
             <div class="flex justify-between items-center border-b border-stone-800 pb-3">
                 <div class="leading-none">
                     <h3 class="font-serif font-bold text-[#f5be38] text-base uppercase tracking-wide">Modificar Usuario</h3>
-                    <p class="text-[9px] text-stone-500 font-mono mt-0.5">Id_usuario (BIGINT): <span id="editDisplayId" class="text-stone-400">0</span></p>
+                    <p class="text-[9px] text-stone-500 font-mono mt-0.5">Id_usuario : <span id="editDisplayId" class="text-stone-400">0</span></p>
                 </div>
                 <button type="button" class="close-modal-btn text-stone-400 hover:text-white transition-colors cursor-pointer text-base"><i class="fa-solid fa-xmark"></i></button>
             </div>
@@ -178,28 +194,39 @@
                 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Usuario (VARCHAR)</label>
+                        <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Usuario </label>
                         <input type="text" name="usuario" id="editUsuario" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]" required>
                     </div>
                     <div>
-                        <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Contraseña (Opcional)</label>
+                        <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Contraseña </label>
                         <input type="password" name="contraseña" placeholder="Dejar en blanco para mantener" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Nombre Completo (VARCHAR)</label>
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Nombre Completo </label>
                     <input type="text" name="nombre_completo" id="editNombre" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]" required>
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Email (VARCHAR)</label>
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Email </label>
                     <input type="email" name="email" id="editEmail" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]" required>
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Teléfono (VARCHAR)</label>
+  <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[10px]">Cambiar Rol</label>
+  <select id="editRol" name="rol" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-3 outline-none focus:border-[#f5be38]" required>
+    <option value="ROLE_USER">Usuario / Cliente</option>
+    <option value="ROLE_ADMIN">Administrador</option>
+    <option value="ROLE_MOZO">Mozo</option>
+    <option value="ROLE_BARMAN">Barman</option>
+    <option value="ROLE_COCINA">Cocina</option>
+    <option value="ROLE_CAJA">Caja</option>
+  </select>
+</div>
+                <div>
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Teléfono </label>
                     <input type="text" name="telefono" id="editTelefono" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]">
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Dirección (VARCHAR)</label>
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Dirección </label>
                     <input type="text" name="direccion" id="editDireccion" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]">
                 </div>
                 <div class="pt-3 border-t border-stone-800 flex justify-end gap-2 text-xs">
@@ -217,7 +244,7 @@
 
 
     <script src="/JS/Usuarios_Admin.js"></script>
-       
+     <script src="/JS/Perfil_Admin.js"></script>
     </script>
 </body>
 </html>

@@ -40,6 +40,16 @@ public class PedidoController {
         return ResponseEntity.ok(pedidoService.obtenerPorId(id));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarPedido(@PathVariable Long id, @RequestBody pedido pedidoActualizado) {
+        try {
+            pedido pedidoGuardado = pedidoService.actualizarPedido(id, pedidoActualizado);
+            return ResponseEntity.ok(pedidoGuardado);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> crearPedido(@RequestBody pedido pedido) {
         // Tu servicio ya maneja la lógica transaccional, cálculo de totales y actualización de mesas

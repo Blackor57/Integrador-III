@@ -83,11 +83,23 @@
             class="active-indicator absolute bottom-[-14px] left-0 w-full h-[3px] bg-[#cf6937] rounded-full"
           ></div>
         </a>
+        <a
+          href="Admin_Mesas.html"
+          class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 group text-[#cf6937]"
+        >
+          <i class="fa-solid fa-chair text-xs"></i>
+          <span class="hidden sm:inline">Mesas</span>
+        </a>
       </div>
 
       <div class="flex items-center gap-3">
         <div class="text-right hidden sm:block leading-none">
-          <span class="block text-xs font-bold text-stone-800">EDU</span>
+          <!-- Le agregamos el id="nombreAdmin" para inyectar el nombre con JS -->
+          <span
+            id="nombreAdmin"
+            class="block text-xs font-bold text-stone-800 uppercase"
+            >Cargando...</span
+          >
           <span class="text-[9px] text-stone-500">Administrador</span>
         </div>
         <button
@@ -393,5 +405,6 @@
     </footer>
 
     <script src="/JS/Productos_Admin.js"></script>
+    <script src="/JS/Perfil_Admin.js"></script>
   </body>
 </html>

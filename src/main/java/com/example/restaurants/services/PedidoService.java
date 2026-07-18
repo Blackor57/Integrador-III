@@ -337,6 +337,40 @@ public class PedidoService {
     }
 
     @Transactional
+    public pedido actualizarPedido(Long id, pedido pedidoActualizado) {
+        // 1. Buscamos el pedido existente en la base de datos
+        pedido pedidoExistente = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado con ID: " + id));
+
+        // 2. Actualizamos los totales y notas
+        pedidoExistente.setSubtotal(pedidoActualizado.getSubtotal());
+        pedidoExistente.setTotal(pedidoActualizado.getTotal());
+
+        // Concatenamos las notas si hay nuevas
+        if (pedidoActualizado.getNotasespeciales() != null && !pedidoActualizado.getNotasespeciales().isEmpty()) {
+            pedidoExistente.setNotasespeciales(pedidoActualizado.getNotasespeciales());
+        }
+
+        // 3. Manejo Inteligente de los Detalles (SOLUCIÓN AL ERROR)
+        if (pedidoActualizado.getDetalles() != null) {
+            for (detalle_pedido detalleEntrante : pedidoActualizado.getDetalles()) {
+
+                // Si el detalle NO tiene ID, significa que es un producto NUEVO
+                // que el mozo acaba de agregar al carrito
+                if (detalleEntrante.getId() == null) {
+                    detalleEntrante.setPedido(pedidoExistente); // Lo amarramos al pedido
+                    pedidoExistente.getDetalles().add(detalleEntrante); // Lo agregamos a la BD
+                }
+                // Si ya tiene ID, significa que es un plato antiguo que ya estaba preparándose,
+                // por lo que lo ignoramos y dejamos que siga su curso normal.
+            }
+        }
+
+        // 4. Guardamos los cambios
+        return pedidoRepository.save(pedidoExistente);
+    }
+
+    @Transactional
     public detalle_pedido cambiarEstadoDetalle(
             Long idDetalle,
             EstadoItem nuevoEstado) {

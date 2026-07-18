@@ -1,7 +1,6 @@
 (function () {
   // 1. UTILIDADES Y GLOBALES
   const token = localStorage.getItem("token");
-  // Almacenamos los pedidos aquí para ver los detalles sin consultar a la BD nuevamente
   let misPedidosGlobal = [];
 
   // Redirigir si no hay token
@@ -13,32 +12,25 @@
   // 2. ELEMENTOS DEL DOM
   const contenedorPedidos = document.getElementById("contenedorPedidos");
 
-  // Elementos del Modal - Nuevo Pedido (Existente)
-  const modal = document.getElementById("modalContainer");
-  const btnOpen = document.getElementById("btnOpenModal");
-  const btnClose = document.getElementById("btnCloseModal");
-  const btnCancel = document.getElementById("btnCancelModal");
-
-  // Elementos del Modal - Detalles (NUEVO)
+  // Modal de Detalles
   const modalDetalles = document.getElementById("modalDetalles");
   const btnCloseDetalles = document.getElementById("btnCloseDetalles");
 
-  // 3. LÓGICA DE MODALES
-  const toggleModal = (show) => modal.classList.toggle("hidden", !show);
-  btnOpen?.addEventListener("click", () => toggleModal(true));
-  btnClose?.addEventListener("click", () => toggleModal(false));
-  btnCancel?.addEventListener("click", () => toggleModal(false));
+  // Pestañas
+  const btnTabActivos = document.getElementById("btnTabActivos");
+  const btnTabHistorial = document.getElementById("btnTabHistorial");
+  let tabActual = "ACTIVOS";
 
+  // 3. LÓGICA DEL MODAL DE DETALLES
   const toggleModalDetalles = (show) =>
-    modalDetalles.classList.toggle("hidden", !show);
+    modalDetalles?.classList.toggle("hidden", !show);
   btnCloseDetalles?.addEventListener("click", () => toggleModalDetalles(false));
 
-  // Cerrar el modal si haces clic fuera de la caja
   modalDetalles?.addEventListener("click", (e) => {
     if (e.target === modalDetalles) toggleModalDetalles(false);
   });
 
-  // 4. CARGAR Y RENDERIZAR PEDIDOS
+  // 4. CARGAR PEDIDOS (Petición al Backend)
   async function cargarMisPedidos() {
     try {
       contenedorPedidos.innerHTML = `<div class="col-span-full text-center text-stone-400 py-10"><i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i><p>Cargando tus pedidos...</p></div>`;
@@ -56,27 +48,73 @@
 
       if (!response.ok) throw new Error("No se pudieron cargar los pedidos.");
 
-      // Guardamos la respuesta en la variable global
       misPedidosGlobal = await response.json();
-      contenedorPedidos.innerHTML = "";
+      console.log("👉 DATOS RECIBIDOS DEL BACKEND:", misPedidosGlobal);
 
-      if (!misPedidosGlobal || misPedidosGlobal.length === 0) {
+      if (
+        !misPedidosGlobal ||
+        !Array.isArray(misPedidosGlobal) ||
+        misPedidosGlobal.length === 0
+      ) {
         contenedorPedidos.innerHTML = `<div class="col-span-full text-center text-stone-400 py-10">Aún no has realizado ningún pedido.</div>`;
         return;
       }
 
-      // Inyectamos las tarjetas
-      misPedidosGlobal.forEach((pedido) => {
-        const totalFormateado = Number(pedido.total || 0).toFixed(2);
-        const estado = pedido.estadopedido || "PENDIENTE";
-        const fecha = pedido.fechacreacion
-          ? new Date(pedido.fechacreacion).toLocaleDateString()
-          : "Reciente";
-        const mesaStr = pedido.mesa
-          ? `Mesa ${pedido.mesa.nombre}`
-          : "Para llevar";
+      renderizarPedidos();
+    } catch (error) {
+      console.error("Error en cargarMisPedidos:", error);
+      contenedorPedidos.innerHTML = `<div class="col-span-full text-center text-red-400 py-10">Hubo un error al cargar tus pedidos. Revisa la consola (F12).</div>`;
+    }
+  }
 
-        const tarjetaHTML = `
+  // 5. FUNCIÓN QUE DIBUJA SEGÚN LA PESTAÑA
+  function renderizarPedidos() {
+    contenedorPedidos.innerHTML = "";
+
+    const pedidosFiltrados = misPedidosGlobal.filter((pedido) => {
+      const estadoReal =
+        pedido.estadopedido ||
+        pedido.estadoPedido ||
+        pedido.estado ||
+        "PENDIENTE";
+      const estadoEnMayusculas = estadoReal.toUpperCase();
+      const esCerrado =
+        estadoEnMayusculas === "PAGADO" || estadoEnMayusculas === "CANCELADO";
+
+      return tabActual === "ACTIVOS" ? !esCerrado : esCerrado;
+    });
+
+    if (pedidosFiltrados.length === 0) {
+      const mensaje =
+        tabActual === "ACTIVOS"
+          ? "No tienes pedidos activos en este momento."
+          : "No hay registros en tu historial de pedidos.";
+      contenedorPedidos.innerHTML = `<div class="col-span-full text-center text-stone-500 font-medium py-10">${mensaje}</div>`;
+      return;
+    }
+
+    pedidosFiltrados.forEach((pedido) => {
+      const totalFormateado = Number(pedido.total || 0).toFixed(2);
+      const estado = (
+        pedido.estadopedido ||
+        pedido.estadoPedido ||
+        pedido.estado ||
+        "PENDIENTE"
+      ).toUpperCase();
+      const fecha = pedido.fechacreacion
+        ? new Date(pedido.fechacreacion).toLocaleDateString()
+        : "Reciente";
+      const mesaStr = pedido.mesa
+        ? `Mesa ${pedido.mesa.nombre || pedido.mesa.id}`
+        : "Para llevar";
+
+      let colorEstado = "text-amber-500 border-amber-500/30";
+      if (estado === "ENTREGADO" || estado === "PAGADO")
+        colorEstado = "text-green-400 border-green-500/30";
+      if (estado === "CANCELADO")
+        colorEstado = "text-red-500 border-red-500/30";
+
+      const tarjetaHTML = `
             <article class="bg-[#3d2a21]/60 border border-[#543d32] rounded-[1.8rem] p-5 shadow-xl flex flex-col justify-between hover:border-[#f5be38]/30 transition-all">
                 <div>
                     <div class="flex justify-between items-start border-b border-stone-800 pb-2 mb-3">
@@ -85,8 +123,8 @@
                             <p class="text-[9px] text-stone-500 font-mono mt-0.5">${mesaStr} | ${fecha}</p>
                         </div>
                         <div class="relative">
-                            <span class="bg-[#2a1a14] ${estado === "ENTREGADO" ? "text-green-400 border-green-500/30" : "text-amber-500 border-amber-500/30"} font-bold text-[10px] tracking-wider px-2 py-1 rounded-md border uppercase">
-                                ${estado.replace("_", " ")}
+                            <span class="bg-[#2a1a14] ${colorEstado} font-bold text-[10px] tracking-wider px-2 py-1 rounded-md border uppercase">
+                                ${estado.replace(/_/g, " ")}
                             </span>
                         </div>
                     </div>
@@ -95,7 +133,6 @@
                         <div class="text-right"><span class="text-[9px] font-bold text-stone-500 block uppercase">Total</span><span class="font-mono text-[#f5be38] font-bold">S/. ${totalFormateado}</span></div>
                     </div>
                 </div>
-                <!-- NUEVO BOTÓN PARA VER DETALLES -->
                 <div class="mt-1 pt-3 border-t border-stone-800/60">
                     <button class="btn-ver-detalles w-full py-2 bg-[#2a1a14] hover:bg-[#e07a48] text-stone-400 hover:text-white border border-stone-700 hover:border-[#e07a48] transition-colors rounded-xl text-xs font-bold uppercase cursor-pointer" data-id="${pedido.id}">
                         <i class="fa-solid fa-eye mr-1"></i> Ver Detalles
@@ -103,16 +140,34 @@
                 </div>
             </article>
           `;
-        contenedorPedidos.insertAdjacentHTML("beforeend", tarjetaHTML);
-      });
-    } catch (error) {
-      console.error(error);
-      contenedorPedidos.innerHTML = `<div class="col-span-full text-center text-red-400 py-10">Hubo un error al cargar tus pedidos.</div>`;
-    }
+      contenedorPedidos.insertAdjacentHTML("beforeend", tarjetaHTML);
+    });
   }
 
-  // 5. DELEGACIÓN DE EVENTOS: CLIC EN "VER DETALLES"
-  // Usamos el contenedor padre para escuchar todos los botones a la vez
+  // 6. EVENTOS DE PESTAÑAS
+  btnTabActivos?.addEventListener("click", () => {
+    tabActual = "ACTIVOS";
+    if (btnTabActivos && btnTabHistorial) {
+      btnTabActivos.className =
+        "flex items-center gap-2 font-bold text-[#e07a48] border-b-2 border-[#e07a48] pb-3 -mb-[14px] cursor-pointer transition-all";
+      btnTabHistorial.className =
+        "flex items-center gap-2 font-medium text-stone-500 hover:text-stone-300 border-b-2 border-transparent pb-3 -mb-[14px] transition-all cursor-pointer";
+    }
+    renderizarPedidos();
+  });
+
+  btnTabHistorial?.addEventListener("click", () => {
+    tabActual = "HISTORIAL";
+    if (btnTabActivos && btnTabHistorial) {
+      btnTabHistorial.className =
+        "flex items-center gap-2 font-bold text-[#e07a48] border-b-2 border-[#e07a48] pb-3 -mb-[14px] cursor-pointer transition-all";
+      btnTabActivos.className =
+        "flex items-center gap-2 font-medium text-stone-500 hover:text-stone-300 border-b-2 border-transparent pb-3 -mb-[14px] transition-all cursor-pointer";
+    }
+    renderizarPedidos();
+  });
+
+  // 7. EVENTO BOTÓN "VER DETALLES"
   contenedorPedidos.addEventListener("click", (e) => {
     const btn = e.target.closest(".btn-ver-detalles");
     if (btn) {
@@ -121,19 +176,15 @@
     }
   });
 
-  // 6. FUNCIÓN QUE CONSTRUYE EL TICKET DENTRO DEL MODAL
   function pintarDetalles(id) {
-    // 6.1 Buscar el pedido específico en nuestra memoria
     const pedido = misPedidosGlobal.find((p) => p.id === id);
     if (!pedido) return;
 
-    // 6.2 Llenar cabecera y total
     document.getElementById("detPedidoId").textContent = pedido.id;
     document.getElementById("detPedidoTotal").textContent = Number(
       pedido.total || 0,
     ).toFixed(2);
 
-    // 6.3 Llenar la lista de productos
     const lista = document.getElementById("listaDetalles");
     lista.innerHTML = "";
 
@@ -146,7 +197,6 @@
         const subtotal = Number(det.subtotal || 0).toFixed(2);
         const estadoItem = det.estadoItem || "EN_PREPARACION";
 
-        // Lógica de colores según el estado que envía Java
         let colorEstado = "text-amber-500";
         if (estadoItem === "LISTO") colorEstado = "text-lime-400";
         if (estadoItem === "ENTREGADO") colorEstado = "text-green-400";
@@ -162,7 +212,7 @@
                       </div>
                       <div class="text-right">
                           <span class="block font-mono font-bold text-[#f5be38] text-sm mb-0.5">S/. ${subtotal}</span>
-                          <span class="text-[9px] font-bold tracking-wider ${colorEstado}">${estadoItem.replace("_", " ")}</span>
+                          <span class="text-[9px] font-bold tracking-wider ${colorEstado}">${estadoItem.replace(/_/g, " ")}</span>
                       </div>
                   </div>
               `;
@@ -172,11 +222,14 @@
         '<p class="text-center text-stone-500 text-xs py-4">No hay productos registrados en este pedido.</p>';
     }
 
-    // 6.4 Abrir Modal
     toggleModalDetalles(true);
   }
 
-  
+  // 8. LOGOUT (Comentado si usas LogOut.js externo, pero útil por si acaso)
+  document.getElementById("navBtnLogout")?.addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "login.html"; // Asegúrate que esta ruta es tu login real (Index.html / login.html)
+  });
 
   // ARRANQUE INICIAL
   cargarMisPedidos();

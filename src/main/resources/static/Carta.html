@@ -95,15 +95,19 @@
 
       <div class="flex items-center gap-3 md:gap-4">
         <button
+          id="btnOpenCarrito"
           class="relative w-10 h-10 rounded-full border border-stone-200 bg-white hover:bg-stone-50 text-stone-600 flex items-center justify-center transition-colors shadow-sm cursor-pointer"
           aria-label="Ver carrito"
         >
           <i class="fa-solid fa-cart-shopping text-sm text-blue-900"></i>
           <span
+            id="badgeCarritoTop"
             class="absolute -top-1.5 -right-1.5 bg-[#cf6937] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#fdfbf7]"
-            >0</span
           >
+            0
+          </span>
         </button>
+
         <button
           id="navBtnThemeToggle"
           class="w-10 h-10 rounded-full border border-stone-200 bg-white hover:bg-stone-50 text-amber-500 flex items-center justify-center transition-colors shadow-sm cursor-pointer"
@@ -149,7 +153,8 @@
 
         <div class="flex items-center gap-6 w-full md:w-auto justify-end">
           <button
-            class="bg-[#e07a48] hover:bg-[#cf6937] text-white font-semibold text-xs px-4 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
+            id="btnOpenCarrito2"
+            class="bg-[#e07a48] hover:bg-[#cf6937] text-white font-semibold text-xs px-4 py-3 rounded-xl ..."
           >
             <i class="fa-solid fa-basket-shopping"></i> Carrito
           </button>
@@ -188,7 +193,93 @@
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2"
       ></div>
     </main>
+    <div
+      id="modalCarrito"
+      class="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-end z-[60] hidden"
+    >
+      <!-- Panel Lateral (Se desliza desde la derecha) -->
+      <div
+        class="bg-[#1c0e0a] border-l border-stone-700 w-full max-w-md h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300"
+      >
+        <!-- Header del Carrito -->
+        <div
+          class="p-5 border-b border-stone-800 flex justify-between items-center bg-[#2a1a14] shrink-0"
+        >
+          <h3
+            class="font-serif font-bold text-[#f5be38] text-lg uppercase tracking-wide flex items-center gap-2"
+          >
+            <i class="fa-solid fa-basket-shopping"></i> Tu Pedido
+          </h3>
+          <button
+            id="btnCloseCarrito"
+            class="text-stone-400 hover:text-white transition-colors cursor-pointer text-xl"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
 
+        <!-- Lista de Productos en el Carrito (Scrollable) -->
+        <div
+          id="cartItemsContainer"
+          class="p-5 overflow-y-auto no-scrollbar flex-grow space-y-3 bg-[#1c0e0a]"
+        >
+          <!-- El mensaje de carrito vacío o los items se inyectan aquí -->
+          <div
+            class="text-center text-stone-500 py-10 flex flex-col items-center"
+          >
+            <i
+              class="fa-solid fa-cart-arrow-down text-4xl mb-3 text-stone-700"
+            ></i>
+            <p>Tu carrito está vacío.</p>
+          </div>
+        </div>
+
+        <!-- Footer con Total y Botón de Procesar -->
+        <div
+          class="p-5 bg-[#2a1a14] border-t border-stone-800 shrink-0 space-y-4"
+        >
+          <!-- NUEVO: Selector de Recibo y Notas -->
+          <div class="space-y-3 pb-3 border-b border-stone-700/50">
+            <div class="flex items-center justify-between">
+              <label
+                class="text-[10px] text-stone-400 font-bold uppercase tracking-wider"
+                >Comprobante (Tipo_Recibo)</label
+              >
+              <select
+                id="cartTipoRecibo"
+                class="bg-[#1c0e0a] text-stone-300 text-xs font-medium border border-stone-700 rounded-lg px-2 py-1.5 outline-none focus:border-[#f5be38] cursor-pointer"
+              >
+                <option value="BOLETA">Boleta</option>
+                <option value="FACTURA">Factura</option>
+              </select>
+            </div>
+            <div>
+              <input
+                type="text"
+                id="cartNotas"
+                placeholder="Notas para cocina (Ej: Sin ají, poco arroz...)"
+                class="w-full bg-[#1c0e0a] text-stone-300 placeholder-stone-600 text-xs rounded-lg px-3 py-2 border border-stone-700 focus:border-[#f5be38] outline-none transition-colors"
+              />
+            </div>
+          </div>
+
+          <div
+            class="flex justify-between items-center text-lg font-bold text-[#f5be38]"
+          >
+            <span class="uppercase text-sm text-stone-300">Total a Pagar</span>
+            <span class="font-mono text-xl"
+              >S/. <span id="lblTotalCarrito">0.00</span></span
+            >
+          </div>
+          <button
+            id="btnProcesarPedido"
+            class="w-full bg-[#e07a48] hover:bg-[#cf6937] text-white font-bold tracking-widest text-xs px-4 py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            CONFIRMAR PEDIDO <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
     <script src="/JS/Carta.js"></script>
     <script src="/JS/LogOut.js"></script>
   </body>

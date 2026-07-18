@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Estación - Editar Perfil</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        background: radial-gradient(circle at center, #1c0e0a 0%, #0c0402 100%);
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen font-sans antialiased flex flex-col items-center justify-center text-stone-200 p-4"
+  >
+    <div class="w-full max-w-lg">
+      <!-- Botón Volver -->
+      <button
+        onclick="regresarAlPerfil()"
+        class="mb-6 text-stone-400 hover:text-[#f5be38] transition-colors flex items-center gap-2 text-sm font-bold uppercase tracking-wider cursor-pointer"
+      >
+        <i class="fa-solid fa-arrow-left"></i> Volver al Perfil
+      </button>
+
+      <!-- Tarjeta del Formulario -->
+      <div
+        class="bg-[#3d2a21]/80 border border-[#543d32] rounded-[2rem] p-6 md:p-8 shadow-2xl backdrop-blur-sm"
+      >
+        <div class="text-center mb-6 border-b border-stone-800 pb-4">
+          <div
+            class="w-16 h-16 mx-auto rounded-full bg-[#4a352b] border-2 border-[#f5be38] flex items-center justify-center text-2xl shadow-inner mb-3"
+          >
+            <i class="fa-solid fa-user-pen text-[#f5be38]"></i>
+          </div>
+          <h2
+            class="text-2xl font-serif font-bold tracking-wide text-white uppercase"
+          >
+            Editar Perfil
+          </h2>
+          <p
+            class="text-[10px] text-stone-400 font-mono mt-1 uppercase tracking-widest"
+          >
+            Actualiza tu información personal
+          </p>
+        </div>
+
+        <form id="formEditarPerfil" class="space-y-4">
+          <!-- Nombre -->
+          <div>
+            <label
+              class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[10px]"
+              >Nombre Completo</label
+            >
+            <input
+              type="text"
+              id="inputNombre"
+              name="nombreCompleto"
+              class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-3 outline-none focus:border-[#f5be38] text-sm"
+              required
+            />
+          </div>
+
+          <!-- Correo (Usualmente no se edita, o se pone como solo lectura, pero lo dejamos editable por si acaso) -->
+          <div>
+            <label
+              class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[10px]"
+              >Correo Electrónico</label
+            >
+            <input
+              type="email"
+              id="inputEmail"
+              name="email"
+              class="w-full bg-[#2a1a14] text-stone-500 border border-stone-700 rounded-xl p-3 outline-none text-sm cursor-not-allowed"
+              readonly
+              title="El correo no se puede cambiar"
+            />
+          </div>
+
+          <!-- Teléfono y Dirección -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[10px]"
+                >Teléfono</label
+              >
+              <input
+                type="text"
+                id="inputTelefono"
+                name="telefono"
+                class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-3 outline-none focus:border-[#f5be38] text-sm"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[10px]"
+                >Dirección</label
+              >
+              <input
+                type="text"
+                id="inputDireccion"
+                name="direccion"
+                class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-3 outline-none focus:border-[#f5be38] text-sm"
+              />
+            </div>
+          </div>
+
+          <!-- Contraseña Opcional -->
+          <div class="pt-2">
+            <label
+              class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[10px]"
+              >Nueva Contraseña (Opcional)</label
+            >
+            <input
+              type="password"
+              id="inputPassword"
+              name="password"
+              placeholder="Déjalo en blanco para no cambiarla"
+              class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-3 outline-none focus:border-[#f5be38] text-sm placeholder:text-stone-600"
+            />
+          </div>
+
+          <div class="pt-6 border-t border-stone-800 flex justify-end gap-3">
+            <button
+              type="button"
+              onclick="regresarAlPerfil()"
+              class="px-5 py-2.5 rounded-xl border border-stone-700 text-stone-400 hover:text-white hover:bg-stone-800 transition-colors text-xs font-bold cursor-pointer"
+            >
+              CANCELAR
+            </button>
+            <button
+              type="submit"
+              id="btnGuardar"
+              class="px-6 py-2.5 rounded-xl bg-[#e07a48] hover:bg-[#cf6937] text-white text-xs font-bold shadow-md cursor-pointer transition-all flex items-center gap-2"
+            >
+              <i class="fa-solid fa-save"></i> GUARDAR CAMBIOS
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="/JS/Editar_Perfil.js"></script>
+  </body>
+</html>

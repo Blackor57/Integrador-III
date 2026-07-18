@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Estación - Cocina & Despacho</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        background: radial-gradient(circle at center, #1c0e0a 0%, #0c0402 100%);
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen font-sans antialiased flex flex-col justify-between selection:bg-amber-500 selection:text-white text-stone-200"
+  >
+    <!-- NAVBAR -->
+    <nav
+      class="w-full bg-[#fdfbf7] border-b border-stone-200 shadow-sm px-4 md:px-8 py-3 flex items-center justify-between text-stone-800 z-50 sticky top-0"
+    >
+      <div class="flex items-center gap-3 cursor-pointer">
+        <div class="text-[#cf6937] text-2xl">
+          <i class="fa-solid fa-fire-burner"></i>
+        </div>
+        <div class="leading-none">
+          <span
+            class="block font-serif font-black tracking-widest text-[#cf6937] text-lg md:text-xl uppercase"
+            >Estación</span
+          >
+          <span
+            class="block text-[8px] tracking-[0.3em] text-stone-500 uppercase font-medium"
+            >Producción</span
+          >
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <a
+          href="cocina-despacho.html"
+          class="py-2 text-sm font-medium text-[#cf6937] flex items-center gap-2"
+        >
+          <i class="fa-solid fa-bell-concierge text-xs"></i>
+          <span class="hidden sm:inline">Monitoreo Cocina</span>
+        </a>
+        <button
+          id="navBtnLogout"
+          class="py-2 text-sm font-medium text-stone-600 hover:text-red-600 transition-colors flex items-center gap-2 cursor-pointer"
+        >
+          <i class="fa-solid fa-door-open text-xs"></i>
+          <span class="hidden sm:inline">Salir</span>
+        </button>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-stone-500 font-mono hidden sm:inline"
+          >En cola:</span
+        >
+        <span
+          id="globalQueueCount"
+          class="bg-red-500 text-white font-mono font-bold text-xs px-2.5 py-1 rounded-full animate-pulse"
+          >0 Órdenes</span
+        >
+      </div>
+    </nav>
+
+    <!-- TABLERO DE 2 COLUMNAS -->
+    <main
+      class="w-full mx-auto px-4 md:px-12 py-6 flex-grow grid grid-cols-1 lg:grid-cols-2 gap-8 items-start h-[calc(100vh-140px)]"
+    >
+      <!-- COLUMNA 1: EN PREPARACIÓN (ANTES 'EN ESPERA') -->
+      <section
+        class="flex flex-col bg-[#140a07]/90 border border-stone-800/80 rounded-[1.8rem] p-4 h-full overflow-hidden"
+      >
+        <div
+          class="flex justify-between items-center border-b border-stone-800 pb-3 mb-4 flex-shrink-0"
+        >
+          <span
+            class="font-serif font-bold text-sm tracking-wide uppercase text-stone-200 flex items-center gap-2"
+          >
+            <i class="fa-solid fa-fire-burner text-amber-500"></i> En
+            Preparación
+          </span>
+        </div>
+        <div
+          class="flex-grow overflow-y-auto space-y-4 pr-1 no-scrollbar"
+          id="columnEnEspera"
+        >
+          <!-- Tarjetas inyectadas por JS -->
+        </div>
+      </section>
+
+      <!-- COLUMNA 2: LISTO PARA DESPACHO -->
+      <section
+        class="flex flex-col bg-[#140a07]/90 border border-stone-800/80 rounded-[1.8rem] p-4 h-full overflow-hidden"
+      >
+        <div
+          class="flex justify-between items-center border-b border-stone-800 pb-3 mb-4 flex-shrink-0"
+        >
+          <span
+            class="font-serif font-bold text-sm tracking-wide uppercase text-stone-200 flex items-center gap-2"
+          >
+            <i class="fa-solid fa-bell-concierge text-emerald-400"></i> Listo /
+            Para Despachar
+          </span>
+          <span
+            class="bg-stone-800 text-stone-400 font-mono text-[10px] px-2 py-0.5 rounded-full font-bold"
+            id="readyCountBadge"
+            >0</span
+          >
+        </div>
+        <div
+          class="flex-grow overflow-y-auto space-y-4 pr-1 no-scrollbar"
+          id="columnListo"
+        >
+          <div
+            id="readyEmptyState"
+            class="h-full flex flex-col items-center justify-center text-center p-4 text-stone-600 space-y-2"
+          >
+            <i class="fa-solid fa-moped text-2xl opacity-30"></i>
+            <p class="text-[11px] font-medium leading-tight">
+              No hay platos listos para entregar.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer Corporativo -->
+    <footer
+      class="w-full text-center py-4 text-[11px] text-stone-600 border-t border-stone-900 bg-[#0c0402]/80 flex-shrink-0"
+    >
+      &copy; 2026 Restaurante La Estación - Sistema Integrado de Gestión de
+      Cocina KDS.
+    </footer>
+    <script src="/JS/Cocina.js"></script>
+    </script>
+    <script src="/JS/LogOut.js"></script>
+  </body>
+</html>
