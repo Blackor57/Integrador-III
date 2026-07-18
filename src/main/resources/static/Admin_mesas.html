@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Estación - Admin Pedidos</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: radial-gradient(circle at center, #1c0e0a 0%, #0c0402 100%);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased flex flex-col justify-between selection:bg-amber-500 selection:text-white text-stone-200">
+
+    <!-- =========================================================================
+         NAVBAR ADMIN
+         ========================================================================= -->
+   <nav class="w-full bg-[#fdfbf7] border-b border-stone-200 shadow-sm px-4 md:px-8 py-3 flex items-center justify-between text-stone-800 z-40">
+        <div class="flex items-center gap-2.5 cursor-pointer">
+            <div class="text-[#cf6937] text-2xl">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+            </div>
+            <div class="leading-none">
+                <div class="flex items-center gap-1.5">
+                    <span class="block font-serif font-black tracking-widest text-[#cf6937] text-base md:text-lg uppercase">Estación</span>
+                    <span class="bg-[#cf6937] text-white font-mono text-[9px] font-bold px-1 py-0.5 rounded-sm">ADMIN</span>
+                </div>
+                <span class="block text-[8px] tracking-[0.4em] text-stone-500 uppercase font-medium">Huaral</span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-4 md:gap-6">
+              <a href="Admin_inicio.html" class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center group text-stone-600 hover:text-[#cf6937]">
+                <i class="fa-solid fa-users-gear text-xs"></i>
+                <span class="hidden sm:inline">Inicio</span>
+            </a>
+            <a href="Admin_Usuario.html" class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]">
+                <i class="fa-solid fa-users-gear text-xs"></i>
+                <span class="hidden sm:inline">Usuario</span>
+            </a>
+            <a href="Admin_pedidos.html" class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]">
+                <i class="fa-regular fa-clipboard text-xs"></i>
+                <span class="hidden sm:inline">Pedidos</span>
+            </a>
+            <a href="Admin_productos.html" class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]">
+                <i class="fa-solid fa-bowl-food text-xs"></i>
+                <span class="hidden sm:inline">Producto</span>
+            </a>
+            <a href="Admin_mesas.html" class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 group text-[#cf6937]">
+                <i class="fa-regular fa-clipboard text-xs"></i>
+                <span class="hidden sm:inline">Mesas</span>
+                <div class="active-indicator absolute bottom-[-14px] left-0 w-full h-[3px] bg-[#cf6937] rounded-full"></div>
+            </a>
+            <a href="Admin_Rendimiento.html" class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]">
+                <i class="fa-solid fa-bowl-food text-xs"></i>
+                <span class="hidden sm:inline">Rendimiento</span>
+            </a>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <div class="text-right hidden sm:block leading-none">
+                <span class="block text-xs font-bold text-stone-800">EDU</span>
+                <span class="text-[9px] text-stone-500">Administrador</span>
+            </div>
+            <button id="navBtnLogout" class="w-9 h-9 rounded-full border border-stone-200 bg-white hover:bg-red-50 text-stone-500 hover:text-red-600 flex items-center justify-center transition-colors shadow-xs cursor-pointer">
+                <i class="fa-solid fa-power-off text-sm"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <main class="max-w-7xl w-full mx-auto px-4 py-8 md:px-8 flex-grow grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <section class="lg:col-span-3 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-table-cells-large text-[#f5be38] text-xl"></i>
+                    <h1 class="text-xl font-bold tracking-wider text-white uppercase">Salas y Mesas</h1>
+                </div>
+                
+                <div class="flex items-center gap-4 text-xs font-medium">
+                    <span class="flex items-center gap-1.5 text-green-400">
+                        <span class="w-2 h-2 rounded-full bg-green-500"></span> Disponibles (4)
+                    </span>
+                    <span class="flex items-center gap-1.5 text-red-400">
+                        <span class="w-2 h-2 rounded-full bg-red-500"></span> Ocupadas (2)
+                    </span>
+                    <span class="flex items-center gap-1.5 text-stone-400">
+                        <span class="w-2 h-2 rounded-full bg-stone-600"></span> Mantenimiento (1)
+                    </span>
+                </div>
+            </div>
+
+            <div id="gridMesas" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                
+                <article class="bg-[#3d2a21]/60 border border-[#543d32] rounded-2xl p-4 flex flex-col justify-between space-y-4 shadow-lg transition-all hover:border-[#f5be38]/30" data-id-mesa="1">
+                    <div class="space-y-3">
+                        <div class="border-b border-stone-800 pb-2 flex justify-between items-center">
+                            <h2 class="font-serif font-bold text-white text-sm tracking-wide uppercase">Mesa 01</h2>
+                            <span class="text-[10px] font-mono text-stone-500">ID: MES-001</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-2 text-xs text-stone-300 font-medium">
+                            <i class="fa-solid fa-users text-stone-500 text-[10px]"></i>
+                            <span>Capacidad: 4 Personas</span>
+                        </div>
+
+                        <div class="text-xs text-stone-400">
+                            <span class="block font-semibold text-stone-500 text-[10px] uppercase">Zona de Ubicación</span>
+                            <span class="text-stone-300">SALA PRINCIPAL 1</span>
+                        </div>
+
+                        <div class="flex justify-between items-center bg-red-500/10 border border-red-500/20 p-2 rounded-lg text-xs">
+                            <span class="text-red-400 font-medium flex items-center gap-1">
+                                <i class="fa-solid fa-circle text-[8px] animate-pulse"></i> Ocupada
+                            </span>
+                            <span class="text-stone-400 font-mono">Pedido: #ORD-001</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-stone-800/60 flex justify-between items-center text-xs">
+                        <span class="font-semibold text-stone-400 uppercase tracking-wider">Habilitar Mesa</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" data-action="toggle-mesa" checked>
+                            <div class="w-9 h-5 bg-stone-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-600"></div>
+                        </label>
+                    </div>
+                </article>
+
+                <article class="bg-[#3d2a21]/60 border border-[#543d32] rounded-2xl p-4 flex flex-col justify-between space-y-4 shadow-lg transition-all hover:border-[#f5be38]/30" data-id-mesa="2">
+                    <div class="space-y-3">
+                        <div class="border-b border-stone-800 pb-2 flex justify-between items-center">
+                            <h2 class="font-serif font-bold text-white text-sm tracking-wide uppercase">Mesa 02</h2>
+                            <span class="text-[10px] font-mono text-stone-500">ID: MES-002</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-2 text-xs text-stone-300 font-medium">
+                            <i class="fa-solid fa-users text-stone-500 text-[10px]"></i>
+                            <span>Capacidad: 2 Personas</span>
+                        </div>
+
+                        <div class="text-xs text-stone-400">
+                            <span class="block font-semibold text-stone-500 text-[10px] uppercase">Zona de Ubicación</span>
+                            <span class="text-stone-300">TERRAZA EXTERIOR</span>
+                        </div>
+
+                        <div class="flex justify-between items-center bg-green-500/10 border border-green-500/20 p-2 rounded-lg text-xs">
+                            <span class="text-green-400 font-medium flex items-center gap-1">
+                                <i class="fa-solid fa-circle text-[8px]"></i> Disponible
+                            </span>
+                            <span class="text-stone-500 font-mono">Sin Orden</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-stone-800/60 flex justify-between items-center text-xs">
+                        <span class="font-semibold text-stone-400 uppercase tracking-wider">Habilitar Mesa</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" data-action="toggle-mesa" checked>
+                            <div class="w-9 h-5 bg-stone-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-600"></div>
+                        </label>
+                    </div>
+                </article>
+
+                <article class="bg-[#3d2a21]/40 border border-stone-800 opacity-70 rounded-2xl p-4 flex flex-col justify-between space-y-4 shadow-lg" data-id-mesa="3">
+                    <div class="space-y-3">
+                        <div class="border-b border-stone-900 pb-2 flex justify-between items-center">
+                            <h2 class="font-serif font-bold text-stone-400 text-sm tracking-wide uppercase">Mesa 03</h2>
+                            <span class="text-[10px] font-mono text-stone-600">ID: MES-003</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-2 text-xs text-stone-500 font-medium">
+                            <i class="fa-solid fa-users text-stone-600 text-[10px]"></i>
+                            <span>Capacidad: 6 Personas</span>
+                        </div>
+
+                        <div class="text-xs text-stone-500">
+                            <span class="block font-semibold text-stone-600 text-[10px] uppercase">Zona de Ubicación</span>
+                            <span class="text-stone-500">SALA PRINCIPAL 2</span>
+                        </div>
+
+                        <div class="flex justify-between items-center bg-stone-800/40 p-2 rounded-lg text-xs">
+                            <span class="text-stone-400 font-medium flex items-center gap-1">
+                                <i class="fa-solid fa-triangle-exclamation text-[10px]"></i> Mantenimiento
+                            </span>
+                            <span class="text-stone-600 font-mono">Bloqueada</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-stone-900 flex justify-between items-center text-xs">
+                        <span class="font-semibold text-stone-500 uppercase tracking-wider">Habilitar Mesa</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" data-action="toggle-mesa">
+                            <div class="w-9 h-5 bg-stone-800 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-stone-500 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-600"></div>
+                        </label>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <section class="lg:col-span-1 space-y-6">
+            <div class="flex items-center gap-3 border-b border-stone-800 pb-3">
+                <i class="fa-solid fa-plus text-[#e07a48] text-lg"></i>
+                <h2 class="text-xl font-bold tracking-wider text-white uppercase">Acciones</h2>
+            </div>
+
+            <div id="btnAgregarMesa" class="bg-[#3d2a21]/40 border-2 border-dashed border-[#543d32] rounded-2xl h-56 flex flex-col items-center justify-center p-6 text-center group hover:border-[#f5be38]/40 transition-colors cursor-pointer">
+                <div class="w-12 h-12 rounded-full bg-[#2a1a14]/80 text-stone-400 group-hover:text-[#f5be38] group-hover:bg-[#3d2a21] border border-stone-800 flex items-center justify-center text-lg transition-all shadow-md mb-3">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <p class="text-xs text-stone-400 font-semibold uppercase tracking-wider">Agregar Mesa</p>
+                <p class="text-[10px] text-stone-500 mt-1">Registrar nueva ubicación en el mapa lógico</p>
+            </div>
+        </section>
+
+    </main>
+    <footer class="w-full text-center py-4 text-[11px] text-stone-600 border-t border-stone-900 bg-[#0c0402]/80">
+        &copy; 2026 Restaurante La Estación - Panel de Control de Mesas.
+    </footer>
+</body>
+</html>
