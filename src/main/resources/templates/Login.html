@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Estación - Iniciar Sesión</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Fondo general simulando el branding de la imagen */
+      body {
+        background: radial-gradient(circle, #2d1710 0%, #150905 100%);
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen flex items-center justify-center p-4 antialiased selection:bg-amber-500 selection:text-white"
+  >
+    <main
+      class="w-full max-w-md bg-[#3d2a21]/80 backdrop-blur-md border border-[#543d32] rounded-[2.5rem] px-8 py-10 shadow-2xl text-center"
+    >
+      <header class="mb-8">
+        <h1
+          class="text-4xl font-serif font-bold tracking-widest text-[#f5be38] uppercase drop-shadow-md"
+        >
+          La Estación
+        </h1>
+        <p
+          class="text-xs tracking-[0.3em] text-[#d4af77] uppercase mt-1 font-medium"
+        >
+          Huaral
+        </p>
+        <p class="text-sm text-stone-300/90 mt-6 font-light balance">
+          Bienvenido de nuevo! Por favor, inicie sesión para continuar
+        </p>
+      </header>
+
+      <form id="loginForm" class="space-y-5 text-left" novalidate>
+        <div class="relative group">
+          <label
+            for="email"
+            class="block text-xs font-semibold text-[#f5be38] mb-1.5 ml-1 tracking-wide"
+          >
+            Correo Electrónico
+          </label>
+          <div class="relative">
+            <span
+              class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-stone-400 group-focus-within:text-[#f5be38] transition-colors"
+            >
+              <i class="fa-regular fa-envelope text-lg"></i>
+            </span>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Introduce tu correo electrónico"
+              class="w-full bg-[#2a1a14]/90 text-stone-100 placeholder-stone-500 text-sm rounded-xl pl-11 pr-4 py-3.5 border border-[#f5be38]/40 focus:border-[#f5be38] focus:ring-2 focus:ring-[#f5be38]/20 outline-none transition-all"
+              required
+            />
+          </div>
+          <span
+            id="emailError"
+            class="text-xs text-red-400 mt-1 hidden block px-1"
+          ></span>
+        </div>
+
+        <div class="relative group">
+          <div class="flex justify-between items-center mb-1.5 ml-1">
+            <label
+              for="password"
+              class="text-xs font-semibold text-[#f5be38] tracking-wide"
+            >
+              Contraseña
+            </label>
+            <a
+              href="#"
+              class="text-xs text-stone-400 hover:text-[#f5be38] transition-colors"
+            >
+              ¿Olvidaste tu contraseña?
+            </a>
+          </div>
+          <div class="relative">
+            <span
+              class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-stone-400 group-focus-within:text-[#f5be38] transition-colors"
+            >
+              <i class="fa-solid fa-lock text-base"></i>
+            </span>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Introduce tu contraseña"
+              class="w-full bg-[#4a352b]/60 text-stone-100 placeholder-stone-400 text-sm rounded-xl pl-11 pr-11 py-3.5 border border-stone-500/30 focus:border-[#f5be38] focus:ring-2 focus:ring-[#f5be38]/20 outline-none transition-all"
+              required
+            />
+            <button
+              type="button"
+              id="togglePassword"
+              class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-stone-400 hover:text-stone-200 transition-colors cursor-pointer"
+              aria-label="Mostrar u ocultar contraseña"
+            >
+              <i class="fa-regular fa-eye text-base" id="eyeIcon"></i>
+            </button>
+          </div>
+          <span
+            id="passwordError"
+            class="text-xs text-red-400 mt-1 hidden block px-1"
+          ></span>
+        </div>
+
+        <div class="flex items-center pt-1">
+          <input
+            type="checkbox"
+            id="rememberMe"
+            name="rememberMe"
+            class="w-4 h-4 rounded border-stone-500/40 text-[#e07a48] bg-[#2a1a14] focus:ring-[#e07a48]/30 accent-[#e07a48] cursor-pointer"
+          />
+          <label
+            for="rememberMe"
+            class="ml-2.5 text-xs font-medium text-stone-300 cursor-pointer select-none"
+          >
+            Recordarme
+          </label>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-[#e07a48] hover:bg-[#cf6937] active:scale-[0.99] text-white font-medium text-sm rounded-xl py-3.5 shadow-lg shadow-[#e07a48]/20 transition-all cursor-pointer flex items-center justify-center gap-2"
+        >
+          <span id="submitText">Iniciar Sesión</span>
+          <i
+            id="loadingSpinner"
+            class="fa-solid fa-circle-notch animate-spin hidden"
+          ></i>
+        </button>
+      </form>
+
+      <div class="relative flex py-6 items-center">
+        <div class="flex-grow border-t border-stone-600/40"></div>
+        <span
+          class="flex-shrink mx-4 text-xs text-stone-400 font-light tracking-wide"
+          >O continuar como</span
+        >
+        <div class="flex-grow border-t border-stone-600/40"></div>
+      </div>
+
+      <button
+        id="btnGuest"
+        class="w-full bg-[#3d271d]/60 hover:bg-[#4d3225] border border-stone-600/40 text-stone-200 font-semibold text-sm rounded-xl py-3.5 transition-colors cursor-pointer flex items-center justify-center gap-2"
+      >
+        Continuar como Invitado
+        <i class="fa-solid fa-arrow-right text-xs"></i>
+      </button>
+
+      <div class="flex justify-center gap-4 mt-6">
+        <button
+          id="btnGoogle"
+          class="w-10 h-10 rounded-full bg-[#4e3a31] hover:bg-[#5e473d] text-white flex items-center justify-center transition-all shadow-md active:scale-95 cursor-pointer"
+          title="Continuar con Google"
+        >
+          <i class="fa-brands fa-google text-base"></i>
+        </button>
+        <button
+          id="btnFacebook"
+          class="w-10 h-10 rounded-full bg-[#4e3a31] hover:bg-[#5e473d] text-white flex items-center justify-center transition-all shadow-md active:scale-95 cursor-pointer"
+          title="Continuar con Facebook"
+        >
+          <i class="fa-brands fa-facebook-f text-base"></i>
+        </button>
+      </div>
+
+      <footer class="mt-8 text-xs text-stone-400 font-light">
+        ¿No tienes una cuenta?
+        <a
+          href="./Register.html"
+          class="text-[#f5be38] font-semibold hover:underline ml-1"
+          >Regístrate →</a
+        >
+      </footer>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const loginForm = document.getElementById("loginForm");
+        const passwordInput = document.getElementById("password");
+        const togglePasswordBtn = document.getElementById("togglePassword");
+        const eyeIcon = document.getElementById("eyeIcon");
+        const submitText = document.getElementById("submitText");
+        const loadingSpinner = document.getElementById("loadingSpinner");
+
+        // 1. Mostrar/Ocultar Contraseña
+        togglePasswordBtn.addEventListener("click", () => {
+          const isPassword = passwordInput.getAttribute("type") === "password";
+          passwordInput.setAttribute("type", isPassword ? "text" : "password");
+
+          // Cambia el icono de ojo abierto a cerrado
+          eyeIcon.classList.toggle("fa-eye");
+          eyeIcon.classList.toggle("fa-eye-slash");
+        });
+
+        // 2. Manejo del Submit e Integración con Backend
+        loginForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          // Resetear errores anteriores
+          resetErrors();
+
+          // Capturar datos del formulario estructurados
+          const formData = new FormData(loginForm);
+          const data = Object.fromEntries(formData.entries());
+
+          // Validación básica del lado del cliente antes de enviar
+          let hasErrors = false;
+          if (!data.email) {
+            showError("emailError", "El correo electrónico es requerido.");
+            hasErrors = true;
+          }
+          if (!data.password) {
+            showError("passwordError", "La contraseña es requerida.");
+            hasErrors = true;
+          }
+
+          if (hasErrors) return;
+
+          // Estado de Carga (UI Feedback)
+          setLoading(true);
+
+          try {
+            const response = await fetch("http://localhost:8080/auth/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                username: data.email,
+                password: data.password,
+              }),
+            });
+
+            if (!response.ok) {
+              // Leemos el mensaje de error del backend en lugar de colapsar
+              throw new Error(
+                "Credenciales incorrectas o usuario no encontrado.",
+              );
+            }
+
+            const result = await response.json();
+
+            // 1. Guardamos el token
+            localStorage.setItem("token", result.token);
+
+            // 2. Abrimos el token para ver qué hay dentro
+            const payload = decodificarJwt(result.token);
+            console.log("Información oculta en tu Token:", payload);
+
+            // 3. Extraemos el rol (Spring Security suele guardarlo en un arreglo 'roles' o 'authorities')
+            let rolUsuario = "";
+            if (payload && payload.roles) {
+              // Toma el primer rol de la lista
+              rolUsuario = payload.roles[0].authority || payload.roles[0] || "";
+            } else if (payload && payload.authorities) {
+              rolUsuario =
+                payload.authorities[0].authority ||
+                payload.authorities[0] ||
+                "";
+            }
+
+            // 4. LÓGICA DE EJECUCIÓN (El semáforo)
+            if (rolUsuario === "ROLE_ADMIN" || rolUsuario === "ADMIN") {
+              // Si es administrador, al panel de control
+              window.location.href = "./Admin_Usuario.html"; // <-- Cambia esto si tu archivo se llama diferente
+            } else if (rolUsuario === "ROLE_MOZO") {
+              // Si tienes otros roles, puedes agregarlos aquí
+              window.location.href = "./pedidos-mozo.html";
+            } else {
+              // Si es Cliente (ROLE_USER) o cualquier otro, a la página principal
+              window.location.href = "./index.html";
+            }
+          } catch (error) {
+            console.error("Login Error:", error);
+            alert(
+              error.message || "Hubo un problema al conectar con el servidor.",
+            );
+          } finally {
+            setLoading(false);
+          }
+        });
+
+        // Funciones Auxiliares para UI
+        function showError(elementId, message) {
+          const errorSpan = document.getElementById(elementId);
+          errorSpan.textContent = message;
+          errorSpan.classList.remove("hidden");
+        }
+
+        function resetErrors() {
+          document.getElementById("emailError").classList.add("hidden");
+          document.getElementById("passwordError").classList.add("hidden");
+        }
+
+        function setLoading(isLoading) {
+          if (isLoading) {
+            submitText.textContent = "Verificando...";
+            loadingSpinner.classList.remove("hidden");
+            loginForm
+              .querySelectorAll("input, button")
+              .forEach((el) => (el.disabled = true));
+          } else {
+            submitText.textContent = "Iniciar Sesión";
+            loadingSpinner.classList.add("hidden");
+            loginForm
+              .querySelectorAll("input, button")
+              .forEach((el) => (el.disabled = false));
+          }
+        }
+
+        // Manejadores básicos para el resto de botones de interacción
+        document.getElementById("btnGuest").addEventListener("click", () => {
+          console.log("Navegando como invitado...");
+        });
+        document.getElementById("btnGoogle").addEventListener("click", () => {
+          console.log("Iniciando OAuth Google...");
+        });
+        document.getElementById("btnFacebook").addEventListener("click", () => {
+          console.log("Iniciando OAuth Facebook...");
+        });
+      });
+      function decodificarJwt(token) {
+        try {
+          const base64Url = token.split(".")[1];
+          const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+          const jsonPayload = decodeURIComponent(
+            atob(base64)
+              .split("")
+              .map(function (c) {
+                return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+              })
+              .join(""),
+          );
+          return JSON.parse(jsonPayload);
+        } catch (error) {
+          return null;
+        }
+      }
+    </script>
+  </body>
+</html>
