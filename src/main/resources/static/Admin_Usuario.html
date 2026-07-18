@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,46 +13,73 @@
         body {
             background: radial-gradient(circle at center, #1c0e0a 0%, #0c0402 100%);
         }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
-<body class="min-h-screen font-sans antialiased flex flex-col justify-between selection:bg-amber-500 selection:text-white text-stone-200">
+
+<body
+    class="min-h-screen font-sans antialiased flex flex-col justify-between selection:bg-amber-500 selection:text-white text-stone-200">
 
     <!-- =========================================================================
          NAVBAR ADMIN
          ========================================================================= -->
-   <nav class="w-full bg-[#fdfbf7] border-b border-stone-200 shadow-sm px-4 md:px-8 py-3 flex items-center justify-between text-stone-800 z-40">
+    <nav
+        class="w-full bg-[#fdfbf7] border-b border-stone-200 shadow-sm px-4 md:px-8 py-3 flex items-center justify-between text-stone-800 z-40">
         <div class="flex items-center gap-2.5 cursor-pointer">
             <div class="text-[#cf6937] text-2xl">
                 <i class="fa-solid fa-screwdriver-wrench"></i>
             </div>
             <div class="leading-none">
                 <div class="flex items-center gap-1.5">
-                    <span class="block font-serif font-black tracking-widest text-[#cf6937] text-base md:text-lg uppercase">Estación</span>
-                    <span class="bg-[#cf6937] text-white font-mono text-[9px] font-bold px-1 py-0.5 rounded-sm">ADMIN</span>
+                    <span
+                        class="block font-serif font-black tracking-widest text-[#cf6937] text-base md:text-lg uppercase">Estación</span>
+                    <span
+                        class="bg-[#cf6937] text-white font-mono text-[9px] font-bold px-1 py-0.5 rounded-sm">ADMIN</span>
                 </div>
                 <span class="block text-[8px] tracking-[0.4em] text-stone-500 uppercase font-medium">Huaral</span>
             </div>
         </div>
 
         <div class="flex items-center gap-2 sm:gap-4 md:gap-6">
-               <a href="Admin_inicio.html" class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center group text-stone-600 hover:text-[#cf6937]">
+            <a href="Admin_inicio.html"
+                class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center group text-stone-600 hover:text-[#cf6937]">
                 <i class="fa-solid fa-users-gear text-xs"></i>
                 <span class="hidden sm:inline">Inicio</span>
             </a>
-            <a href="Admin_Usuario.html" class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 group text-[#cf6937]">
+            <a href="Admin_Usuario.html"
+                class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 group text-[#cf6937]">
                 <i class="fa-solid fa-users-gear text-xs"></i>
                 <span class="hidden sm:inline">Usuario</span>
-                <div class="active-indicator absolute bottom-[-14px] left-0 w-full h-[3px] bg-[#cf6937] rounded-full"></div>
+                <div class="active-indicator absolute bottom-[-14px] left-0 w-full h-[3px] bg-[#cf6937] rounded-full">
+                </div>
             </a>
-            <a href="Admin_pedidos.html" class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]">
+            <a href="Admin_pedidos.html"
+                class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]">
                 <i class="fa-regular fa-clipboard text-xs"></i>
                 <span class="hidden sm:inline">Pedidos</span>
             </a>
-            <a href="Admin_productos.html" class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]">
+            <a href="Admin_productos.html"
+                class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]">
                 <i class="fa-solid fa-bowl-food text-xs"></i>
                 <span class="hidden sm:inline">Producto</span>
+            </a>
+            <a href="Admin_mesas.html"
+                class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]">
+                <i class="fa-regular fa-clipboard text-xs"></i>
+                <span class="hidden sm:inline">Mesas</span>
+            </a>
+            <a href="Admin_Rendimiento.html"
+                class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]">
+                <i class="fa-regular fa-clipboard text-xs"></i>
+                <span class="hidden sm:inline">Rendimiento</span>
             </a>
         </div>
 
@@ -60,7 +88,8 @@
                 <span class="block text-xs font-bold text-stone-800">EDU</span>
                 <span class="text-[9px] text-stone-500">Administrador</span>
             </div>
-            <button id="navBtnLogout" class="w-9 h-9 rounded-full border border-stone-200 bg-white hover:bg-red-50 text-stone-500 hover:text-red-600 flex items-center justify-center transition-colors shadow-xs cursor-pointer">
+            <button id="navBtnLogout"
+                class="w-9 h-9 rounded-full border border-stone-200 bg-white hover:bg-red-50 text-stone-500 hover:text-red-600 flex items-center justify-center transition-colors shadow-xs cursor-pointer">
                 <i class="fa-solid fa-power-off text-sm"></i>
             </button>
         </div>
@@ -70,21 +99,26 @@
          CONTENIDO PRINCIPAL: TABLA DE USUARIOS
          ========================================================================= -->
     <main class="max-w-7xl w-full mx-auto px-4 py-8 md:px-8 flex-grow space-y-6">
-        
+
         <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-stone-800 pb-4">
             <div>
-                <h1 class="text-2xl font-serif font-bold tracking-wider text-white uppercase">Administración de Usuarios</h1>
-                <p class="text-xs text-stone-400 mt-1">Esquema físico mapeado a la tabla relacional <code class="bg-[#2a1a14] px-1 py-0.5 rounded text-[#f5be38] font-mono">usuario</code></p>
+                <h1 class="text-2xl font-serif font-bold tracking-wider text-white uppercase">Administración de Usuarios
+                </h1>
+                <p class="text-xs text-stone-400 mt-1">Esquema físico mapeado a la tabla relacional <code
+                        class="bg-[#2a1a14] px-1 py-0.5 rounded text-[#f5be38] font-mono">usuario</code></p>
             </div>
-            <button id="btnOpenAddModal" class="bg-[#e07a48] hover:bg-[#cf6937] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer self-start sm:self-auto">
+            <button id="btnOpenAddModal"
+                class="bg-[#e07a48] hover:bg-[#cf6937] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer self-start sm:self-auto">
                 <i class="fa-solid fa-user-plus"></i> NUEVO USUARIO
             </button>
         </div>
 
-        <div class="bg-[#3d2a21]/60 border border-[#543d32] rounded-[1.8rem] overflow-hidden shadow-2xl overflow-x-auto no-scrollbar">
+        <div
+            class="bg-[#3d2a21]/60 border border-[#543d32] rounded-[1.8rem] overflow-hidden shadow-2xl overflow-x-auto no-scrollbar">
             <table class="w-full text-left border-collapse text-xs whitespace-nowrap">
                 <thead>
-                    <tr class="bg-[#2a1a14]/80 border-b border-[#543d32]/60 text-[#d4af77] font-semibold uppercase tracking-wider text-[10px]">
+                    <tr
+                        class="bg-[#2a1a14]/80 border-b border-[#543d32]/60 text-[#d4af77] font-semibold uppercase tracking-wider text-[10px]">
                         <th class="p-4 font-mono">id (BIGINT)</th>
                         <th class="p-4">usuario (VARCHAR)</th>
                         <th class="p-4">nombre_completo (VARCHAR)</th>
@@ -102,58 +136,170 @@
                         <td class="p-4 font-medium text-stone-200" data-field="nombre_completo">Edu Luis Perez</td>
                         <td class="p-4 font-mono text-stone-300" data-field="email">eduben10@estacionhuaral.com</td>
                         <td class="p-4 font-mono text-stone-400" data-field="telefono">951654321</td>
-                        <td class="p-4 text-stone-400 max-w-xs truncate" data-field="direccion">Av. Timoteo y Barney</td>
+                        <td class="p-4 text-stone-400 max-w-xs truncate" data-field="direccion">Av. Timoteo y Barney
+                        </td>
                         <td class="p-4 font-mono text-stone-500">2026-06-15 22:11:45</td>
                         <td class="p-4 text-center space-x-3">
-                            <button class="text-stone-400 hover:text-[#f5be38] transition-colors cursor-pointer btn-edit" title="Modificar datos"><i class="fa-regular fa-pen-to-square"></i></button>
-                            <button class="text-stone-400 hover:text-red-400 transition-colors cursor-pointer btn-delete" title="Eliminar registro (DELETE)"><i class="fa-regular fa-trash-can"></i></button>
+                            <button
+                                class="text-stone-400 hover:text-[#f5be38] transition-colors cursor-pointer btn-edit"
+                                title="Modificar datos"><i class="fa-regular fa-pen-to-square"></i></button>
+                            <button
+                                class="text-stone-400 hover:text-red-400 transition-colors cursor-pointer btn-delete"
+                                title="Eliminar registro (DELETE)"><i class="fa-regular fa-trash-can"></i></button>
                         </td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <!-- Vista roles-->
+        <!-- =========================================================================
+     BLOQUE SECCIÓN: MAESTRO DE ROLES (CONTROL DE ACCESO)
+     ========================================================================= -->
+        <div class="space-y-6 w-full">
+            <!-- Encabezado del Módulo de Roles -->
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-stone-800 pb-4">
+                <div>
+                    <h2 class="text-2xl font-serif font-bold tracking-wider text-white uppercase">Gestión de Roles</h2>
+                    <p class="text-xs text-stone-400 mt-1">Definición de perfiles mapeada a la tabla relacional <code
+                            class="bg-[#2a1a14] px-1 py-0.5 rounded text-[#f5be38] font-mono">rol</code></p>
+                </div>
+                <button id="btnNuevoRol"
+                    class="bg-[#e07a48] hover:bg-[#cf6937] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer self-start sm:self-auto">
+                    <i class="fa-solid fa-user-shield"></i> NUEVO ROL
+                </button>
+            </div>
+
+            <!-- Tabla Principal de Roles (Formato Expandido) -->
+            <div
+                class="bg-[#3d2a21]/60 border border-[#543d32] rounded-[1.8rem] overflow-hidden shadow-2xl overflow-x-auto lg:overflow-x-visible no-scrollbar">
+                <table class="w-full text-left border-collapse text-xs table-auto lg:table-fixed">
+                    <thead>
+                        <tr
+                            class="bg-[#2a1a14]/80 border-b border-[#543d32]/60 text-[#d4af77] font-semibold uppercase tracking-wider text-[10px]">
+                            <th class="p-4 font-mono lg:w-32">id (BIGINT)</th>
+                            <th class="p-4 lg:w-auto">nombre (VARCHAR)</th>
+                            <th class="p-4 text-center lg:w-40">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBodyRoles" class="divide-y divide-stone-800/40 text-stone-300">
+
+                        <!-- Fila 1 -->
+                        <tr class="hover:bg-[#2a1a14]/30 transition-colors" data-id="1" data-nombre="ADMINISTRADOR">
+                            <td class="p-4 font-mono text-stone-500">1</td>
+                            <td class="p-4 font-mono font-semibold text-white tracking-wider">ADMINISTRADOR</td>
+                            <td class="p-4 text-center space-x-3">
+                                <button
+                                    class="text-stone-400 hover:text-[#f5be38] transition-colors cursor-pointer btn-edit-rol"
+                                    title="Modificar Rol"><i class="fa-regular fa-pen-to-square text-sm"></i></button>
+                                <button
+                                    class="text-stone-400 hover:text-red-400 transition-colors cursor-pointer btn-delete-rol"
+                                    title="Eliminar Rol (DELETE)"><i
+                                        class="fa-regular fa-trash-can text-sm"></i></button>
+                            </td>
+                        </tr>
+
+                        <!-- Fila 2 -->
+                        <tr class="hover:bg-[#2a1a14]/30 transition-colors" data-id="2" data-nombre="COCINERO">
+                            <td class="p-4 font-mono text-stone-500">2</td>
+                            <td class="p-4 font-mono font-semibold text-stone-300 tracking-wider">COCINERO</td>
+                            <td class="p-4 text-center space-x-3">
+                                <button
+                                    class="text-stone-400 hover:text-[#f5be38] transition-colors cursor-pointer btn-edit-rol"
+                                    title="Modificar Rol"><i class="fa-regular fa-pen-to-square text-sm"></i></button>
+                                <button
+                                    class="text-stone-400 hover:text-red-400 transition-colors cursor-pointer btn-delete-rol"
+                                    title="Eliminar Rol (DELETE)"><i
+                                        class="fa-regular fa-trash-can text-sm"></i></button>
+                            </td>
+                        </tr>
+
+                        <!-- Fila 3 -->
+                        <tr class="hover:bg-[#2a1a14]/30 transition-colors" data-id="3" data-nombre="MOZO">
+                            <td class="p-4 font-mono text-stone-500">3</td>
+                            <td class="p-4 font-mono font-semibold text-stone-300 tracking-wider">MOZO</td>
+                            <td class="p-4 text-center space-x-3">
+                                <button
+                                    class="text-stone-400 hover:text-[#f5be38] transition-colors cursor-pointer btn-edit-rol"
+                                    title="Modificar Rol"><i class="fa-regular fa-pen-to-square text-sm"></i></button>
+                                <button
+                                    class="text-stone-400 hover:text-red-400 transition-colors cursor-pointer btn-delete-rol"
+                                    title="Eliminar Rol (DELETE)"><i
+                                        class="fa-regular fa-trash-can text-sm"></i></button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
     <!-- =========================================================================
          MODAL 1: FORMULARIO AGREGAR USUARIO (POST)
          ========================================================================= -->
-    <div id="addModal" class="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-[#3d2a21] border border-[#543d32] w-full max-w-md rounded-[2rem] p-6 shadow-2xl space-y-4 text-xs animate-in fade-in zoom-in-95 duration-150">
+    <div id="addModal"
+        class="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+        <div
+            class="bg-[#3d2a21] border border-[#543d32] w-full max-w-md rounded-[2rem] p-6 shadow-2xl space-y-4 text-xs animate-in fade-in zoom-in-95 duration-150">
             <div class="flex justify-between items-center border-b border-stone-800 pb-3">
-                <h3 class="font-serif font-bold text-[#f5be38] text-base uppercase tracking-wide">Registrar Nuevo Usuario</h3>
-                <button type="button" class="close-modal-btn text-stone-400 hover:text-white transition-colors cursor-pointer text-base"><i class="fa-solid fa-xmark"></i></button>
+                <h3 class="font-serif font-bold text-[#f5be38] text-base uppercase tracking-wide">Registrar Nuevo
+                    Usuario</h3>
+                <button type="button"
+                    class="close-modal-btn text-stone-400 hover:text-white transition-colors cursor-pointer text-base"><i
+                        class="fa-solid fa-xmark"></i></button>
             </div>
-            
+
             <form id="formAddUsuario" class="space-y-3.5">
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Usuario (VARCHAR)</label>
-                        <input type="text" name="usuario" placeholder="Ej: user99" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]" required>
+                        <label
+                            class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Usuario
+                            (VARCHAR)</label>
+                        <input type="text" name="usuario" placeholder="Ej: user99"
+                            class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]"
+                            required>
                     </div>
                     <div>
-                        <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Contraseña (VARCHAR)</label>
-                        <input type="password" name="contraseña" placeholder="********" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]" required>
+                        <label
+                            class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Contraseña
+                            (VARCHAR)</label>
+                        <input type="password" name="contraseña" placeholder="********"
+                            class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]"
+                            required>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Nombre Completo (VARCHAR)</label>
-                    <input type="text" name="nombre_completo" placeholder="Ej: Juan Perez" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]" required>
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Nombre
+                        Completo (VARCHAR)</label>
+                    <input type="text" name="nombre_completo" placeholder="Ej: Juan Perez"
+                        class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]"
+                        required>
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Email (VARCHAR)</label>
-                    <input type="email" name="email" placeholder="juan@estacionhuaral.com" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]" required>
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Email
+                        (VARCHAR)</label>
+                    <input type="email" name="email" placeholder="juan@estacionhuaral.com"
+                        class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]"
+                        required>
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Teléfono (VARCHAR)</label>
-                    <input type="text" name="telefono" placeholder="Ej: 999888777" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]">
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Teléfono
+                        (VARCHAR)</label>
+                    <input type="text" name="telefono" placeholder="Ej: 999888777"
+                        class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]">
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Dirección (VARCHAR)</label>
-                    <input type="text" name="direccion" placeholder="Ej: Calle Lima 456" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]">
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Dirección
+                        (VARCHAR)</label>
+                    <input type="text" name="direccion" placeholder="Ej: Calle Lima 456"
+                        class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]">
                 </div>
                 <div class="pt-3 border-t border-stone-800 flex justify-end gap-2 text-xs">
-                    <button type="button" class="close-modal-btn px-4 py-2 rounded-xl border border-stone-700 text-stone-400 hover:text-stone-200 transition-colors cursor-pointer">Cancelar</button>
-                    <button type="submit" class="px-5 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold transition-colors cursor-pointer shadow-md">INSERTAR</button>
+                    <button type="button"
+                        class="close-modal-btn px-4 py-2 rounded-xl border border-stone-700 text-stone-400 hover:text-stone-200 transition-colors cursor-pointer">Cancelar</button>
+                    <button type="submit"
+                        class="px-5 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold transition-colors cursor-pointer shadow-md">INSERTAR</button>
                 </div>
             </form>
         </div>
@@ -162,49 +308,75 @@
     <!-- =========================================================================
          MODAL 2: FORMULARIO MODIFICAR USUARIO (PUT / PATCH)
          ========================================================================= -->
-    <div id="editModal" class="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-[#3d2a21] border border-[#543d32] w-full max-w-md rounded-[2rem] p-6 shadow-2xl space-y-4 text-xs animate-in fade-in zoom-in-95 duration-150">
+    <div id="editModal"
+        class="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+        <div
+            class="bg-[#3d2a21] border border-[#543d32] w-full max-w-md rounded-[2rem] p-6 shadow-2xl space-y-4 text-xs animate-in fade-in zoom-in-95 duration-150">
             <div class="flex justify-between items-center border-b border-stone-800 pb-3">
                 <div class="leading-none">
-                    <h3 class="font-serif font-bold text-[#f5be38] text-base uppercase tracking-wide">Modificar Usuario</h3>
-                    <p class="text-[9px] text-stone-500 font-mono mt-0.5">Id_usuario (BIGINT): <span id="editDisplayId" class="text-stone-400">0</span></p>
+                    <h3 class="font-serif font-bold text-[#f5be38] text-base uppercase tracking-wide">Modificar Usuario
+                    </h3>
+                    <p class="text-[9px] text-stone-500 font-mono mt-0.5">Id_usuario (BIGINT): <span id="editDisplayId"
+                            class="text-stone-400">0</span></p>
                 </div>
-                <button type="button" class="close-modal-btn text-stone-400 hover:text-white transition-colors cursor-pointer text-base"><i class="fa-solid fa-xmark"></i></button>
+                <button type="button"
+                    class="close-modal-btn text-stone-400 hover:text-white transition-colors cursor-pointer text-base"><i
+                        class="fa-solid fa-xmark"></i></button>
             </div>
-            
+
             <form id="formEditUsuario" class="space-y-3.5">
                 <!-- ID oculto para enviar en el Request Body o endpoint -->
                 <input type="hidden" name="id" id="editInputId">
-                
+
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Usuario (VARCHAR)</label>
-                        <input type="text" name="usuario" id="editUsuario" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]" required>
+                        <label
+                            class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Usuario
+                            (VARCHAR)</label>
+                        <input type="text" name="usuario" id="editUsuario"
+                            class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]"
+                            required>
                     </div>
                     <div>
-                        <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Contraseña (Opcional)</label>
-                        <input type="password" name="contraseña" placeholder="Dejar en blanco para mantener" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]">
+                        <label
+                            class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Contraseña
+                            (Opcional)</label>
+                        <input type="password" name="contraseña" placeholder="Dejar en blanco para mantener"
+                            class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Nombre Completo (VARCHAR)</label>
-                    <input type="text" name="nombre_completo" id="editNombre" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]" required>
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Nombre
+                        Completo (VARCHAR)</label>
+                    <input type="text" name="nombre_completo" id="editNombre"
+                        class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]"
+                        required>
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Email (VARCHAR)</label>
-                    <input type="email" name="email" id="editEmail" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]" required>
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Email
+                        (VARCHAR)</label>
+                    <input type="email" name="email" id="editEmail"
+                        class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]"
+                        required>
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Teléfono (VARCHAR)</label>
-                    <input type="text" name="telefono" id="editTelefono" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]">
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Teléfono
+                        (VARCHAR)</label>
+                    <input type="text" name="telefono" id="editTelefono"
+                        class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]">
                 </div>
                 <div>
-                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Dirección (VARCHAR)</label>
-                    <input type="text" name="direccion" id="editDireccion" class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]">
+                    <label class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]">Dirección
+                        (VARCHAR)</label>
+                    <input type="text" name="direccion" id="editDireccion"
+                        class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-2.5 outline-none focus:border-[#f5be38]">
                 </div>
                 <div class="pt-3 border-t border-stone-800 flex justify-end gap-2 text-xs">
-                    <button type="button" class="close-modal-btn px-4 py-2 rounded-xl border border-stone-700 text-stone-400 hover:text-stone-200 transition-colors cursor-pointer">Cancelar</button>
-                    <button type="submit" class="px-5 py-2 rounded-xl bg-[#e07a48] hover:bg-[#cf6937] text-white font-bold transition-colors cursor-pointer shadow-md">GUARDAR CAMBIOS</button>
+                    <button type="button"
+                        class="close-modal-btn px-4 py-2 rounded-xl border border-stone-700 text-stone-400 hover:text-stone-200 transition-colors cursor-pointer">Cancelar</button>
+                    <button type="submit"
+                        class="px-5 py-2 rounded-xl bg-[#e07a48] hover:bg-[#cf6937] text-white font-bold transition-colors cursor-pointer shadow-md">GUARDAR
+                        CAMBIOS</button>
                 </div>
             </form>
         </div>
@@ -218,7 +390,7 @@
          LOGICA JAVASCRIPT DE MANEJO DE MODALES E INTEGRACIÓN BACKEND
          ========================================================================= -->
     <script>
-        (function() {
+        (function () {
             // Referencias DOM Modales
             const addModal = document.getElementById('addModal');
             const editModal = document.getElementById('editModal');
@@ -242,9 +414,9 @@
             document.getElementById('formAddUsuario').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const data = Object.fromEntries(new FormData(e.target).entries());
-                
+
                 console.log("Petición Backend -> POST /api/usuarios | Payload relacional:", data);
-                
+
                 /* // Código de conexión real a tu endpoint backend:
                 const res = await fetch('/api/usuarios', {
                     method: 'POST',
@@ -298,7 +470,7 @@
                 const userId = data.id;
 
                 console.log(`Petición Backend -> PUT /api/usuarios/${userId} | Payload:`, data);
-                
+
                 /* // Código de conexión real a tu endpoint backend:
                 const res = await fetch(`/api/usuarios/${userId}`, {
                     method: 'PUT',
@@ -319,4 +491,5 @@
         })();
     </script>
 </body>
+
 </html>

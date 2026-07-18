@@ -53,6 +53,15 @@
                 <span class="hidden sm:inline">Producto</span>
                  <div class="active-indicator absolute bottom-[-14px] left-0 w-full h-[3px] bg-[#cf6937] rounded-full"></div>
             </a>
+                        <a href="Admin_mesas.html"
+                class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]">
+                <i class="fa-regular fa-clipboard text-xs"></i>
+                <span class="hidden sm:inline">Mesas</span>
+            </a>
+            <a href="Admin_Rendimiento.html"
+                class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]">
+                <i class="fa-regular fa-clipboard text-xs"></i>
+                <span class="hidden sm:inline">Rendimiento</span>
             </a>
         </div>
 
@@ -134,6 +143,90 @@
                 </tbody>
             </table>
         </div>
+
+    <!--Seccion de Lotes: -->
+    <div class="space-y-6 w-full">
+    <!-- Encabezado del Módulo de Lotes -->
+    <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-stone-800 pb-4">
+        <div>
+            <h2 class="text-2xl font-serif font-bold tracking-wider text-white uppercase">Control de Lotes e Insumos</h2>
+            <p class="text-xs text-stone-400 mt-1">Monitoreo físico mapeado a la tabla relacional <code class="bg-[#2a1a14] px-1 py-0.5 rounded text-[#f5be38] font-mono">lote</code></p>
+        </div>
+        <button id="btnNuevoLote" class="bg-[#e07a48] hover:bg-[#cf6937] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer self-start sm:self-auto">
+            <i class="fa-solid fa-boxes-stacked"></i> REGISTRAR LOTE
+        </button>
+    </div>
+
+    <!-- Tabla Principal de Lotes en Formato Expandido sin Arrastre Obligatorio -->
+    <div class="bg-[#3d2a21]/60 border border-[#543d32] rounded-[1.8rem] overflow-hidden shadow-2xl overflow-x-auto lg:overflow-x-visible no-scrollbar">
+        <table class="w-full text-left border-collapse text-xs table-auto lg:table-fixed">
+            <thead>
+                <tr class="bg-[#2a1a14]/80 border-b border-[#543d32]/60 text-[#d4af77] font-semibold uppercase tracking-wider text-[10px]">
+                    <th class="p-4 font-mono lg:w-20">id</th>
+                    <th class="p-4 font-mono lg:w-36">codlote</th>
+                    <th class="p-4 font-mono lg:w-24">idinsumo</th>
+                    <th class="p-4 lg:w-32">cantidadrecibido</th>
+                    <th class="p-4 lg:w-28">cantidadactual</th>
+                    <th class="p-4 lg:w-44">fechafabricacion</th>
+                    <th class="p-4 lg:w-44">fecha_vencimiento</th>
+                    <th class="p-4 text-center lg:w-32">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tableBodyLotes" class="divide-y divide-stone-800/40 text-stone-300">
+                
+                <!-- Fila 1 de Ejemplo -->
+                <tr class="hover:bg-[#2a1a14]/30 transition-colors" 
+                    data-id="1" 
+                    data-codlote="LOT-CARNE-2026-01" 
+                    data-idinsumo="802" 
+                    data-cantidadrecibido="150" 
+                    data-cantidadactual="45"
+                    data-fechafabricacion="2026-07-10 06:00:00"
+                    data-fechavencimiento="2026-07-24 23:59:59">
+                    <td class="p-4 font-mono text-stone-500">1</td>
+                    <td class="p-4 font-mono font-semibold text-white">LOT-CARNE-2026-01</td>
+                    <td class="p-4 font-mono text-stone-400">802 (Lomo Fino)</td>
+                    <td class="p-4 font-mono text-stone-400">150 kg</td>
+                    <td class="p-4 font-mono">
+                        <span class="text-[#f5be38] font-bold">45 kg</span> 
+                        <!-- Alerta visual si queda poco stock del lote -->
+                        <span class="ml-1.5 text-[9px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-1.5 py-0.2 rounded-sm uppercase font-bold">Bajo</span>
+                    </td>
+                    <td class="p-4 font-mono text-stone-400">2026-07-10 06:00:00</td>
+                    <td class="p-4 font-mono text-red-400 font-medium">2026-07-24 23:59:59</td>
+                    <td class="p-4 text-center space-x-3">
+                        <button class="text-stone-400 hover:text-[#f5be38] transition-colors cursor-pointer btn-edit-lote" title="Modificar Lote"><i class="fa-regular fa-pen-to-square text-sm"></i></button>
+                        <button class="text-stone-400 hover:text-red-400 transition-colors cursor-pointer btn-delete-lote" title="Dar de baja (DELETE)"><i class="fa-regular fa-trash-can text-sm"></i></button>
+                    </td>
+                </tr>
+
+                <!-- Fila 2 de Ejemplo (Lote óptimo) -->
+                <tr class="hover:bg-[#2a1a14]/30 transition-colors" 
+                    data-id="2" 
+                    data-codlote="LOT-MAIZ-2026-44" 
+                    data-idinsumo="809" 
+                    data-cantidadrecibido="500" 
+                    data-cantidadactual="500"
+                    data-fechafabricacion="2026-07-15 08:30:00"
+                    data-fechavencimiento="2026-12-15 18:00:00">
+                    <td class="p-4 font-mono text-stone-500">2</td>
+                    <td class="p-4 font-mono font-semibold text-white">LOT-MAIZ-2026-44</td>
+                    <td class="p-4 font-mono text-stone-400">809 (Maíz Morado)</td>
+                    <td class="p-4 font-mono text-stone-400">500 kg</td>
+                    <td class="p-4 font-mono text-green-400 font-bold">500 kg</td>
+                    <td class="p-4 font-mono text-stone-400">2026-07-15 08:30:00</td>
+                    <td class="p-4 font-mono text-stone-400">2026-12-15 18:00:00</td>
+                    <td class="p-4 text-center space-x-3">
+                        <button class="text-stone-400 hover:text-[#f5be38] transition-colors cursor-pointer btn-edit-lote" title="Modificar Lote"><i class="fa-regular fa-pen-to-square text-sm"></i></button>
+                        <button class="text-stone-400 hover:text-red-400 transition-colors cursor-pointer btn-delete-lote" title="Dar de baja (DELETE)"><i class="fa-regular fa-trash-can text-sm"></i></button>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+    
     </main>
 
     <div id="addModal" class="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
