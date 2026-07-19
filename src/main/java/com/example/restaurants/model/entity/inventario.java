@@ -28,7 +28,7 @@ public class inventario {
     private String tipo_movimiento;
 
     @Column(name = "cantidadmovimiento")
-    private String cantidad_movimiento;
+    private Double cantidad_movimiento;
 
     @Column(name = "fecharegistro")
     private Date fecha_registro;

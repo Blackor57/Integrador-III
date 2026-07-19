@@ -61,4 +61,22 @@ public class RecetaService {
         receta existente = obtenerPorId(id);
         recetaRepository.delete(existente);
     }
+
+    @Transactional
+    public List<receta> guardarRecetaLote(List<receta> insumosReceta) {
+        if (insumosReceta != null && !insumosReceta.isEmpty()) {
+
+            // 1. Identificamos el producto al que le pertenece esta receta
+            Long idProducto = insumosReceta.get(0).getProducto().getId();
+
+            // 2. BUSCAMOS Y BORRAMOS la receta anterior usando tu repositorio
+            // (Asegúrate de crear el método void deleteByProductoId(Long idProducto); en tu IRecetaRepository)
+            List<receta> recetaVieja = recetaRepository.findByProductoId(idProducto);
+            recetaRepository.deleteAll(recetaVieja);
+
+            // 3. Guardamos la nueva lista de golpe
+            return recetaRepository.saveAll(insumosReceta);
+        }
+        throw new RuntimeException("La receta no puede estar vacía.");
+    }
 }

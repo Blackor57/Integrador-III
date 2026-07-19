@@ -22,6 +22,9 @@ public class insumo {
     private String nombre;
 
     @Column(name = "stock_minimo")
-    private Integer stockMinimo;
+    private Double stockMinimo;
+
+    @Column(name = "unidad_medida", length = 20)
+    private String unidadMedida;
 
 }

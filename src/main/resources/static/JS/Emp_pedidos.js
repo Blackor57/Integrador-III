@@ -12,7 +12,7 @@
   let vistaActual = "ACTIVOS"; // Puede ser 'ACTIVOS' o 'HISTORIAL'
 
   if (!token) {
-    window.location.href = "login.html";
+    window.location.href = "Index.html";
     return;
   }
 
@@ -110,16 +110,20 @@
       // Botón de Añadir Productos (Solo aparece en ACTIVOS)
       let btnAccion = "";
       if (vistaActual === "ACTIVOS") {
+        // LA MAGIA DE LA URL:
+        // Le enviamos a NuevaOrden el parámetro &action=add para decirle:
+        // "Oye, no crees un pedido nuevo, búscalo y añádele cosas".
         const urlRedireccion = pedido.mesa
-          ? `NuevaOrden.html?mesa=${pedido.mesa.id}`
-          : `NuevaOrden.html`;
+          ? `NuevaOrden.html?mesa=${pedido.mesa.id}&action=add`
+          : `NuevaOrden.html?pedido=${pedido.id}&action=add`; // (Por si en el futuro tienes para llevar)
+
         btnAccion = `
-                <div class="pt-3 border-t border-stone-800">
-                    <button onclick="window.location.href='${urlRedireccion}'" class="w-full bg-[#3d2a21] hover:bg-stone-700 text-[#f5be38] border border-[#f5be38]/30 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer">
-                        <i class="fa-solid fa-cart-plus"></i> AÑADIR PRODUCTOS
-                    </button>
-                </div>
-              `;
+          <div class="pt-3 border-t border-stone-800">
+              <button onclick="window.location.href='${urlRedireccion}'" class="w-full bg-[#3d2a21] hover:bg-stone-700 text-[#f5be38] border border-[#f5be38]/30 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer">
+                  <i class="fa-solid fa-cart-plus"></i> AÑADIR PRODUCTOS
+              </button>
+          </div>
+        `;
       }
 
       const tarjetaHTML = `

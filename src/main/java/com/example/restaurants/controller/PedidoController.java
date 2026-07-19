@@ -127,14 +127,12 @@ public class PedidoController {
         }
     }
 
-    @GetMapping("/mesa/{idMesa}")
+    @GetMapping("/mesa/{idMesa}/activo")
     public ResponseEntity<?> obtenerPedidoPorMesa(@PathVariable Long idMesa) {
         try {
-            // Llamamos al servicio que ya tiene el filtro inteligente
             pedido pedidoActivo = pedidoService.obtenerPorMesa(idMesa);
             return ResponseEntity.ok(pedidoActivo);
         } catch (RuntimeException e) {
-            // Si la mesa no tiene pedidos activos, devolvemos un JSON con el error limpio
             Map<String, String> error = new HashMap<>();
             error.put("error", e.getMessage());
             return ResponseEntity.badRequest().body(error);
@@ -223,5 +221,18 @@ public class PedidoController {
         List<pedido> historialPedidos = pedidoService.obtenerPedidosPorUsuario(usuarioLogueado.getId());
 
         return ResponseEntity.ok(historialPedidos);
+    }
+    @PutMapping("/transferir/{idOrigen}/{idDestino}")
+    public ResponseEntity<?> transferirPedido(
+            @PathVariable Long idOrigen,
+            @PathVariable Long idDestino) {
+        try {
+            pedido pedidoTransferido = pedidoService.transferirMesa(idOrigen, idDestino);
+            return ResponseEntity.ok(pedidoTransferido);
+        } catch (RuntimeException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
     }
 }

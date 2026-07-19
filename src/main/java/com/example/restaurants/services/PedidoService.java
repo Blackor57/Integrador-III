@@ -337,6 +337,37 @@ public class PedidoService {
     }
 
     @Transactional
+    public pedido transferirMesa(Long idMesaOrigen, Long idMesaDestino) {
+
+        // 1. Obtenemos el pedido activo que queremos mover
+        pedido pedidoActivo = obtenerPorMesa(idMesaOrigen);
+
+        // 2. Buscamos las entidades de ambas mesas
+        mesa mesaOrigen = mesaRepository.findById(idMesaOrigen)
+                .orElseThrow(() -> new RuntimeException("La mesa de origen no existe en el sistema."));
+
+        mesa mesaDestino = mesaRepository.findById(idMesaDestino)
+                .orElseThrow(() -> new RuntimeException("La mesa de destino no existe en el sistema."));
+
+        // 3. Validamos la disponibilidad
+        if (!"LIBRE".equalsIgnoreCase(mesaDestino.getEstado())) {
+            throw new RuntimeException("Transferencia fallida: La mesa destino ya se encuentra ocupada.");
+        }
+
+        // 4. Realizamos la transferencia lógica
+        pedidoActivo.setMesa(mesaDestino);
+
+        // 5. Actualizamos los estados físicos de las mesas
+        mesaOrigen.setEstado("LIBRE");
+        mesaDestino.setEstado("OCUPADO"); // (O "OCUPADA" según la convención exacta de tu BD)
+
+        // 6. Guardamos los cambios
+        mesaRepository.save(mesaOrigen);
+        mesaRepository.save(mesaDestino);
+        return pedidoRepository.save(pedidoActivo);
+    }
+
+    @Transactional
     public pedido actualizarPedido(Long id, pedido pedidoActualizado) {
         // 1. Buscamos el pedido existente en la base de datos
         pedido pedidoExistente = pedidoRepository.findById(id)
@@ -385,7 +416,8 @@ public class PedidoService {
 
     @Transactional(readOnly = true)
     public List<pedido> listarPedidosPorRango(Date inicio, Date fin) {
-        // Aseguramos que la fecha fin incluya todo el día
+        // Aseguramos que la fecha fin
+        // incluya todo el día
         return pedidoRepository.buscarPedidosPorRango(inicio, fin);
     }
 

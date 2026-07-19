@@ -25,10 +25,20 @@ public class ReciboService {
         pedido pedidoDB = pedidoRepository.findById(idPedido)
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado con ID: " + idPedido));
 
-        // 2. Validamos que el pedido sepa qué tipo de comprobante necesita
-        if (pedidoDB.getTiporecibo() == null) {
-            throw new RuntimeException("El pedido no tiene especificado si requiere BOLETA o FACTURA.");
+        // -------------------------------------------------------------------
+        // 🚀 NUEVA LÓGICA: Autodetección del tipo de comprobante según el cajero
+        // -------------------------------------------------------------------
+        if (datosRecibo.getRUC() != null && !datosRecibo.getRUC().trim().isEmpty()) {
+            pedidoDB.setTiporecibo(TipoRecibo.FACTURA);
+        } else if (datosRecibo.getDni() != null && !datosRecibo.getDni().trim().isEmpty()) {
+            pedidoDB.setTiporecibo(TipoRecibo.BOLETA);
         }
+
+        // Validación final de seguridad
+        if (pedidoDB.getTiporecibo() == null) {
+            throw new RuntimeException("El pedido no tiene especificado si requiere BOLETA o FACTURA y no se enviaron datos.");
+        }
+        // -------------------------------------------------------------------
 
         recibo nuevoRecibo = new recibo();
         nuevoRecibo.setPedido(pedidoDB);
@@ -44,14 +54,14 @@ public class ReciboService {
         nuevoRecibo.setIGV(igv);
         nuevoRecibo.setTotal(total);
 
-        // 4. Lógica de discriminación usando Enums (seguro contra errores tipográficos)
+        // 4. Lógica de discriminación usando Enums
         if (pedidoDB.getTiporecibo() == TipoRecibo.FACTURA) {
 
             if (datosRecibo.getRUC() == null || datosRecibo.getRUC().trim().isEmpty()) {
                 throw new RuntimeException("Facturación requiere un RUC válido.");
             }
             nuevoRecibo.setRUC(datosRecibo.getRUC());
-            nuevoRecibo.setRazonsocial(datosRecibo.getRazonsocial()); // Respetando tu camelCase
+            nuevoRecibo.setRazonsocial(datosRecibo.getRazonsocial());
             nuevoRecibo.setDireccion(datosRecibo.getDireccion());
 
         } else if (pedidoDB.getTiporecibo() == TipoRecibo.BOLETA) {

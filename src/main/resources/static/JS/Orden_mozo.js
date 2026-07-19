@@ -1,210 +1,235 @@
 (function () {
-  // =====================================================================
-  // CONFIGURACIÓN Y ESTADO
-  // =====================================================================
+  // --- 1. GLOBALES Y CONFIGURACIÓN ---
   const API_PRODUCTOS = "http://localhost:8080/producto";
   const API_PEDIDOS = "http://localhost:8080/pedido";
   const API_PERFIL = "http://localhost:8080/usuario/mi-perfil";
 
-  let usuarioGlobalId = null;
-  let pedidoActivoExistente = null; // Guardará el pedido si la mesa está ocupada
-  let carrito = {};
+  const token =
+    localStorage.getItem("token") || localStorage.getItem("tu_token_jwt");
 
-  // 1. EXTRAER ID DE LA MESA
-  const urlParams = new URLSearchParams(window.location.search);
-  const idMesa = urlParams.get("mesa");
-
-  const displayMesa = document.getElementById("displayMesaId");
-  if (displayMesa) {
-    displayMesa.textContent = idMesa ? `MESA ${idMesa}` : "NO ESPECIFICADA";
+  if (!token) {
+    window.location.href = "Index.html";
+    return;
   }
 
   function getHeaders() {
-    const token =
-      localStorage.getItem("token") || localStorage.getItem("tu_token_jwt");
     return {
       "Content-Type": "application/json",
-      Authorization: token ? `Bearer ${token}` : "",
+      Authorization: `Bearer ${token}`,
     };
   }
 
-  // 2. OBTENER ID DEL USUARIO
-  async function cargarUsuario() {
+  // --- 2. LEER URL PARA SABER QUÉ HACER ---
+  const urlParams = new URLSearchParams(window.location.search);
+  const idMesaParam = urlParams.get("mesa"); // Ej: ?mesa=5
+  const actionParam = urlParams.get("action"); // Ej: ?action=add
+
+  let pedidoActivoFondo = null; // Guardará el pedido viejo si estamos agregando
+  let carrito = {}; // { idPlato: { producto, cantidad, subtotal } }
+  let todosLosPlatos = [];
+  let rutaVolver = "Emp_pedidos.html"; // Por defecto mozo
+
+  // Inicializar UI superior
+  document.getElementById("displayMesaId").textContent = idMesaParam
+    ? `MESA ${idMesaParam}`
+    : "PARA LLEVAR";
+  if (actionParam === "add") {
+    document.getElementById("textoAccion").textContent =
+      "Agregando productos a:";
+    document.getElementById("btnProcesarPedido").innerHTML =
+      `<i class="fa-solid fa-plus"></i> AGREGAR A LA CUENTA`;
+  }
+
+  // --- 3. CARGAR PERFIL (Para saber a dónde vuelve) ---
+  async function configurarBotonVolver() {
     try {
       const res = await fetch(API_PERFIL, { headers: getHeaders() });
       if (res.ok) {
-        const data = await res.json();
-        usuarioGlobalId = data.id;
-      }
-    } catch (error) {
-      console.error("Error al cargar perfil:", error);
-    }
-  }
+        const usuario = await res.json();
+        let rolStr = JSON.stringify(
+          usuario.roles || usuario.authorities || [],
+        ).toUpperCase();
 
-  // 3. VERIFICAR SI LA MESA YA TIENE UN PEDIDO ACTIVO
-  async function verificarPedidoExistente() {
-    if (!idMesa) return;
-    try {
-      const res = await fetch(`http://localhost:8080/pedido/mesa/${idMesa}`, {
-        headers: getHeaders(),
-      });
-      if (res.ok) {
-        pedidoActivoExistente = await res.json();
-        console.log(
-          "Agregando productos al pedido existente:",
-          pedidoActivoExistente.id,
-        );
-
-        // Opcional: Cambiar el título visual para que el mozo sepa que está añadiendo
-        if (displayMesa) {
-          displayMesa.innerHTML = `MESA ${idMesa} <span class="text-xs bg-amber-500 text-white px-2 py-1 rounded ml-2">AÑADIENDO A PEDIDO #${pedidoActivoExistente.id}</span>`;
+        // Si es caja o admin, regresa a la vista de caja
+        if (rolStr.includes("CAJA") || rolStr.includes("ADMIN")) {
+          rutaVolver = "Caja_Pedidos.html";
         }
       }
-    } catch (error) {
-      console.log("Mesa libre. Se creará un pedido nuevo.");
+    } catch (e) {
+      console.warn("Error cargando perfil");
+    }
+
+    document.getElementById("btnVolver").addEventListener("click", () => {
+      window.location.href = rutaVolver;
+    });
+  }
+
+  // --- 4. SI ES "ADD", OBTENER EL PEDIDO ACTIVO DE ESA MESA ---
+  async function cargarPedidoExistenteSiAplica() {
+    if (actionParam === "add" && idMesaParam) {
+      try {
+        const res = await fetch(`${API_PEDIDOS}/mesa/${idMesaParam}/activo`, {
+          headers: getHeaders(),
+        });
+        if (res.ok) {
+          pedidoActivoFondo = await res.json();
+          console.log("Se agregarán items al pedido:", pedidoActivoFondo.id);
+        } else {
+          alert(
+            "No se encontró un pedido activo en esta mesa. Se creará uno nuevo.",
+          );
+        }
+      } catch (error) {
+        console.error("Error buscando pedido activo:", error);
+      }
     }
   }
 
-  // =====================================================================
-  // 4. CARGAR MENÚ DE PRODUCTOS
-  // =====================================================================
-  async function cargarProductos() {
+  // --- 5. CARGAR PLATOS Y CARRITO ---
+  async function cargarPlatos() {
+    const contenedor = document.getElementById("gridProductos");
     try {
+      contenedor.innerHTML = `<div class="col-span-full text-center text-stone-400 py-10">Cargando la carta...</div>`;
       const response = await fetch(API_PRODUCTOS, { headers: getHeaders() });
-      if (!response.ok) throw new Error("Fallo al obtener productos");
-
-      const productos = await response.json();
-      const grid = document.getElementById("gridProductos");
-      grid.innerHTML = "";
-
-      const productosActivos = productos.filter((p) => p.disponible !== false);
-
-      productosActivos.forEach((prod) => {
-        const precioF = parseFloat(prod.precio).toFixed(2);
-        const article = document.createElement("article");
-        article.className =
-          "bg-[#3d2a21]/60 border border-[#543d32] rounded-2xl p-4 flex flex-col justify-between shadow-md hover:border-[#f5be38]/50 hover:bg-[#3d2a21]/80 transition-all cursor-pointer group";
-        article.onclick = () => agregarAlCarrito(prod);
-
-        article.innerHTML = `
-                    <div>
-                        <div class="text-[9px] font-mono text-stone-500 mb-1">${prod.codproducto || ""}</div>
-                        <h3 class="font-bold text-stone-200 text-sm leading-tight group-hover:text-white">${prod.nombreproducto}</h3>
-                        <p class="text-[10px] text-stone-400 mt-1.5 line-clamp-2 leading-snug">${prod.descripcion || ""}</p>
-                    </div>
-                    <div class="mt-4 flex justify-between items-center border-t border-stone-800 pt-2">
-                        <span class="font-mono font-bold text-[#f5be38] text-sm">S/. ${precioF}</span>
-                        <div class="w-6 h-6 rounded-full bg-[#2a1a14] border border-stone-700 flex items-center justify-center text-stone-400 group-hover:bg-[#f5be38] group-hover:text-stone-900 group-hover:border-[#f5be38] transition-colors">
-                            <i class="fa-solid fa-plus text-[10px]"></i>
-                        </div>
-                    </div>
-                `;
-        grid.appendChild(article);
-      });
+      if (!response.ok) throw new Error("Fallo");
+      todosLosPlatos = await response.json();
+      renderizarPlatos(todosLosPlatos);
     } catch (error) {
-      document.getElementById("gridProductos").innerHTML =
-        `<p class="text-red-400 col-span-full">Error al cargar el menú.</p>`;
+      contenedor.innerHTML = `<div class="col-span-full text-center text-red-400 py-10">Error al cargar el menú.</div>`;
     }
   }
 
-  // =====================================================================
-  // 5. LÓGICA DEL CARRITO
-  // =====================================================================
-  function agregarAlCarrito(producto) {
-    const id = producto.id;
-    const precio = parseFloat(producto.precio);
-    if (carrito[id]) {
-      carrito[id].cantidad += 1;
-      carrito[id].subtotal = carrito[id].cantidad * precio;
+  function renderizarPlatos(platos) {
+    const contenedor = document.getElementById("gridProductos");
+    contenedor.innerHTML = "";
+
+    platos.forEach((plato) => {
+      const precioFormateado = Number(plato.precio).toFixed(2);
+      const nombreCat = (
+        plato.subcategoria?.categoria?.nombre ||
+        plato.categoria ||
+        ""
+      ).toLowerCase();
+      let emoji = nombreCat.includes("bebida") ? "🥤" : "🍲";
+
+      contenedor.insertAdjacentHTML(
+        "beforeend",
+        `
+        <article class="bg-[#3d2a21]/60 border border-[#543d32] rounded-2xl overflow-hidden shadow-lg flex flex-col group hover:border-[#f5be38]/50 transition-all">
+          <div class="bg-[#2a1a14]/60 aspect-video w-full flex items-center justify-center relative overflow-hidden text-4xl border-b border-[#543d32]/40">
+            <span class="group-hover:scale-110 transition-transform duration-300">${emoji}</span>
+            <span class="absolute top-3 right-3 bg-[#e07a48] text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm">S/. ${precioFormateado}</span>
+          </div>
+          <div class="p-4 flex-grow flex flex-col justify-between space-y-3">
+            <div>
+              <h3 class="font-serif font-bold text-stone-100 text-sm tracking-wide uppercase">${plato.nombreproducto || plato.nombre}</h3>
+            </div>
+            <button onclick="agregarAlCarrito(${plato.id})" class="w-full bg-[#e07a48]/20 hover:bg-[#e07a48] text-[#f5be38] hover:text-white font-medium text-xs py-2.5 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-plus text-[10px]"></i> Agregar
+            </button>
+          </div>
+        </article>
+      `,
+      );
+    });
+  }
+
+  // --- 6. GESTIÓN DEL CARRITO INTERNO ---
+  window.agregarAlCarrito = function (idPlato) {
+    const plato = todosLosPlatos.find((p) => p.id === idPlato);
+    if (!plato) return;
+
+    if (carrito[idPlato]) {
+      carrito[idPlato].cantidad += 1;
+      carrito[idPlato].subtotal = carrito[idPlato].cantidad * plato.precio;
     } else {
-      carrito[id] = {
-        producto: producto,
+      carrito[idPlato] = {
+        producto: plato,
         cantidad: 1,
-        precioUnitario: precio,
-        subtotal: precio,
+        precioUnitario: plato.precio,
+        subtotal: plato.precio,
       };
     }
-    renderizarCarrito();
-  }
+    actualizarUI();
+  };
 
-  function modificarCantidad(id, delta) {
-    if (!carrito[id]) return;
-    carrito[id].cantidad += delta;
-    if (carrito[id].cantidad <= 0) {
-      delete carrito[id];
-    } else {
-      carrito[id].subtotal = carrito[id].cantidad * carrito[id].precioUnitario;
-    }
-    renderizarCarrito();
-  }
-  window.modificarCantidad = modificarCantidad;
+  window.modificarCantidad = function (idPlato, delta) {
+    if (!carrito[idPlato]) return;
+    carrito[idPlato].cantidad += delta;
+    if (carrito[idPlato].cantidad <= 0) delete carrito[idPlato];
+    else
+      carrito[idPlato].subtotal =
+        carrito[idPlato].cantidad * carrito[idPlato].precioUnitario;
+    actualizarUI();
+  };
 
-  function renderizarCarrito() {
+  function actualizarUI() {
     const container = document.getElementById("cartItemsContainer");
-    const btnEnviar = document.getElementById("btnEnviarPedido");
-    const emptyMsg = document.getElementById("emptyCartMsg");
+    const lblSubtotal = document.getElementById("lblSubtotal");
+    const lblTotal = document.getElementById("lblTotal");
+    const btnProcesar = document.getElementById("btnProcesarPedido");
+
+    container.innerHTML = "";
     const items = Object.values(carrito);
-    let totalSuma = 0;
+    let total = 0;
 
     if (items.length === 0) {
-      container.innerHTML = "";
-      container.appendChild(emptyMsg);
-      emptyMsg.style.display = "block";
-      btnEnviar.disabled = true;
+      container.innerHTML = `<div class="text-center text-stone-500 text-sm mt-10 italic"><i class="fa-solid fa-basket-shopping text-3xl mb-3 opacity-50"></i><br />La comanda está vacía.</div>`;
+      btnProcesar.disabled = true;
     } else {
-      container.innerHTML = "";
-      emptyMsg.style.display = "none";
-      btnEnviar.disabled = false;
-
+      btnProcesar.disabled = false;
       items.forEach((item) => {
-        totalSuma += item.subtotal;
-        const div = document.createElement("div");
-        div.className =
-          "bg-[#2a1a14]/60 border border-stone-800 rounded-xl p-3 flex justify-between items-center";
-        div.innerHTML = `
-                    <div class="flex-grow pr-2">
-                        <h4 class="font-bold text-stone-200 text-xs truncate max-w-[150px]">${item.producto.nombreproducto}</h4>
-                        <div class="font-mono text-[#f5be38] text-[11px] font-bold mt-0.5">S/. ${item.subtotal.toFixed(2)}</div>
-                    </div>
-                    <div class="flex items-center gap-2 bg-[#1c0e0a] rounded-lg border border-stone-700 px-1 py-1 shrink-0">
-                        <button class="w-6 h-6 text-stone-400 hover:text-white cursor-pointer" onclick="modificarCantidad(${item.producto.id}, -1)"><i class="fa-solid fa-minus text-[10px]"></i></button>
-                        <span class="font-mono text-xs font-bold text-white w-4 text-center">${item.cantidad}</span>
-                        <button class="w-6 h-6 text-stone-400 hover:text-white cursor-pointer" onclick="modificarCantidad(${item.producto.id}, 1)"><i class="fa-solid fa-plus text-[10px]"></i></button>
-                    </div>
-                `;
-        container.appendChild(div);
+        total += item.subtotal;
+        container.insertAdjacentHTML(
+          "beforeend",
+          `
+          <div class="bg-[#2a1a14]/60 border border-stone-800 rounded-xl p-3 flex justify-between items-center cart-item-enter">
+            <div class="flex-grow pr-2">
+              <h4 class="font-bold text-stone-200 text-xs truncate w-[140px]">${item.producto.nombreproducto}</h4>
+              <div class="font-mono text-[#f5be38] text-[11px] font-bold mt-0.5">S/. ${item.subtotal.toFixed(2)}</div>
+            </div>
+            <div class="flex items-center gap-2 bg-[#1c0e0a] rounded-lg border border-stone-700 px-1 py-1 shrink-0">
+              <button class="w-6 h-6 flex items-center justify-center text-stone-400 hover:text-white cursor-pointer" onclick="modificarCantidad(${item.producto.id}, -1)"><i class="fa-solid fa-minus text-[10px]"></i></button>
+              <span class="font-mono text-xs font-bold text-white w-4 text-center">${item.cantidad}</span>
+              <button class="w-6 h-6 flex items-center justify-center text-stone-400 hover:text-white cursor-pointer" onclick="modificarCantidad(${item.producto.id}, 1)"><i class="fa-solid fa-plus text-[10px]"></i></button>
+            </div>
+          </div>
+        `,
+        );
       });
     }
-    document.getElementById("lblSubtotal").textContent = totalSuma.toFixed(2);
-    document.getElementById("lblTotal").textContent = totalSuma.toFixed(2);
+    lblSubtotal.textContent = total.toFixed(2);
+    lblTotal.textContent = total.toFixed(2);
   }
 
-  // =====================================================================
-  // 6. ENVIAR EL PEDIDO AL BACKEND (NUEVO vs ACTUALIZACIÓN)
-  // =====================================================================
+  // --- 7. PROCESAR PEDIDO (NUEVO O ACTUALIZAR EXISTENTE) ---
   document
-    .getElementById("btnEnviarPedido")
-    .addEventListener("click", async () => {
+    .getElementById("btnProcesarPedido")
+    .addEventListener("click", async (e) => {
       const items = Object.values(carrito);
       if (items.length === 0) return;
-      if (!usuarioGlobalId) {
-        alert("Error de sesión: No se pudo identificar al usuario.");
-        return;
-      }
 
-      const btn = document.getElementById("btnEnviarPedido");
+      const btn = e.target;
       btn.disabled = true;
       btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> PROCESANDO...`;
 
-      const totalCarritoNuevo = items.reduce(
+      const totalNuevosItems = items.reduce(
         (sum, item) => sum + item.subtotal,
         0,
       );
-      const tiposervicio =
-        document.getElementById("inputTipoServicio")?.value || "SALON";
-      const notas = document.getElementById("inputNotas")?.value || "";
+      const userId = localStorage.getItem("userId");
 
-      // Transformamos los items del carrito al formato DetallePedido
+      // LEEMOS LOS INPUTS DE LA INTERFAZ
+      const inputServicio = document.getElementById("inputTipoServicio");
+      const tipoServicioSelec = inputServicio
+        ? inputServicio.value
+        : idMesaParam
+          ? "MESA"
+          : "RECOJO";
+
+      const inputNotas = document.getElementById("inputNotas");
+      const notasTexto = inputNotas ? inputNotas.value : "";
+
       const nuevosDetalles = items.map((item) => ({
         producto: { id: item.producto.id },
         cantidad: item.cantidad,
@@ -214,65 +239,34 @@
       }));
 
       let payload;
-      let metodoHTTP;
-      let endpointAPI;
+      let endpoint = API_PEDIDOS;
+      let metodoHTTP = "POST";
 
-      // LÓGICA BIFURCADA: ¿Añadir a pedido existente o Crear nuevo?
-      if (pedidoActivoExistente) {
-        // ---> MODO ACTUALIZACIÓN (Mesa Ocupada)
-
-        // Juntamos los detalles viejos con los nuevos para que la Base de Datos no borre los anteriores
-        const detallesAntiguos = pedidoActivoExistente.detalles.map((d) => ({
-          id: d.id,
-          producto: { id: d.producto.id },
-          cantidad: d.cantidad,
-          precioUnitario: d.precioUnitario,
-          subtotal: d.subtotal,
-          estadoItem: d.estadoItem,
-        }));
-
+      if (pedidoActivoFondo) {
         payload = {
-          id: pedidoActivoExistente.id,
-          mesa: { id: parseInt(idMesa) },
-          usuario: { id: usuarioGlobalId },
-          estadopedido: pedidoActivoExistente.estadopedido,
-          tiposervicio: pedidoActivoExistente.tiposervicio, // Mantener el original
-          notasespeciales: notas
-            ? pedidoActivoExistente.notasespeciales + " | " + notas
-            : pedidoActivoExistente.notasespeciales,
-          subtotal: pedidoActivoExistente.subtotal + totalCarritoNuevo,
-          total: pedidoActivoExistente.total + totalCarritoNuevo,
-          detalles: [...detallesAntiguos, ...nuevosDetalles], // Viejos + Nuevos
+          ...pedidoActivoFondo,
+          notasespeciales: notasTexto || pedidoActivoFondo.notasespeciales, // Actualiza notas si escribes algo
+          total: pedidoActivoFondo.total + totalNuevosItems,
+          subtotal: pedidoActivoFondo.subtotal + totalNuevosItems,
+          detalles: [...pedidoActivoFondo.detalles, ...nuevosDetalles],
         };
-
-        // Para actualizar en Spring Boot se usa PUT hacia la URL base, o POST dependiendo de tu configuración.
-        // Lo estándar en REST es usar PUT pasando el ID en la URL.
+        endpoint = `${API_PEDIDOS}/${pedidoActivoFondo.id}`;
         metodoHTTP = "PUT";
-        endpointAPI = `${API_PEDIDOS}/${pedidoActivoExistente.id}`;
-
-        // *NOTA: Si tu backend no tiene PUT configurado, prueba cambiando el metodoHTTP a "POST" y endpointAPI a API_PEDIDOS.
       } else {
-        // ---> MODO CREACIÓN (Mesa Libre)
         payload = {
-          mesa:
-            idMesa && !isNaN(parseInt(idMesa))
-              ? { id: parseInt(idMesa) }
-              : null,
-          usuario: { id: usuarioGlobalId },
+          tiposervicio: tipoServicioSelec, // <--- Aquí inyectamos el valor "MESA" o "RECOJO"
           estadopedido: "PENDIENTE",
-          tiposervicio: tiposervicio,
-          notasespeciales: notas,
-          subtotal: totalCarritoNuevo,
-          total: totalCarritoNuevo,
+          notasespeciales: notasTexto,
+          subtotal: totalNuevosItems,
+          total: totalNuevosItems,
+          usuario: userId ? { id: parseInt(userId) } : null,
+          mesa: idMesaParam ? { id: parseInt(idMesaParam) } : null,
           detalles: nuevosDetalles,
         };
-
-        metodoHTTP = "POST";
-        endpointAPI = API_PEDIDOS;
       }
 
       try {
-        const response = await fetch(endpointAPI, {
+        const response = await fetch(endpoint, {
           method: metodoHTTP,
           headers: getHeaders(),
           body: JSON.stringify(payload),
@@ -280,31 +274,34 @@
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.error || "Fallo al procesar el pedido");
+          throw new Error(errorData.error || "Fallo al registrar el pedido");
         }
 
         alert(
-          pedidoActivoExistente
-            ? "¡Productos añadidos a la orden con éxito!"
-            : "¡Pedido nuevo creado exitosamente!",
+          pedidoActivoFondo
+            ? "¡Productos agregados a la cuenta!"
+            : "¡Pedido creado exitosamente!",
         );
-        window.location.href = "Emp_pedidos.html";
+        carrito = {};
+        window.location.href = rutaVolver;
       } catch (error) {
-        alert("Error al procesar: " + error.message);
-        console.error(error);
+        if (
+          error.message.includes("AGOTADO") ||
+          error.message.includes("Stock insuficiente")
+        ) {
+          const msgTexto = document.getElementById("msgAgotadoTexto");
+          if (msgTexto) msgTexto.textContent = error.message;
+          document.getElementById("modalAgotado")?.classList.remove("hidden");
+        } else {
+          alert("Error: " + error.message);
+        }
         btn.disabled = false;
         btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> PROCESAR PEDIDO`;
       }
     });
-
-  // =====================================================================
-  // 7. ARRANQUE SECUENCIAL
-  // =====================================================================
-  async function inicializarPantalla() {
-    await cargarUsuario();
-    await verificarPedidoExistente(); // Chequea la mesa antes de empezar
-    await cargarProductos();
-  }
-
-  inicializarPantalla();
+  // Arrancar
+  configurarBotonVolver();
+  cargarPedidoExistenteSiAplica();
+  cargarPlatos();
+  actualizarUI();
 })();

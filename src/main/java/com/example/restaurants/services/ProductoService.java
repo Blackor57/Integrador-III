@@ -1,8 +1,10 @@
 package com.example.restaurants.services;
 
+import com.example.restaurants.model.entity.inventario;
 import com.example.restaurants.model.entity.lote;
 import com.example.restaurants.model.entity.producto;
 import com.example.restaurants.model.entity.receta;
+import com.example.restaurants.repository.IInventario;
 import com.example.restaurants.repository.ILote;
 import com.example.restaurants.repository.IProducto;
 import com.example.restaurants.repository.IReceta;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -21,6 +24,7 @@ public class ProductoService {
     private final IProducto productoRepository;
     private final IReceta recetaRepository;
     private final ILote loteRepository;
+    private final IInventario inventarioRepository;
 
     @Transactional
     public producto crearProducto(producto nuevoProducto) {
@@ -111,32 +115,50 @@ public class ProductoService {
 
         // 2. Recorremos cada ingrediente (Ej: Carne, Papas, Arroz)
         for (receta r : ingredientes) {
-            // Multiplicamos lo que pide la receta por la cantidad de platos (Ej: 1 carne x 2 Lomo Saltados = 2 carnes necesarias)
-            int cantidadNecesaria = r.getCantidad() * cantidadPedida;
+            // CAMBIO 1: Usamos Double porque los insumos se miden en decimales (Ej: 0.250 KG * 2 platos = 0.500 KG)
+            Double cantidadNecesaria = r.getCantidad() * cantidadPedida;
 
-            // Traemos los lotes disponibles de ese insumo
+            // Traemos los lotes disponibles de ese insumo (¡Asegúrate que tu query los ordene por FechaVencimiento ASC!)
             List<lote> lotes = loteRepository.obtenerLotesDisponibles(r.getInsumo().getId());
 
             // 3. Empezamos a restar de los lotes más antiguos
             for (lote lote : lotes) {
-                if (cantidadNecesaria == 0) break; // Si ya cubrimos lo necesario, pasamos al siguiente ingrediente
+                if (cantidadNecesaria <= 0) break; // Si ya cubrimos lo necesario, pasamos al siguiente ingrediente
+
+                Double cantidadADescontar = 0.0;
 
                 if (lote.getCantidadactual() >= cantidadNecesaria) {
                     // Si este lote tiene suficiente, le restamos todo lo necesario
+                    cantidadADescontar = cantidadNecesaria;
                     lote.setCantidadactual(lote.getCantidadactual() - cantidadNecesaria);
-                    loteRepository.save(lote);
-                    cantidadNecesaria = 0;
+                    cantidadNecesaria = 0.0;
                 } else {
-                    // Si este lote no alcanza, lo vaciamos y seguimos buscando en el siguiente lote
+                    // Si este lote no alcanza, lo vaciamos por completo
+                    cantidadADescontar = lote.getCantidadactual();
                     cantidadNecesaria -= lote.getCantidadactual();
-                    lote.setCantidadactual(0);
-                    loteRepository.save(lote);
+                    lote.setCantidadactual(0.0);
+                }
+
+                loteRepository.save(lote);
+
+                // CAMBIO 2: ¡Registramos el movimiento en el historial de inventario!
+                if (cantidadADescontar > 0) {
+                    inventario movimiento = new inventario();
+                    movimiento.setLote(lote);
+                    movimiento.setTipo_movimiento("SALIDA");
+                    movimiento.setCantidad_movimiento(cantidadADescontar);
+                    movimiento.setFecha_registro(new Date());
+
+                    inventarioRepository.save(movimiento);
                 }
             }
 
-            // 4. Si después de revisar todos los lotes, aún falta ingrediente, bloqueamos la venta
+            // 4. Si después de revisar todos los lotes aún falta ingrediente, bloqueamos la venta
             if (cantidadNecesaria > 0) {
-                throw new RuntimeException("Stock insuficiente para el insumo: " + r.getInsumo().getNombre() + ". Se canceló el pedido.");
+                // Ahora el mensaje de error es mucho más exacto
+                throw new RuntimeException("Stock insuficiente para el insumo: "
+                        + r.getInsumo().getNombre()
+                        + ". Faltan " + cantidadNecesaria);
             }
         }
     }
@@ -150,7 +172,8 @@ public class ProductoService {
         }
 
         for (receta r : ingredientes) {
-            int cantidadAReponer = r.getCantidad() * cantidadDevuelta;
+            // CAMBIO 1: Cambiamos a Double para soportar decimales en los insumos
+            Double cantidadAReponer = r.getCantidad() * cantidadDevuelta;
 
             // Buscamos los lotes de este insumo
             List<lote> lotes = loteRepository.obtenerLotesDisponibles(r.getInsumo().getId());
@@ -160,6 +183,16 @@ public class ProductoService {
                 lote loteSeleccionado = lotes.get(0);
                 loteSeleccionado.setCantidadactual(loteSeleccionado.getCantidadactual() + cantidadAReponer);
                 loteRepository.save(loteSeleccionado);
+
+                // CAMBIO 2: ¡Registramos el movimiento en el historial de inventario!
+                inventario movimiento = new inventario();
+                movimiento.setLote(loteSeleccionado);
+                movimiento.setTipo_movimiento("DEVOLUCION"); // Etiqueta clave para auditoría
+                movimiento.setCantidad_movimiento(cantidadAReponer);
+                movimiento.setFecha_registro(new Date());
+
+                inventarioRepository.save(movimiento);
+
                 System.out.println("-> [DEVOLUCIÓN] Se regresaron " + cantidadAReponer + " unidades al lote " + loteSeleccionado.getId());
             } else {
                 System.out.println("-> [ALERTA] No se encontró un lote activo para devolver el insumo ID: " + r.getInsumo().getId());

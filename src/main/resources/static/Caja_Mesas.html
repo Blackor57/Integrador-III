@@ -53,35 +53,21 @@
 
       <div class="flex items-center gap-2 sm:gap-4 md:gap-6">
         <a
-          href="Admin_inicio.html"
-          class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center group text-stone-600 hover:text-[#cf6937]"
-        >
-          <i class="fa-solid fa-chart-line text-xs"></i>
-          <span class="hidden sm:inline">Inicio</span>
-        </a>
-        <a
-          href="Admin_Usuario.html"
+          href="Emp_Perfil.html"
           class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]"
         >
           <i class="fa-solid fa-users-gear text-xs"></i>
-          <span class="hidden sm:inline">Usuario</span>
+          <span class="hidden sm:inline">Perfil</span>
         </a>
         <a
-          href="Admin_pedidos.html"
+          href="Caja_pedidos.html"
           class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]"
         >
           <i class="fa-regular fa-clipboard text-xs"></i>
           <span class="hidden sm:inline">Pedidos</span>
         </a>
         <a
-          href="Admin_productos.html"
-          class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]"
-        >
-          <i class="fa-solid fa-bowl-food text-xs"></i>
-          <span class="hidden sm:inline">Producto</span>
-        </a>
-        <a
-          href="Admin_Mesas.html"
+          href="Caja_Mesas.html"
           class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 group text-[#cf6937]"
         >
           <i class="fa-solid fa-chair text-xs"></i>
@@ -90,20 +76,6 @@
             class="active-indicator absolute bottom-[-14px] left-0 w-full h-[3px] bg-[#cf6937] rounded-full"
           ></div>
         </a>
-        <a
-          href="Admin_Rendimiento.html"
-          class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]"
-        >
-          <i class="fa-regular fa-clipboard text-xs"></i>
-          <span class="hidden sm:inline">Rendimiento</span>
-        </a>
-        <a
-          href="Admin_Insumo.html"
-          class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 group text-[#cf6937]"
-        >
-          <i class="fa-solid fa-boxes-stacked text-xs"></i
-          ><span class="hidden sm:inline">Insumos y Lotes</span>
-          </a>
       </div>
 
       <div class="flex items-center gap-3">
@@ -114,7 +86,7 @@
             class="block text-xs font-bold text-stone-800 uppercase"
             >Cargando...</span
           >
-          <span class="text-[9px] text-stone-500">Administrador</span>
+          <span class="text-[9px] text-stone-500">Mozo</span>
         </div>
         <button
           id="navBtnLogout"
@@ -166,72 +138,69 @@
         <!-- Las mesas se inyectan aquí con JS -->
       </div>
     </main>
-
-    <!-- MODAL AGREGAR MESA -->
-    <div
-      id="addModal"
-      class="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden"
-    >
-      <div
-        class="bg-[#3d2a21] border border-[#543d32] w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150"
-      >
-        <div
-          class="flex justify-between items-center border-b border-stone-800 pb-2"
-        >
-          <h3
-            class="font-serif font-bold text-[#f5be38] text-base uppercase tracking-wide"
-          >
-            Registrar Nueva Mesa
+    <!-- ========================================== -->
+    <!-- MODAL 1: DETALLE DE MESA                   -->
+    <!-- ========================================== -->
+    <div id="detalleModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+      <div class="bg-[#3d2a21] border border-[#543d32] w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4">
+        <div class="flex justify-between items-center border-b border-stone-800 pb-2">
+          <h3 id="modalTitle" class="font-serif font-bold text-[#f5be38] text-base uppercase tracking-wide">
+            Detalle de Mesa
           </h3>
-          <button
-            type="button"
-            class="close-modal-btn text-stone-400 hover:text-white text-base cursor-pointer"
-          >
+          <button onclick="document.getElementById('detalleModal').classList.add('hidden')" class="text-stone-400 hover:text-white cursor-pointer">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
 
-        <form id="formAddMesa" class="space-y-4">
-          <div>
-            <label
-              class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[10px]"
-              >Número de Mesa</label
-            >
-            <input
-              type="number"
-              name="nombre"
-              placeholder="Ej: 1"
-              class="w-full bg-[#2a1a14] text-stone-200 border border-stone-700 rounded-xl p-3 outline-none focus:border-[#f5be38] text-center text-lg font-bold"
-              required
-              min="1"
-            />
-            <p class="text-[9px] text-stone-500 mt-1">
-              * Se guardará automáticamente como estado "LIBRE".
-            </p>
-          </div>
-          <div class="pt-3 border-t border-stone-800 flex justify-end gap-2">
-            <button
-              type="button"
-              class="close-modal-btn px-4 py-2 rounded-xl border border-stone-700 text-stone-400 hover:text-stone-200 transition-colors text-xs font-bold cursor-pointer"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              class="px-5 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white text-xs font-bold shadow-md cursor-pointer"
-            >
-              GUARDAR MESA
-            </button>
-          </div>
-        </form>
+        <div id="modalContent" class="space-y-3 text-sm text-stone-300">
+          <!-- Aquí inyectaremos los productos con JS -->
+        </div>
+
+        <div class="pt-4 border-t border-stone-800 flex justify-end">
+          <button onclick="document.getElementById('detalleModal').classList.add('hidden')" class="px-5 py-2 rounded-xl bg-stone-700 hover:bg-stone-600 text-white text-xs font-bold cursor-pointer">
+            CERRAR
+          </button>
+        </div>
       </div>
     </div>
-    <footer
-      class="w-full text-center py-4 text-[11px] text-stone-600 border-t border-stone-900 bg-[#0c0402]/80"
-    >
-      &copy; 2026 Restaurante La Estación - Panel de Auditoría Transaccional.
-    </footer>
+
+    <!-- ========================================== -->
+    <!-- MODAL 2: TRANSFERENCIA DE MESA             -->
+    <!-- ========================================== -->
+    <div id="transferModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+      <div class="bg-[#3d2a21] border border-[#543d32] w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4">
+        <div class="flex justify-between items-center border-b border-stone-800 pb-2">
+          <h3 class="font-serif font-bold text-amber-500 text-base uppercase tracking-wide">
+            Transferir Mesa
+          </h3>
+          <button onclick="document.getElementById('transferModal').classList.add('hidden')" class="text-stone-400 hover:text-white cursor-pointer">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="space-y-3 text-sm text-stone-300">
+          <p>Moviendo orden de la <span id="lblMesaOrigen" class="font-bold text-white">Mesa X</span> a:</p>
+          <select id="selectMesaDestino" class="w-full bg-[#1c0e0a] text-white p-3 rounded-xl border border-stone-600 outline-none focus:border-amber-500">
+            <!-- Las mesas LIBRES se inyectarán aquí con JS -->
+            <option value="">Cargando mesas libres...</option>
+          </select>
+        </div>
+
+        <div class="pt-4 border-t border-stone-800 flex gap-3">
+          <button onclick="document.getElementById('transferModal').classList.add('hidden')" class="flex-1 px-5 py-2 rounded-xl bg-stone-700 hover:bg-stone-600 text-white text-xs font-bold cursor-pointer">
+            CANCELAR
+          </button>
+          <button id="btnConfirmarTransferencia" class="flex-1 px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold cursor-pointer">
+            CONFIRMAR
+          </button>
+        </div>
+      </div>
+    </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/JS/Caja_Mesas.js"></script>
     <script src="/JS/Perfil_Admin.js"></script>
-    <script src="/JS/Mesas_Admin.js"></script>
   </body>
 </html>

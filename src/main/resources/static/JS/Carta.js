@@ -246,17 +246,39 @@
         body: JSON.stringify(payload),
       });
 
+      // 1. Aquí capturamos la respuesta del backend aunque sea un error
+      const data = await response.json().catch(() => ({}));
+
       if (!response.ok) {
-        const errorMsg = await response.text();
-        throw new Error(errorMsg || "Fallo al registrar el pedido");
+        // Lanzamos el error con el mensaje específico del servidor
+        throw new Error(
+          data.error || data.message || "Fallo al registrar el pedido",
+        );
       }
 
+      // Si todo sale bien:
       carrito = {};
       actualizarUI();
       window.location.href = "pedido.html";
     } catch (error) {
-      console.error("Error enviando pedido:", error);
-      alert("No se pudo procesar el pedido. Revisa tu conexión al servidor.");
+      console.error("Error enviado al usuario:", error.message);
+
+      // 1. Asignamos el mensaje del backend al modal
+      const msgTexto = document.getElementById("msgAgotadoTexto");
+      if (msgTexto) {
+        msgTexto.textContent = error.message;
+      }
+
+      // 2. FORZAMOS QUE SE VEA EL MODAL
+      const modal = document.getElementById("modalAgotado");
+      if (modal) {
+        modal.classList.remove("hidden");
+      } else {
+        // Fallback por si el modal no carga
+        alert("Aviso importante: " + error.message);
+      }
+
+      // 3. Restaurar botón para que el usuario pueda editar el carrito
       btnProcesarPedido.disabled = false;
       btnProcesarPedido.innerHTML = `CONFIRMAR PEDIDO <i class="fa-solid fa-arrow-right"></i>`;
     }

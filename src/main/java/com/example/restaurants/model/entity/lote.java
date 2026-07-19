@@ -34,8 +34,8 @@ public class lote {
     private Date FechaVencimiento;
 
     @Column(name = "cantidadrecibido")
-    private Integer cantidadrecibido;
+    private Double cantidadrecibido;
 
     @Column(name = "cantidadactual")
-    private Integer cantidadactual;
+    private Double cantidadactual;
 }

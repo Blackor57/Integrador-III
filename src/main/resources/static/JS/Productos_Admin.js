@@ -79,6 +79,9 @@
                             <button class="text-stone-400 ${btnColor} transition-colors cursor-pointer btn-toggle-status" title="${titleAccion}">
                                 <i class="fa-solid ${btnIcono} icono-estado text-sm"></i>
                             </button>
+                            <button onclick="abrirModalReceta(${prod.id}, '${prod.nombreproducto}')" title="Configurar Receta" class="w-8 h-8 rounded-lg bg-stone-800 border border-stone-700 text-green-400 hover:bg-green-500/20 hover:border-green-500 transition-colors cursor-pointer flex items-center justify-center">
+    <i class="fa-solid fa-kitchen-set"></i>
+</button>
                         </td>
                     `;
       tableBodyProductos.appendChild(tr);

@@ -90,6 +90,20 @@
           <i class="fa-solid fa-chair text-xs"></i>
           <span class="hidden sm:inline">Mesas</span>
         </a>
+        <a
+          href="Admin_Rendimiento.html"
+          class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 group text-stone-600 hover:text-[#cf6937]"
+        >
+          <i class="fa-regular fa-clipboard text-xs"></i>
+          <span class="hidden sm:inline">Rendimiento</span>
+        </a>
+        <a
+          href="Admin_Insumo.html"
+          class="admin-nav-btn relative py-2 px-2.5 text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 group text-[#cf6937]"
+        >
+          <i class="fa-solid fa-boxes-stacked text-xs"></i
+          ><span class="hidden sm:inline">Insumos y Lotes</span>
+        </a>
       </div>
 
       <div class="flex items-center gap-3">
@@ -398,6 +412,122 @@
       </div>
     </div>
 
+    <!-- MODAL CONFIGURAR RECETA -->
+    <div
+      id="recetaModal"
+      class="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden"
+    >
+      <div
+        class="bg-[#3d2a21] border border-[#543d32] w-full max-w-lg rounded-[2rem] p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150"
+      >
+        <div
+          class="flex justify-between items-center border-b border-stone-800 pb-3"
+        >
+          <div>
+            <h3
+              class="font-serif font-bold text-green-400 text-base uppercase tracking-wide flex items-center gap-2"
+            >
+              <i class="fa-solid fa-kitchen-set"></i> Configurar Receta
+            </h3>
+            <p
+              id="recetaNombreProducto"
+              class="text-xs text-white font-bold mt-1"
+            >
+              Cargando...
+            </p>
+          </div>
+          <button
+            type="button"
+            class="close-modal-receta text-stone-400 hover:text-white text-base cursor-pointer"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Formulario para agregar insumo a la lista temporal -->
+        <div
+          class="bg-[#2a1a14] p-3 rounded-xl border border-stone-700 flex flex-col sm:flex-row gap-3 items-end"
+        >
+          <div class="flex-grow w-full">
+            <label
+              class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]"
+              >Seleccionar Insumo</label
+            >
+            <select
+              id="recetaSelectInsumo"
+              class="w-full bg-[#1c0e0a] text-stone-200 border border-stone-800 rounded-lg p-2.5 outline-none focus:border-green-400 text-xs appearance-none"
+            >
+              <option value="" disabled selected>Cargando insumos...</option>
+            </select>
+          </div>
+          <div class="w-full sm:w-28 shrink-0">
+            <label
+              class="block text-stone-400 font-semibold mb-1 uppercase tracking-wider text-[9px]"
+              >Cantidad</label
+            >
+            <input
+              type="number"
+              id="recetaCantidadInsumo"
+              step="0.001"
+              placeholder="0.000"
+              class="w-full bg-[#1c0e0a] text-white font-bold border border-stone-800 rounded-lg p-2.5 outline-none focus:border-green-400 text-xs"
+            />
+          </div>
+          <button
+            type="button"
+            id="btnAgregarInsumoLista"
+            class="bg-stone-700 hover:bg-stone-600 border border-stone-600 text-white rounded-lg p-2.5 w-full sm:w-auto flex items-center justify-center cursor-pointer transition-colors shadow-md"
+          >
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+
+        <!-- Tabla temporal de la receta -->
+        <div
+          class="max-h-48 overflow-y-auto no-scrollbar border border-stone-700 rounded-xl bg-[#2a1a14]/50"
+        >
+          <table class="w-full text-left text-xs text-stone-300">
+            <thead
+              class="bg-[#1c0e0a] text-stone-500 sticky top-0 border-b border-stone-700"
+            >
+              <tr>
+                <th class="p-3 font-medium">Insumo</th>
+                <th class="p-3 font-medium w-24 text-center">Cant.</th>
+                <th class="p-3 w-12 text-center">Quitar</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyRecetaList" class="divide-y divide-stone-800">
+              <!-- Los insumos se irán pintando aquí -->
+              <tr>
+                <td
+                  colspan="3"
+                  class="text-center p-4 text-stone-500 italic text-[10px]"
+                >
+                  Agrega insumos a la receta
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pt-3 border-t border-stone-800 flex justify-end gap-2">
+          <button
+            type="button"
+            class="close-modal-receta px-4 py-2 rounded-xl border border-stone-700 text-stone-400 hover:text-stone-200 transition-colors text-xs cursor-pointer"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            id="btnGuardarRecetaFinal"
+            class="px-5 py-2 rounded-xl bg-green-600 hover:bg-green-500 text-white font-bold shadow-md text-xs cursor-pointer"
+          >
+            GUARDAR RECETA
+          </button>
+        </div>
+      </div>
+    </div>
+
     <footer
       class="w-full text-center py-4 text-[11px] text-stone-600 border-t border-stone-900 bg-[#0c0402]/80"
     >
@@ -406,5 +536,6 @@
 
     <script src="/JS/Productos_Admin.js"></script>
     <script src="/JS/Perfil_Admin.js"></script>
+    <script src="/JS/Receta.js"></script>
   </body>
 </html>

@@ -7,7 +7,8 @@
 
   function getHeaders() {
     const headers = { "Content-Type": "application/json" };
-    const token = localStorage.getItem("token") || localStorage.getItem("tu_token_jwt");
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("tu_token_jwt");
     if (token) headers["Authorization"] = `Bearer ${token}`;
     return headers;
   }
@@ -23,7 +24,8 @@
       const response = await fetch(API_PERFIL_URL, { headers: getHeaders() });
       if (response.ok) {
         const usuario = await response.json();
-        const primerNombre = usuario.nombreCompleto?.split(" ")[0].toUpperCase() || "ADMIN";
+        const primerNombre =
+          usuario.nombreCompleto?.split(" ")[0].toUpperCase() || "ADMIN";
         const spanNombre = document.getElementById("nombreAdmin");
         if (spanNombre) spanNombre.textContent = primerNombre;
       }
@@ -52,10 +54,13 @@
 
     mesas.forEach((mesa) => {
       const esLibre = mesa.estado === "LIBRE";
-      if (esLibre) libres++; else ocupadas++;
+      if (esLibre) libres++;
+      else ocupadas++;
 
       const colorEstado = esLibre ? "text-green-400" : "text-red-400";
-      const bgEstado = esLibre ? "bg-green-500/10 border-green-500/20" : "bg-red-500/10 border-red-500/20";
+      const bgEstado = esLibre
+        ? "bg-green-500/10 border-green-500/20"
+        : "bg-red-500/10 border-red-500/20";
       const iconoEstado = esLibre ? "fa-circle" : "fa-circle-dot animate-pulse";
 
       const article = document.createElement("article");
@@ -87,7 +92,8 @@
 
   function agregarTarjetaNuevaMesa() {
     const btnAgregar = document.createElement("div");
-    btnAgregar.className = "bg-[#3d2a21]/40 border-2 border-dashed border-[#543d32] rounded-2xl min-h-[120px] flex flex-col items-center justify-center p-6 cursor-pointer hover:border-[#f5be38]/40";
+    btnAgregar.className =
+      "bg-[#3d2a21]/40 border-2 border-dashed border-[#543d32] rounded-2xl min-h-[120px] flex flex-col items-center justify-center p-6 cursor-pointer hover:border-[#f5be38]/40";
     btnAgregar.innerHTML = `
         <i class="fa-solid fa-plus text-stone-400 mb-2"></i>
         <p class="text-xs text-stone-400 font-bold uppercase">Registrar Mesa</p>
@@ -100,20 +106,27 @@
   }
 
   // 2. CREAR MESA (POST)
-  document.getElementById("formAddMesa").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const payload = { nombre: parseInt(new FormData(e.target).get("nombre")), estado: "LIBRE" };
-    try {
-      const response = await fetch(API_BASE_URL, {
-        method: "POST",
-        headers: getHeaders(),
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) throw new Error();
-      await cargarMesas();
-      addModal.classList.add("hidden");
-    } catch (error) { alert("Error al registrar mesa."); }
-  });
+  document
+    .getElementById("formAddMesa")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const payload = {
+        nombre: parseInt(new FormData(e.target).get("nombre")),
+        estado: "LIBRE",
+      };
+      try {
+        const response = await fetch(API_BASE_URL, {
+          method: "POST",
+          headers: getHeaders(),
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) throw new Error();
+        await cargarMesas();
+        addModal.classList.add("hidden");
+      } catch (error) {
+        alert("Error al registrar mesa.");
+      }
+    });
 
   // 3. ELIMINAR MESA (DELETE)
   gridMesas.addEventListener("click", async (e) => {
@@ -121,7 +134,10 @@
     if (btnDelete) {
       if (confirm("¿Eliminar esta mesa?")) {
         const id = btnDelete.getAttribute("data-id");
-        await fetch(`${API_BASE_URL}/${id}`, { method: "DELETE", headers: getHeaders() });
+        await fetch(`${API_BASE_URL}/${id}`, {
+          method: "DELETE",
+          headers: getHeaders(),
+        });
         cargarMesas();
       }
     }
