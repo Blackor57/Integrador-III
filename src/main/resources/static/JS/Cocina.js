@@ -1,12 +1,12 @@
 (function () {
         // --- 1. CONFIGURACIÓN Y GLOBALES ---
         // AHORA LLAMAMOS DIRECTO A PEDIDOS (No a detalles)
-        const API_PEDIDOS = "http://localhost:8080/pedido";
-        const API_CAMBIAR_ESTADO = "http://localhost:8080/pedido/detalle";
+        const API_PEDIDOS = "/pedido";
+        const API_CAMBIAR_ESTADO = "/pedido/detalle";
         const token = localStorage.getItem("token");
 
         if (!token) {
-          window.location.href = "login.html";
+          window.location.href = "Index.html";
           return;
         }
 

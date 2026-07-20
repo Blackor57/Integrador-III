@@ -2,9 +2,9 @@
   // =====================================================================
   // CONFIGURACIÓN Y ESTADO GLOBAL
   // =====================================================================
-  const API_MESAS = "http://localhost:8080/mesa";
-  const API_PEDIDOS = "http://localhost:8080/pedido";
-  const API_PERFIL = "http://localhost:8080/usuario/mi-perfil";
+  const API_MESAS = "/mesa";
+  const API_PEDIDOS = "/pedido";
+  const API_PERFIL = "/usuario/mi-perfil";
 
   let mesasGlobales = [];
 

@@ -1,7 +1,7 @@
 (function () {
   // 1. CONFIGURACIÓN: Apuntamos al endpoint /bar que ya tienes en el controller
-  const API_BAR_DETALLES = "http://localhost:8080/detalle/bar";
-  const API_CAMBIAR_ESTADO = "http://localhost:8080/pedido/detalle";
+  const API_BAR_DETALLES = "/detalle/bar";
+  const API_CAMBIAR_ESTADO = "/pedido/detalle";
   const token = localStorage.getItem("token");
 
   if (!token) {

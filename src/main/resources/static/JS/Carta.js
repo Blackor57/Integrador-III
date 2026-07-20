@@ -58,7 +58,7 @@
   async function cargarPlatos() {
     try {
       contenedorPlatos.innerHTML = `<div class="col-span-full text-center text-stone-400 py-10"><i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i><p>Cargando la carta...</p></div>`;
-      const response = await fetch("http://localhost:8080/producto");
+      const response = await fetch("/producto");
       if (!response.ok) throw new Error("No se pudo cargar la carta.");
 
       todosLosPlatos = await response.json();
@@ -237,7 +237,7 @@
     };
 
     try {
-      const response = await fetch("http://localhost:8080/pedido", {
+      const response = await fetch("/pedido", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

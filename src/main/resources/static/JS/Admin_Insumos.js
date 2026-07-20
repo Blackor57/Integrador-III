@@ -1,7 +1,7 @@
 (function () {
-  const API_INSUMO = "http://localhost:8080/insumo";
-  const API_LOTE = "http://localhost:8080/lote";
-  const API_PERFIL = "http://localhost:8080/usuario/mi-perfil";
+  const API_INSUMO = "/insumo";
+  const API_LOTE = "/lote";
+  const API_PERFIL = "/usuario/mi-perfil";
 
   let insumosGlobales = [];
   let lotesGlobales = [];
