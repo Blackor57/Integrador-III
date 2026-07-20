@@ -84,7 +84,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // Aquí le damos permiso a tu Live Server (y localhost por si acaso)
-            configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500", "http://localhost:5500"));
+            configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500", "https://integrador-iii-production-23c7.up.railway.app","http://localhost:5500"));
 
         // Permitimos todos los métodos HTTP que usarás
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
