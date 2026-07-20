@@ -89,7 +89,7 @@ public class usuario implements UserDetails{
     @Override
     @JsonIgnore
     public boolean isEnabled() {
-        return true;
+        return Boolean.TRUE.equals(this.activo);
     }
 
 }
