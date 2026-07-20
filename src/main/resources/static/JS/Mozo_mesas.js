@@ -1,7 +1,7 @@
 (function () {
-  const API_BASE_URL = "http://localhost:8080/mesa";
-  const API_PEDIDOS = "http://localhost:8080/pedido";
-  const API_PERFIL_URL = "http://localhost:8080/usuario/mi-perfil";
+  const API_BASE_URL = "/mesa";
+  const API_PEDIDOS = "/pedido";
+  const API_PERFIL_URL = "/usuario/mi-perfil";
   const gridMesas = document.getElementById("gridMesas");
 
   function getHeaders() {
@@ -49,7 +49,7 @@
           try {
             // Buscamos el pedido activo para obtener el usuario
             const resPedido = await fetch(
-              `http://localhost:8080/pedido/mesa/${mesa.id}/activo`,
+              `/pedido/mesa/${mesa.id}/activo`,
               { headers: getHeaders() },
             );
             if (resPedido.ok) {
@@ -110,7 +110,7 @@
 
     try {
       const response = await fetch(
-        `http://localhost:8080/pedido/mesa/${idMesa}/activo`,
+        `/pedido/mesa/${idMesa}/activo`,
         { headers: getHeaders() },
       );
       if (!response.ok) throw new Error("No hay pedido activo");

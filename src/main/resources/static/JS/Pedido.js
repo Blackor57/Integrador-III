@@ -36,7 +36,7 @@
       contenedorPedidos.innerHTML = `<div class="col-span-full text-center text-stone-400 py-10"><i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i><p>Cargando tus pedidos...</p></div>`;
 
       const response = await fetch(
-        `http://localhost:8080/pedido/usuario/mis-pedidos`,
+        `/pedido/usuario/mis-pedidos`,
         {
           method: "GET",
           headers: {
@@ -228,7 +228,7 @@
   // 8. LOGOUT (Comentado si usas LogOut.js externo, pero útil por si acaso)
   document.getElementById("navBtnLogout")?.addEventListener("click", () => {
     localStorage.clear();
-    window.location.href = "login.html"; // Asegúrate que esta ruta es tu login real (Index.html / login.html)
+    window.location.href = "Index.html"; // Asegúrate que esta ruta es tu login real (Index.html / login.html)
   });
 
   // ARRANQUE INICIAL

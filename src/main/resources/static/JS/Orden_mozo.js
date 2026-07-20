@@ -1,8 +1,8 @@
 (function () {
   // --- 1. GLOBALES Y CONFIGURACIÓN ---
-  const API_PRODUCTOS = "http://localhost:8080/producto";
-  const API_PEDIDOS = "http://localhost:8080/pedido";
-  const API_PERFIL = "http://localhost:8080/usuario/mi-perfil";
+  const API_PRODUCTOS = "/producto";
+  const API_PEDIDOS = "/pedido";
+  const API_PERFIL = "/usuario/mi-perfil";
 
   const token =
     localStorage.getItem("token") || localStorage.getItem("tu_token_jwt");

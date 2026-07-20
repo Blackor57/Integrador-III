@@ -2,7 +2,7 @@
   // =====================================================================
   // CONFIGURACIÓN BASE
   // =====================================================================
-  const API_BASE_URL = "http://localhost:8080/producto";
+  const API_BASE_URL = "/producto";
   const addModal = document.getElementById("addModal");
   const editModal = document.getElementById("editModal");
   const tableBodyProductos = document.getElementById("tableBodyProductos");

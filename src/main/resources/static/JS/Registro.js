@@ -27,7 +27,7 @@ document
 
     try {
       // Mapeamos los datos para que coincidan exactamente con RegisterRequest.java
-      const response = await fetch("http://localhost:8080/auth/register", {
+      const response = await fetch("/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

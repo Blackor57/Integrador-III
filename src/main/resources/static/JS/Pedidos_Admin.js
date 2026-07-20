@@ -2,7 +2,7 @@
         // =====================================================================
         // CONFIGURACIÓN BASE
         // =====================================================================
-        const API_BASE_URL = "http://localhost:8080/pedido";
+        const API_BASE_URL = "/pedido";
         const itemsModal = document.getElementById("itemsModal");
         const tableBodyPedidos = document.getElementById("tableBodyPedidos");
         const tableItemsBody = document.getElementById("tableItemsBody");

@@ -1,6 +1,6 @@
 (function () {
-  const API_PERFIL = "http://localhost:8080/usuario/mi-perfil";
-  const API_USUARIOS = "http://localhost:8080/usuario";
+  const API_PERFIL = "/usuario/mi-perfil";
+  const API_USUARIOS = "/usuario";
 
   let usuarioId = null;
   let rolGlobal = "ROLE_USER"; // Guardaremos el rol aquí
@@ -9,7 +9,7 @@
     const token =
       localStorage.getItem("token") || localStorage.getItem("tu_token_jwt");
     if (!token) {
-      window.location.href = "login.html";
+      window.location.href = "Index.html";
     }
     return {
       "Content-Type": "application/json",

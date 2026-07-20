@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       // A. Login para obtener el token
-      const resLogin = await fetch("http://localhost:8080/auth/login", {
+      const resLogin = await fetch("/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: data.email, password: data.password }),
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("token", result.token);
 
       // B. Obtener datos del perfil para extraer el rol real
-      const resPerfil = await fetch("http://localhost:8080/usuario/mi-perfil", {
+      const resPerfil = await fetch("/usuario/mi-perfil", {
         method: "GET",
         headers: { Authorization: `Bearer ${result.token}` },
       });

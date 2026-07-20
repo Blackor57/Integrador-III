@@ -1,6 +1,6 @@
 (function () {
-  const API_BASE_URL = "http://localhost:8080/mesa";
-  const API_PERFIL_URL = "http://localhost:8080/usuario/mi-perfil";
+  const API_BASE_URL = "/mesa";
+  const API_PERFIL_URL = "/usuario/mi-perfil";
 
   const gridMesas = document.getElementById("gridMesas");
   const addModal = document.getElementById("addModal");

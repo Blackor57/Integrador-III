@@ -1,5 +1,5 @@
 // Constante para la ruta del perfil
-const API_PERFIL_URL = "http://localhost:8080/usuario/mi-perfil";
+const API_PERFIL_URL = "/usuario/mi-perfil";
 
 // Función para obtener el token (si no la tienes ya creada)
 function getHeaders() {

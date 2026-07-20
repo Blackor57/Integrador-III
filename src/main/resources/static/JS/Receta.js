@@ -1,7 +1,7 @@
 (function () {
-    const API_INSUMO = "http://localhost:8080/insumo";
-    const API_RECETA = "http://localhost:8080/receta"; // Endpoint que deberás crear en Spring Boot
-    
+    const API_INSUMO = "/insumo";
+    const API_RECETA = "/receta";
+
     let insumosGlobales = []; // Para llenar el selector
     let itemsRecetaTemporal = []; // Lista temporal de la receta que se está armando
     let productoActualId = null;

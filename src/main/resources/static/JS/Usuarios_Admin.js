@@ -2,7 +2,7 @@
   // =====================================================================
   // CONFIGURACIÓN Y REFERENCIAS
   // =====================================================================
-  const API_BASE_URL = "http://localhost:8080/usuario"; // Asegúrate de que el puerto sea el correcto
+  const API_BASE_URL = "/usuario"; // Asegúrate de que el puerto sea el correcto
 
   const addModal = document.getElementById("addModal");
   const editModal = document.getElementById("editModal");

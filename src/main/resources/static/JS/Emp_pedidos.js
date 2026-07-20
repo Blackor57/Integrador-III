@@ -47,7 +47,7 @@
     try {
       contenedorPedidos.innerHTML = `<div class="col-span-full text-center text-stone-400 py-10"><i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i><p>Cargando tus pedidos...</p></div>`;
 
-      const urlBackend = `http://localhost:8080/pedido/usuario/mis-pedidos`;
+      const urlBackend = `/pedido/usuario/mis-pedidos`;
       const response = await fetch(urlBackend, {
         method: "GET",
         headers: {

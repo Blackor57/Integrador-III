@@ -34,7 +34,7 @@
     }
 
     try {
-      const response = await fetch("http://localhost:8080/usuario/mi-perfil", {
+      const response = await fetch("/usuario/mi-perfil", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
