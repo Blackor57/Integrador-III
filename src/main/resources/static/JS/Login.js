@@ -31,10 +31,10 @@ function setLoading(isLoading, loginForm, submitText, loadingSpinner) {
 function redirigirSegunRol(rol) {
   const r = rol.toUpperCase();
   if (r.includes("ADMIN")) return "./Admin_inicio.html";
-  if (r.includes("MOZO")) return "./Emp_Mesas.html";
+  if (r.includes("MOZO")) return "./Emp_mesas.html";
   if (r.includes("COCINA")) return "./Cocina.html";
   if (r.includes("BARMAN")) return "./Bar.html";
-  if (r.includes("CAJA")) return "./Caja_pedidos.html";
+  if (r.includes("CAJA")) return "./Caja_Pedidos.html";
   return "./Home.html";
 }
 
