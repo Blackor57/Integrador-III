@@ -1,6 +1,7 @@
 package com.example.restaurants.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class detalle_pedido {
 
     @ManyToOne
     @JoinColumn(name = "idpedido")
-    @JsonBackReference
+    @JsonIgnoreProperties("detalles")
     private pedido pedido;
 
     @ManyToOne

@@ -1,5 +1,6 @@
 package com.example.restaurants.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -58,6 +59,6 @@ public class pedido {
     private TipoRecibo tiporecibo;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonIgnoreProperties("pedido")
     private List<detalle_pedido> detalles;
 }
